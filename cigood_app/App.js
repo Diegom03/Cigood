@@ -1,8 +1,12 @@
+import React from 'react';
 //import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button } from 'react-native';
 
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
+
+import SplashScreen from './screens/SplashScreen';
+import Login from './screens/Login';
 
 const Stack = createStackNavigator();
 
@@ -28,16 +32,23 @@ function DetailsScreen() {
 
 // CADA VEZ QUE SE INSTALE ALGO ==> npm start --reset-cache
 
-export default function App() {
+const App = () => {
+  const [isSplashVisible, setSplashVisible] = React.useState(true);
+
+  React.useEffect(() => {
+    setTimeout(() => {
+      setSplashVisible(false);
+    }, 3000);
+  }, []);
+
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Details" component={DetailsScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <View style={{ flex: 1 }}>
+      {isSplashVisible ? <SplashScreen /> : <Login />}
+    </View>
   );
-}
+};
+
+export default App;
 
 const styles = StyleSheet.create({
   container: {
