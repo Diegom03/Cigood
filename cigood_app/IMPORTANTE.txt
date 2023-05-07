@@ -20,6 +20,12 @@ npm start
 npm install @react-navigation/native
 npm install react-native-screens
 
+8- para agregar fuentes
+npm install expo-font
+
+9- para agregar animaciones
+npm install react-native-animatable
+
 
 CADA VEZ QUE INSTALE ALGO
 npm start --reset-cache
