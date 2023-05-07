@@ -1,6 +1,6 @@
 import React from 'react';
 //import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
@@ -19,8 +19,8 @@ const App = () => {
   React.useEffect(() => {
     setTimeout(() => {
       setSplashVisible(false);
-    }, 3000);
-  }, []);
+    }, 4000);
+  });
 
   return (
     <NavigationContainer>
@@ -60,23 +60,3 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-
-function HomeScreen({ navigation }) {
-  return (
-    <View>
-      <Text>Pantalla principal</Text>
-      <Button
-        title="Ir a pantalla de detalles"
-        onPress={() => navigation.navigate('Details')}
-      />
-    </View>
-  );
-}
-
-function DetailsScreen() {
-  return (
-    <View>
-      <Text>Pantalla de detalles</Text>
-    </View>
-  );
-}

@@ -3,6 +3,9 @@
     "name": "cigood_app",
     "slug": "cigood_app",
     "version": "1.0.0",
+    "assets": [
+      "assets/fonts/"
+    ],
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",

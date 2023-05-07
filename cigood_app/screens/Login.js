@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TextInput, StyleSheet, TouchableOpacity, Text,} from 'react-native';
+import { View, TextInput, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 const Login = () => {
@@ -10,7 +10,29 @@ const Login = () => {
   const [usernameError, setUsernameError] = React.useState('');
   const [passwordError, setPasswordError] = React.useState('');
 
+  const handleInputFocus = () => {
+    setUsername('');
+    setPassword('');
+    setUsernameError('');
+    setPasswordError('');
+  }
+
   const handleLogin = () => {
+    if (!username || !password) {
+      // Si el usuario o la contraseña están vacíos, muestra un error
+      setUsernameError('Debes completar este campo');
+      setPasswordError('Debes completar este campo');
+      return;
+
+    } else if (!username) {
+      setUsernameError('Debes completar este campo');
+      return;
+
+    } else if (!password) {
+      setPasswordError('Debes completar este campo');
+      return;
+    }
+
     console.log(`Iniciando sesión con usuario: ${username} y contraseña: ${password}`);
     // Aquí ira la validacion a la BD
   };
@@ -29,7 +51,7 @@ const Login = () => {
       setUsernameError('');
     }
   };
-
+  
   const handlePasswordChange = (text) => {
     setPassword(text);
     if (text.length < 6) {
@@ -38,8 +60,9 @@ const Login = () => {
       setPasswordError('');
     }
   };
+  
 
-  const inputBorderColor = (usernameError || passwordError) ? 'red' : 'green';
+  const inputBorderColor = (usernameError || passwordError) ? 'red' : 'black';
 
   return (
     <View style={styles.container}>
@@ -50,6 +73,7 @@ const Login = () => {
         placeholder="Nombre de usuario"
         value={username}
         onChangeText={handleUsernameChange}
+        onFocus={handleInputFocus}
       />
       {usernameError ? (<Text style={styles.error}>{usernameError}</Text>) : null}
 
@@ -58,6 +82,7 @@ const Login = () => {
         placeholder="Contraseña"
         value={password}
         onChangeText={handlePasswordChange}
+        onFocus={handleInputFocus}
         secureTextEntry={true}
       />
       {passwordError ? (<Text style={styles.error}>{passwordError}</Text>) : null}
