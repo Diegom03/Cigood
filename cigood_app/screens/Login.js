@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TextInput, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { View, TextInput, StyleSheet, TouchableOpacity, Text, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 const Login = () => {
@@ -34,6 +34,7 @@ const Login = () => {
     }
 
     console.log(`Iniciando sesión con usuario: ${username} y contraseña: ${password}`);
+    navigation.navigate('Principal');
     // Aquí ira la validacion a la BD
   };
 
@@ -66,14 +67,14 @@ const Login = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
+      <Image source={require('./../images/logotipo-short.png')} style={styles.image}/>
 
       <TextInput
         style={[styles.input, { borderColor: inputBorderColor }]}
         placeholder="Nombre de usuario"
         value={username}
         onChangeText={handleUsernameChange}
-        onFocus={handleInputFocus}
+        //onFocus={handleInputFocus}
       />
       {usernameError ? (<Text style={styles.error}>{usernameError}</Text>) : null}
 
@@ -82,7 +83,7 @@ const Login = () => {
         placeholder="Contraseña"
         value={password}
         onChangeText={handlePasswordChange}
-        onFocus={handleInputFocus}
+        //onFocus={handleInputFocus}
         secureTextEntry={true}
       />
       {passwordError ? (<Text style={styles.error}>{passwordError}</Text>) : null}
@@ -110,10 +111,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#fff',
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
+  image: {
+    height: 130,
+    width: 350,
+    marginBottom: 50,
   },
   input: {
     width: '80%',
@@ -131,7 +132,8 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 10,
+    marginBottom: 40,
+    marginTop: 20,
   },
   buttonText: {
     color: '#fff',
