@@ -2,12 +2,18 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Switch } from 'react-native';
 
 const NotificationsScreen = () => {
-    const [vaciarDespensaSwitch, setToggleSwitch] = useState(false);
-    const [compartirRecetaSwitch] = useState(false);
-    const [compraGlovoSwitch] = useState(false);
+    const [vaciarDespensaSwitch, setDespensaSwitch] = useState(false);
+    const [compartirRecetaSwitch, setRecetasSwitch] = useState(false);
+    const [compraGlovoSwitch, setGlovoSwitch] = useState(false);
 
-    const handleToggleSwitch = () => {
-        setToggleSwitch((previousState) => !previousState);
+    const handleDespensaSwitch = () => {
+        setDespensaSwitch((previousState) => !previousState);
+    };
+    const handleRecetasSwitch = () => {
+        setRecetasSwitch((previousState) => !previousState);
+    };
+    const handleGlovoSwitch = () => {
+        setGlovoSwitch((previousState) => !previousState);
     };
 
     return (
@@ -21,7 +27,7 @@ const NotificationsScreen = () => {
                         ligula, non commodo nisi lectus nec lacus.
                     </Text>
                     <View style={styles.switchContainer}>
-                        <Switch value={vaciarDespensaSwitch} onValueChange={handleToggleSwitch} />
+                        <Switch value={vaciarDespensaSwitch} onValueChange={handleDespensaSwitch} />
                     </View>
                 </View>
                 <View style={styles.sectionItem}>
@@ -31,7 +37,7 @@ const NotificationsScreen = () => {
                         ligula, non commodo nisi lectus nec lacus.
                     </Text>
                     <View style={styles.switchContainer}>
-                        <Switch value={compartirRecetaSwitch} onValueChange={handleToggleSwitch} />
+                        <Switch value={compartirRecetaSwitch} onValueChange={handleRecetasSwitch} />
                     </View>
                 </View>
                 <View style={styles.sectionItem}>
@@ -41,11 +47,10 @@ const NotificationsScreen = () => {
                         ligula, non commodo nisi lectus nec lacus.
                     </Text>
                     <View style={styles.switchContainer}>
-                        <Switch value={compraGlovoSwitch} onValueChange={handleToggleSwitch} />
+                        <Switch value={compraGlovoSwitch} onValueChange={handleGlovoSwitch} />
                     </View>
                 </View>
             </View>
-
 
         </View>
     );
