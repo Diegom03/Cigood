@@ -8,6 +8,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import SplashScreen from './screens/SplashScreen';
 import Login from './screens/Login';
 import Register from './screens/Register';
+import Principal from './screens/Principal';
+import Ajustes from './screens/Ajustes';
 
 const Stack = createStackNavigator();
 
@@ -41,6 +43,16 @@ const App = () => {
             <Stack.Screen
               name="Register"
               component={Register}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Principal"
+              component={Principal}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Ajustes"
+              component={Ajustes}
               options={{ headerShown: false }}
             />
           </>
