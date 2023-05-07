@@ -147,6 +147,10 @@ const styles = StyleSheet.create({
     color: '#2196F3',
     textDecorationLine: 'underline',
   },
+  error: {
+    color: 'red',
+    marginBottom: 20,
+  }
 });
 
 export default Login;

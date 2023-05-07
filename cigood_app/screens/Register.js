@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
     borderColor: '#CCCCCC',
     borderRadius: 5,
     padding: 10,
-    marginBottom: 20,
+    marginBottom: 10,
     width: '100%',
   },
   button: {
@@ -171,6 +171,10 @@ const styles = StyleSheet.create({
   text: {
     marginVertical: 10,
   },
+  error: {
+    color: 'red',
+    marginBottom: 20,
+  }
 });
 
 export default Register;
