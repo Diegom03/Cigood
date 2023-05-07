@@ -1,0 +1,25 @@
+1- Instalar expo
+npm  install -g expo-cli
+
+2- Crear la app
+expo init 'nombre'
+
+3- Abrir la app en el visual
+
+4- Ejecutar la app
+cd 'nombre'
+
+5- Cargar la app en el terminal
+npm start
+
+6- Genera un QR que se puede ver en el movil
+
+*DERCARGAR EXPO EN PLAY STORE*
+
+7- Navegacion entre screens
+npm install @react-navigation/native
+npm install react-native-screens
+
+
+CADA VEZ QUE INSTALE ALGO
+npm start --reset-cache
