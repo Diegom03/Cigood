@@ -10,6 +10,7 @@ import Login from './screens/Login';
 import Register from './screens/Register';
 import Principal from './screens/Principal';
 import Ajustes from './screens/Ajustes';
+import Notificaciones from './screens/Notificaciones';
 
 const Stack = createStackNavigator();
 
@@ -53,6 +54,11 @@ const App = () => {
             <Stack.Screen
               name="Ajustes"
               component={Ajustes}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Notificaciones"
+              component={Notificaciones}
               options={{ headerShown: false }}
             />
           </>
