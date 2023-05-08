@@ -38,3 +38,12 @@ npm install @react-native-async-storage/async-storage
 
 CADA VEZ QUE INSTALE ALGO
 npm start --reset-cache
+
+
+Iconos aplicacion
+Lista de iconos: https://ant.design/components/icon#components-icon-demo-basic-usage
+Para usar la libreria: import { AntDesign } from '@expo/vector-icons';
+Ejemplo:
+    <View style={styles.iconContainer}>
+        <AntDesign name="arrowright" size={18} color="#666666" />
+    </View>

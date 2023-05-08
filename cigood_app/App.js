@@ -11,6 +11,7 @@ import Register from './screens/Register';
 import Principal from './screens/Principal';
 import Ajustes from './screens/Ajustes';
 import Notificaciones from './screens/Notificaciones';
+import Cuenta from './screens/Cuenta';
 
 const Stack = createStackNavigator();
 
@@ -59,6 +60,11 @@ const App = () => {
             <Stack.Screen
               name="Notificaciones"
               component={Notificaciones}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Cuenta"
+              component={Cuenta}
               options={{ headerShown: false }}
             />
           </>
