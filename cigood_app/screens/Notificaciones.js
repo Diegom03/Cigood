@@ -2,9 +2,21 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Switch } from 'react-native';
 
 const NotificationsScreen = () => {
-    const [vaciarDespensaSwitch, setDespensaSwitch] = useState(false);
-    const [compartirRecetaSwitch, setRecetasSwitch] = useState(false);
-    const [compraGlovoSwitch, setGlovoSwitch] = useState(false);
+    const [vaciarDespensaSwitch, setVaciarDespensaSwitch] = useState(false);
+    const [compartirRecetaSwitch, setCompartirRecetaSwitch] = useState(false);
+    const [compraGlovoSwitch, setCompraGlovoSwitch] = useState(false);
+
+    const handleVaciarDespensaToggleSwitch = () => {
+        setVaciarDespensaSwitch(previousState => !previousState);
+    };
+
+    const handleCompartirRecetaToggleSwitch = () => {
+        setCompartirRecetaSwitch(previousState => !previousState);
+    };
+
+    const handleCompraGlovoToggleSwitch = () => {
+        setCompraGlovoSwitch(previousState => !previousState);
+    };
 
     const handleDespensaSwitch = () => {
         setDespensaSwitch((previousState) => !previousState);
@@ -21,37 +33,33 @@ const NotificationsScreen = () => {
             <Text style={styles.title}>Notificaciones</Text>
             <View style={styles.section}>
                 <View style={styles.sectionItem}>
-                    <Text style={styles.sectionTitle}>Vaciar despensa</Text>
-                    <Text style={styles.description}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed auctor, ex non viverra sagittis, arcu lacus tristique
-                        ligula, non commodo nisi lectus nec lacus.
-                    </Text>
-                    <View style={styles.switchContainer}>
-                        <Switch value={vaciarDespensaSwitch} onValueChange={handleDespensaSwitch} />
+                    <View style={styles.switchTextContainer}>
+                        <Text style={styles.sectionTitle}>Vaciar despensa</Text>
+                        <Switch value={vaciarDespensaSwitch} onValueChange={handleVaciarDespensaToggleSwitch} />
                     </View>
+                    <Text style={styles.description}>
+                        Elimina automáticamente los productos de tu despensa
+                    </Text>
                 </View>
                 <View style={styles.sectionItem}>
-                    <Text style={styles.sectionTitle}>Compartir receta</Text>
-                    <Text style={styles.description}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed auctor, ex non viverra sagittis, arcu lacus tristique
-                        ligula, non commodo nisi lectus nec lacus.
-                    </Text>
-                    <View style={styles.switchContainer}>
-                        <Switch value={compartirRecetaSwitch} onValueChange={handleRecetasSwitch} />
+                    <View style={styles.switchTextContainer}>
+                        <Text style={styles.sectionTitle}>Compartir receta</Text>
+                        <Switch value={compartirRecetaSwitch} onValueChange={handleCompartirRecetaToggleSwitch} />
                     </View>
+                    <Text style={styles.description}>
+                        Envía tus recetas favoritas a tus amigos a través de la aplicación
+                    </Text>
                 </View>
                 <View style={styles.sectionItem}>
-                    <Text style={styles.sectionTitle}>Compra Glovo</Text>
-                    <Text style={styles.description}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed auctor, ex non viverra sagittis, arcu lacus tristique
-                        ligula, non commodo nisi lectus nec lacus.
-                    </Text>
-                    <View style={styles.switchContainer}>
-                        <Switch value={compraGlovoSwitch} onValueChange={handleGlovoSwitch} />
+                    <View style={styles.switchTextContainer}>
+                        <Text style={styles.sectionTitle}>Compra Glovo</Text>
+                        <Switch value={compraGlovoSwitch} onValueChange={handleCompraGlovoToggleSwitch} />
                     </View>
+                    <Text style={styles.description}>
+                        Compra productos necesarios a través de la aplicación Glovo
+                    </Text>
                 </View>
             </View>
-
         </View>
     );
 };
@@ -66,7 +74,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 24,
         fontWeight: 'bold',
-        marginTop: 20,
+        marginTop: 50,
         marginBottom: 20,
     },
     section: {
@@ -82,6 +90,12 @@ const styles = StyleSheet.create({
         padding: 10,
         marginBottom: 10,
     },
+    switchTextContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 10,
+    },
     sectionTitle: {
         fontSize: 16,
         fontWeight: 'bold',
@@ -89,10 +103,6 @@ const styles = StyleSheet.create({
     description: {
         fontSize: 14,
         marginBottom: 20,
-    },
-    switchContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
     },
 });
 

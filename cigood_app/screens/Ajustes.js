@@ -18,7 +18,7 @@ const SettingsScreen = () => {
                 </View>
                 <View style={styles.listItem} onPress={() => navigation.navigate('Ajustes')}>
                     <Image source={require('../images/cerrar-sesion.png')} style={styles.icon} />
-                    <Text style={styles.itemText}>Cerrar Sesión</Text>
+                    <Text style={styles.itemText} onPress={() => navigation.navigate('Login')}>Cerrar Sesión</Text>
                 </View>
             </View>
         </View>

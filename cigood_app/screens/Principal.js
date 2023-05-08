@@ -1,9 +1,28 @@
-import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Modal } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 const MyScreen = () => {
     const navigation = useNavigation();
+    const [isFilterModalVisible, setFilterModalVisible] = useState(false);
+    const [selectedFilters, setSelectedFilters] = useState([]);
+
+    const handleFilterButtonPress = () => {
+        setFilterModalVisible(true);
+    };
+
+    const handleFilterModalClose = () => {
+        setFilterModalVisible(false);
+    };
+
+    const handleFilterOptionPress = (filter) => {
+        if (selectedFilters.includes(filter)) {
+            setSelectedFilters(selectedFilters.filter((f) => f !== filter));
+        } else {
+            setSelectedFilters([...selectedFilters, filter]);
+        }
+    };
+
     return (
         <View style={styles.container}>
             <TouchableOpacity style={styles.settingsButton} onPress={() => navigation.navigate('Ajustes')}>
@@ -11,14 +30,78 @@ const MyScreen = () => {
             </TouchableOpacity>
             <Text style={styles.title}>Cigood</Text>
             <View style={styles.searchContainer}>
-                <TextInput style={styles.searchInput} placeholder="Buscar" >
-                </TextInput>
-                <TouchableOpacity style={styles.filterButton}>
+                <TextInput style={styles.searchInput} placeholder="Buscar" />
+                <TouchableOpacity style={styles.filterButton} onPress={handleFilterButtonPress}>
                     <Image source={require('../images/filtrar.png')} style={styles.searchButtonImage} />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.searchButton}>
                     <Image source={require('../images/lupa.png')} style={styles.searchButtonImage} />
                 </TouchableOpacity>
+            </View>
+            <Modal visible={isFilterModalVisible} animationType="slide" transparent={true}>
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalContent}>
+                        <Text style={styles.modalTitle}>Opciones de Filtro</Text>
+                        <TouchableOpacity
+                            style={[
+                                styles.filterOption,
+                                selectedFilters.includes('opcion1') && styles.selectedFilterOption,
+                            ]}
+                            onPress={() => handleFilterOptionPress('opcion1')}
+                        >
+                            <Text style={styles.filterOptionLabel}>Opción 1</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[
+                                styles.filterOption,
+                                selectedFilters.includes('opcion2') && styles.selectedFilterOption,
+                            ]}
+                            onPress={() => handleFilterOptionPress('opcion2')}
+                        >
+                            <Text style={styles.filterOptionLabel}>Opción 2</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[
+                                styles.filterOption,
+                                selectedFilters.includes('opcion3') && styles.selectedFilterOption,
+                            ]}
+                            onPress={() => handleFilterOptionPress('opcion3')}
+                        >
+                            <Text style={styles.filterOptionLabel}>Opción 3</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[
+                                styles.filterOption,
+                                selectedFilters.includes('opcion4') && styles.selectedFilterOption,
+                            ]}
+                            onPress={() => handleFilterOptionPress('opcion4')}
+                        >
+                            <Text style={styles.filterOptionLabel}>Opción 4</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.closeButton} onPress={handleFilterModalClose}>
+                            <Text style={styles.closeButtonText}>Cerrar</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
+            <Text style={styles.title2}>Recetas del dia</Text>
+            <View style={styles.recipeContainer}>
+                <View style={styles.recipeItem}>
+                    <Image source={require('../images/receta1.jpg')} style={styles.recipeImage} />
+                    <Text style={styles.recipeTitle}>Receta 1</Text>
+                </View>
+                <View style={styles.recipeItem}>
+                    <Image source={require('../images/receta2.jpg')} style={styles.recipeImage} />
+                    <Text style={styles.recipeTitle}>Receta 2</Text>
+                </View>
+                <View style={styles.recipeItem}>
+                    <Image source={require('../images/receta3.jpg')} style={styles.recipeImage} />
+                    <Text style={styles.recipeTitle}>Receta 3</Text>
+                </View>
+                <View style={styles.recipeItem}>
+                    <Image source={require('../images/receta4.png')} style={styles.recipeImage} />
+                    <Text style={styles.recipeTitle}>Receta 4</Text>
+                </View>
             </View>
         </View>
     );
@@ -36,6 +119,12 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
         marginBottom: 20,
+    },
+    title2: {
+        fontSize: 30,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginVertical: 10,
     },
     searchContainer: {
         flexDirection: 'row',
@@ -74,8 +163,71 @@ const styles = StyleSheet.create({
         top: 40,
         right: 10,
         backgroundColor: 'transparent',
-        padding: 10
-    }
+        padding: 10,
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContent: {
+        backgroundColor: 'white',
+        padding: 20,
+        borderRadius: 10,
+        width: '80%',
+    },
+    modalTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 10,
+    },
+    filterOption: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 10,
+    },
+    selectedFilterOption: {
+        backgroundColor: 'lightblue',
+    },
+    filterOptionLabel: {
+        marginLeft: 10,
+    },
+    closeButton: {
+        backgroundColor: 'lightgray',
+        padding: 10,
+        alignSelf: 'flex-end',
+        borderRadius: 5,
+    },
+    closeButtonText: {
+        color: 'black',
+        fontWeight: 'bold',
+    },
+    recipeContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
+        paddingHorizontal: 20,
+        marginTop: 30,
+      },
+      recipeItem: {
+        width: '48%',
+        marginBottom: 20,
+        backgroundColor: '#E6E6E6',
+        borderRadius: 8,
+        padding: 10,
+        alignItems: 'center',
+      },
+      recipeImage: {
+        width: 150,
+        height: 150,
+        marginBottom: 10,
+      },
+      recipeTitle: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        textAlign: 'center',
+      },
 });
 
 export default MyScreen;
