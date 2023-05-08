@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Switch } from 'react-native';
+import { View, Text, StyleSheet, Switch, ImageBackground } from 'react-native';
 
 const NotificationsScreen = () => {
     const [vaciarDespensaSwitch, setVaciarDespensaSwitch] = useState(false);
@@ -29,7 +29,7 @@ const NotificationsScreen = () => {
     };
 
     return (
-        <View style={styles.container}>
+        <ImageBackground style={styles.container} source={require('../images/fondo-notificaciones.jpg')}>
             <Text style={styles.title}>Notificaciones</Text>
             <View style={styles.section}>
                 <View style={styles.sectionItem}>
@@ -60,7 +60,7 @@ const NotificationsScreen = () => {
                     </Text>
                 </View>
             </View>
-        </View>
+        </ImageBackground>
     );
 };
 
@@ -72,10 +72,11 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     title: {
-        fontSize: 24,
+        fontSize: 34,
         fontWeight: 'bold',
         marginTop: 50,
         marginBottom: 20,
+        color: 'white'
     },
     section: {
         width: '100%',
@@ -83,6 +84,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         padding: 10,
         marginBottom: 20,
+        marginTop: 160,
     },
     sectionItem: {
         backgroundColor: '#E6E6E6',

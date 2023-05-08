@@ -1,26 +1,26 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ImageBackground } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 const SettingsScreen = () => {
     const navigation = useNavigation();
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Ajustes</Text>
-            <View style={styles.listContainer}>
-                <View style={styles.listItem} onPress={() => navigation.navigate('Ajustes')}>
-                    <Image source={require('../images/usuario.png')} style={styles.icon} />
-                    <Text style={styles.itemText}>Cuenta</Text>
+                <Text style={styles.title}>Ajustes</Text>
+                <View style={styles.listContainer}>
+                    <View style={styles.listItem} onPress={() => navigation.navigate('Ajustes')}>
+                        <Image source={require('../images/usuario.png')} style={styles.icon} />
+                        <Text style={styles.itemText}>Cuenta</Text>
+                    </View>
+                    <View style={styles.listItem} >
+                        <Image source={require('../images/notificaciones.png')} style={styles.icon} />
+                        <Text style={styles.itemText} onPress={() => navigation.navigate('Notificaciones')}>Notificaciones</Text>
+                    </View>
+                    <View style={styles.listItem} onPress={() => navigation.navigate('Ajustes')}>
+                        <Image source={require('../images/cerrar-sesion.png')} style={styles.icon} />
+                        <Text style={styles.itemText} onPress={() => navigation.navigate('Login')}>Cerrar Sesión</Text>
+                    </View>
                 </View>
-                <View style={styles.listItem} >
-                    <Image source={require('../images/notificaciones.png')} style={styles.icon} />
-                    <Text style={styles.itemText} onPress={() => navigation.navigate('Notificaciones')}>Notificaciones</Text>
-                </View>
-                <View style={styles.listItem} onPress={() => navigation.navigate('Ajustes')}>
-                    <Image source={require('../images/cerrar-sesion.png')} style={styles.icon} />
-                    <Text style={styles.itemText} onPress={() => navigation.navigate('Login')}>Cerrar Sesión</Text>
-                </View>
-            </View>
         </View>
     );
 };
