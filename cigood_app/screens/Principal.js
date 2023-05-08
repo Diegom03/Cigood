@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Modal } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Modal, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 const MyScreen = () => {
@@ -38,6 +38,7 @@ const MyScreen = () => {
                     <Image source={require('../images/lupa.png')} style={styles.searchButtonImage} />
                 </TouchableOpacity>
             </View>
+
             <Modal visible={isFilterModalVisible} animationType="slide" transparent={true}>
                 <View style={styles.modalContainer}>
                     <View style={styles.modalContent}>
@@ -84,6 +85,7 @@ const MyScreen = () => {
                     </View>
                 </View>
             </Modal>
+
             <Text style={styles.title2}>Recetas del dia</Text>
             <View style={styles.recipeContainer}>
                 <View style={styles.recipeItem}>
@@ -103,6 +105,10 @@ const MyScreen = () => {
                     <Text style={styles.recipeTitle}>Receta 4</Text>
                 </View>
             </View>
+
+            <Button
+            title='Mi despensa'>
+            </Button>
         </View>
     );
 };
@@ -124,7 +130,8 @@ const styles = StyleSheet.create({
         fontSize: 30,
         fontWeight: 'bold',
         textAlign: 'center',
-        marginVertical: 10,
+        marginTop: 20,
+        color: '#E12626',
     },
     searchContainer: {
         flexDirection: 'row',
@@ -211,16 +218,16 @@ const styles = StyleSheet.create({
         marginTop: 30,
       },
       recipeItem: {
-        width: '48%',
+        width: '44%', // 48
         marginBottom: 20,
-        backgroundColor: '#E6E6E6',
+        backgroundColor: '#E1755F',
         borderRadius: 8,
         padding: 10,
         alignItems: 'center',
       },
       recipeImage: {
-        width: 150,
-        height: 150,
+        width: 120, //150
+        height: 120, //150
         marginBottom: 10,
       },
       recipeTitle: {
