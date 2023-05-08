@@ -1,0 +1,52 @@
+1- Instalar expo
+npm  install -g expo-cli
+
+2- Crear la app
+expo init 'nombre'
+
+3- Abrir la app en el visual
+
+4- Ejecutar la app
+cd 'nombre'
+
+5- Cargar la app en el terminal
+npm start
+
+6- Genera un QR que se puede ver en el movil
+
+*DERCARGAR EXPO EN PLAY STORE*
+
+7- Navegacion entre screens
+npm install @react-navigation/native
+npm install react-native-screens
+
+8- para agregar fuentes
+npm install expo-font
+
+9- para agregar animaciones
+npm install react-native-animatable
+
+10- para los checkbox
+
+npm install @react-native-community/checkbox
+
+11- para el asyncStorage
+
+npm install @react-native-async-storage/async-storage
+
+12- para consultar a la BD
+
+import { MongoClient } from 'mongodb';
+
+
+CADA VEZ QUE INSTALE ALGO
+npm start --reset-cache
+
+
+Iconos aplicacion
+Lista de iconos: https://ant.design/components/icon#components-icon-demo-basic-usage
+Para usar la libreria: import { AntDesign } from '@expo/vector-icons';
+Ejemplo:
+    <View style={styles.iconContainer}>
+        <AntDesign name="arrowright" size={18} color="#666666" />
+    </View>
