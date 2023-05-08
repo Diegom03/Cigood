@@ -24,7 +24,7 @@ const SettingsScreen = () => {
             <View style={styles.listContainer}>
                 <View style={styles.listItem} onPress={() => navigation.navigate('Ajustes')}>
                     <Image source={require('../images/usuario.png')} style={styles.icon} />
-                    <Text style={styles.itemText}>Cuenta</Text>
+                    <Text style={styles.itemText} onPress={() => navigation.navigate('Cuenta')}>Cuenta</Text>
                 </View>
                 <View style={styles.listItem} >
                     <Image source={require('../images/notificaciones.png')} style={styles.icon} />
