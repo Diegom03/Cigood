@@ -1,26 +1,40 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ImageBackground } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SettingsScreen = () => {
     const navigation = useNavigation();
+
+    // CERRAR SESIÓN
+    const handleLogout = async () => {
+        try {
+          await AsyncStorage.setItem('esta_logueado', 'false');
+        } catch (error) {
+          console.log(error);
+        }
+    
+        console.log('Cerrando sesion');
+        navigation.navigate('Login');
+    };
+    
     return (
         <View style={styles.container}>
-                <Text style={styles.title}>Ajustes</Text>
-                <View style={styles.listContainer}>
-                    <View style={styles.listItem} onPress={() => navigation.navigate('Ajustes')}>
-                        <Image source={require('../images/usuario.png')} style={styles.icon} />
-                        <Text style={styles.itemText}>Cuenta</Text>
-                    </View>
-                    <View style={styles.listItem} >
-                        <Image source={require('../images/notificaciones.png')} style={styles.icon} />
-                        <Text style={styles.itemText} onPress={() => navigation.navigate('Notificaciones')}>Notificaciones</Text>
-                    </View>
-                    <View style={styles.listItem} onPress={() => navigation.navigate('Ajustes')}>
-                        <Image source={require('../images/cerrar-sesion.png')} style={styles.icon} />
-                        <Text style={styles.itemText} onPress={() => navigation.navigate('Login')}>Cerrar Sesión</Text>
-                    </View>
+            <Text style={styles.title}>Ajustes</Text>
+            <View style={styles.listContainer}>
+                <View style={styles.listItem} onPress={() => navigation.navigate('Ajustes')}>
+                    <Image source={require('../images/usuario.png')} style={styles.icon} />
+                    <Text style={styles.itemText}>Cuenta</Text>
                 </View>
+                <View style={styles.listItem} >
+                    <Image source={require('../images/notificaciones.png')} style={styles.icon} />
+                    <Text style={styles.itemText} onPress={() => navigation.navigate('Notificaciones')}>Notificaciones</Text>
+                </View>
+                <View style={styles.listItem} onPress={() => navigation.navigate('Ajustes')}>
+                    <Image source={require('../images/cerrar-sesion.png')} style={styles.icon} />
+                    <Text style={styles.itemText} onPress={handleLogout}>Cerrar Sesión</Text>
+                </View>
+            </View>
         </View>
     );
 };

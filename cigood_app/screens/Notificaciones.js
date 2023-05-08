@@ -1,31 +1,50 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Switch, ImageBackground } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+//import { ESTA_LOGUEADO } from '../constants.js';
+
 
 const NotificationsScreen = () => {
-    const [vaciarDespensaSwitch, setVaciarDespensaSwitch] = useState(false);
-    const [compartirRecetaSwitch, setCompartirRecetaSwitch] = useState(false);
-    const [compraGlovoSwitch, setCompraGlovoSwitch] = useState(false);
+    const [vaciarDespensaSwitch, setDespensaSwitch] = useState(false);
+    const [compartirRecetaSwitch, setRecetasSwitch] = useState(false);
+    const [compraGlovoSwitch, setGlovoSwitch] = useState(false);
 
-    const handleVaciarDespensaToggleSwitch = () => {
-        setVaciarDespensaSwitch(previousState => !previousState);
+    useEffect(() => {
+        // Recuperar los estados guardados de AsyncStorage cuando la pantalla se monta
+        AsyncStorage.getItem('vaciarDespensaSwitch').then((value) => {
+          if (value !== null) {
+            setDespensaSwitch(value === 'true');
+          }
+        });
+        AsyncStorage.getItem('compartirRecetaSwitch').then((value) => {
+          if (value !== null) {
+            setRecetasSwitch(value === 'true');
+          }
+        });
+        AsyncStorage.getItem('compraGlovoSwitch').then((value) => {
+          if (value !== null) {
+            setGlovoSwitch(value === 'true');
+          }
+        });
+    }, []);
+
+    const handleDespensaSwitch = (value) => {
+        setDespensaSwitch(value);
+        // Guardar el estado del interruptor en AsyncStorage
+        AsyncStorage.setItem('vaciarDespensaSwitch', value.toString());
     };
 
-    const handleCompartirRecetaToggleSwitch = () => {
-        setCompartirRecetaSwitch(previousState => !previousState);
+    const handleRecetasSwitch = (value) => {
+        setRecetasSwitch(value);
+        // Guardar el estado del interruptor en AsyncStorage
+        AsyncStorage.setItem('compartirRecetaSwitch', value.toString());
     };
 
-    const handleCompraGlovoToggleSwitch = () => {
-        setCompraGlovoSwitch(previousState => !previousState);
-    };
-
-    const handleDespensaSwitch = () => {
-        setDespensaSwitch((previousState) => !previousState);
-    };
-    const handleRecetasSwitch = () => {
-        setRecetasSwitch((previousState) => !previousState);
-    };
-    const handleGlovoSwitch = () => {
-        setGlovoSwitch((previousState) => !previousState);
+    const handleGlovoSwitch = (value) => {
+        setGlovoSwitch(value);
+        // Guardar el estado del interruptor en AsyncStorage
+        AsyncStorage.setItem('compraGlovoSwitch', value.toString());
     };
 
     return (
@@ -35,7 +54,7 @@ const NotificationsScreen = () => {
                 <View style={styles.sectionItem}>
                     <View style={styles.switchTextContainer}>
                         <Text style={styles.sectionTitle}>Vaciar despensa</Text>
-                        <Switch value={vaciarDespensaSwitch} onValueChange={handleVaciarDespensaToggleSwitch} />
+                        <Switch value={vaciarDespensaSwitch} onValueChange={handleDespensaSwitch} />
                     </View>
                     <Text style={styles.description}>
                         Elimina automáticamente los productos de tu despensa
@@ -44,7 +63,7 @@ const NotificationsScreen = () => {
                 <View style={styles.sectionItem}>
                     <View style={styles.switchTextContainer}>
                         <Text style={styles.sectionTitle}>Compartir receta</Text>
-                        <Switch value={compartirRecetaSwitch} onValueChange={handleCompartirRecetaToggleSwitch} />
+                        <Switch value={compartirRecetaSwitch} onValueChange={handleRecetasSwitch} />
                     </View>
                     <Text style={styles.description}>
                         Envía tus recetas favoritas a tus amigos a través de la aplicación
@@ -53,7 +72,7 @@ const NotificationsScreen = () => {
                 <View style={styles.sectionItem}>
                     <View style={styles.switchTextContainer}>
                         <Text style={styles.sectionTitle}>Compra Glovo</Text>
-                        <Switch value={compraGlovoSwitch} onValueChange={handleCompraGlovoToggleSwitch} />
+                        <Switch value={compraGlovoSwitch} onValueChange={handleGlovoSwitch} />
                     </View>
                     <Text style={styles.description}>
                         Compra productos necesarios a través de la aplicación Glovo

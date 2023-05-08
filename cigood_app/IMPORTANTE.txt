@@ -30,6 +30,11 @@ npm install react-native-animatable
 
 npm install @react-native-community/checkbox
 
+11- para el asyncStorage
+
+npm install @react-native-async-storage/async-storage
+
+
 
 CADA VEZ QUE INSTALE ALGO
 npm start --reset-cache

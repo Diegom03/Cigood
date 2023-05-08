@@ -1,0 +1,3 @@
+// AQUI SE DEFINEN VARIABLES LOCALES
+
+export let ESTA_LOGUEADO = false;

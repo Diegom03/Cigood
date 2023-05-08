@@ -1,23 +1,32 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, TextInput, StyleSheet, TouchableOpacity, Text, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = () => {
   const navigation = useNavigation();
+
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const loginUser = await AsyncStorage.getItem('esta_logueado');
+        if (loginUser === 'true') {
+          navigation.navigate('Principal');
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    checkSession();
+  }, []);
 
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [usernameError, setUsernameError] = React.useState('');
   const [passwordError, setPasswordError] = React.useState('');
 
-  const handleInputFocus = () => {
-    setUsername('');
-    setPassword('');
-    setUsernameError('');
-    setPasswordError('');
-  }
-
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!username || !password) {
       // Si el usuario o la contraseña están vacíos, muestra un error
       setUsernameError('Debes completar este campo');
@@ -31,6 +40,12 @@ const Login = () => {
     } else if (!password) {
       setPasswordError('Debes completar este campo');
       return;
+    }
+
+    try {
+      await AsyncStorage.setItem('esta_logueado', 'true');
+    } catch (error) {
+      console.log(error);
     }
 
     console.log(`Iniciando sesión con usuario: ${username} y contraseña: ${password}`);
@@ -74,7 +89,6 @@ const Login = () => {
         placeholder="Nombre de usuario"
         value={username}
         onChangeText={handleUsernameChange}
-        //onFocus={handleInputFocus}
       />
       {usernameError ? (<Text style={styles.error}>{usernameError}</Text>) : null}
 
@@ -83,7 +97,6 @@ const Login = () => {
         placeholder="Contraseña"
         value={password}
         onChangeText={handlePasswordChange}
-        //onFocus={handleInputFocus}
         secureTextEntry={true}
       />
       {passwordError ? (<Text style={styles.error}>{passwordError}</Text>) : null}
