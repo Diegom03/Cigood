@@ -51,13 +51,13 @@ async function deleteDocument(collection, filter) {
     }
 }
 
-const get = findDocuments("recetas", {});
+//const get = findDocuments("recetas", {});
   
-//const document = { _descripcion: "receta de visual" };
+//const document = { _descripcion: "receta de Gabo(con extra de amor)" };
 //insertDocument("recetas", document);
 
-//const query = { age: { $gt: 25 } };
-//const documents = await findDocuments("recetas", query);
+const query = { _descripcion: { $eq: 'receta de Gabo(con extra de amor)' } };
+findDocuments("recetas", query);
 
 //const filter = { name: "John" };
 //const update = { $set: { age: 31 } };
