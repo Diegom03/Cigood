@@ -14,6 +14,7 @@ import Notificaciones from './screens/Notificaciones';
 import Cuenta from './screens/Cuenta';
 //import Prueba from './screens/Prueba';
 import ListaRecetas from './screens/ListaRecetas';
+import ListaIngredientes from './screens/ListaIngredientes';
 
 const Stack = createStackNavigator();
 
@@ -72,6 +73,11 @@ const App = () => {
             <Stack.Screen
               name="ListaRecetas"
               component={ListaRecetas}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="ListaIngredientes"
+              component={ListaIngredientes}
               options={{ headerShown: false }}
             />
           </>

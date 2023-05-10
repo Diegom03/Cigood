@@ -120,3 +120,131 @@ export function getRecetas() {
   });
 }
 
+export function getIngredientes() {
+  return new Promise((resolve, reject) => {
+    const recetas = [
+      {
+        id: 1,
+        name: 'Patatas',
+      },
+      {
+        id: 2,
+        name: 'Agua',
+      },
+      {
+        id: 3,
+        name: 'Huevos',
+      },
+      {
+        id: 4,
+        name: 'Pasta',
+      },
+      {
+        id: 5,
+        name: 'Aceite',
+      },
+      {
+        id: 6,
+        name: 'Patatas',
+      },
+      {
+        id: 7,
+        name: 'Agua',
+      },
+      {
+        id: 8,
+        name: 'Huevos',
+      },
+      {
+        id: 9,
+        name: 'Pasta',
+      },
+      {
+        id: 10,
+        name: 'Aceite',
+      },
+      {
+        id: 11,
+        name: 'Patatas',
+      },
+      {
+        id: 12,
+        name: 'Agua',
+      },
+      {
+        id: 13,
+        name: 'Huevos',
+      },
+      {
+        id: 14,
+        name: 'Pasta',
+      },
+      {
+        id: 15,
+        name: 'Aceite',
+      },
+      {
+        id: 16,
+        name: 'Patatas',
+      },
+      {
+        id: 17,
+        name: 'Agua',
+      },
+      {
+        id: 18,
+        name: 'Huevos',
+      },
+      {
+        id: 19,
+        name: 'Pasta',
+      },
+      {
+        id: 20,
+        name: 'Aceite',
+      },
+      {
+        id: 21,
+        name: 'Patatas',
+      },
+      {
+        id: 22,
+        name: 'Agua',
+      },
+      {
+        id: 23,
+        name: 'Huevos',
+      },
+      {
+        id: 24,
+        name: 'Pasta',
+      },
+      {
+        id: 25,
+        name: 'Aceite',
+      },
+      {
+        id: 26,
+        name: 'Patatas',
+      },
+      {
+        id: 27,
+        name: 'Agua',
+      },
+      {
+        id: 28,
+        name: 'Huevos',
+      },
+      {
+        id: 29,
+        name: 'Pasta',
+      },
+      {
+        id: 30,
+        name: 'Aceite',
+      },
+    ];
+    resolve(recetas);
+  });
+}
+

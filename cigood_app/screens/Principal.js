@@ -106,9 +106,15 @@ const MyScreen = () => {
                 </View>
             </View>
 
-            <Button onPress={() => navigation.navigate('ListaRecetas')}
-                title='Mi despensa'>
-            </Button>
+
+            <View style={styles.buttonContainer}>
+                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ListaIngredientes')}>
+                    <Text style={styles.buttonText}>Mi despensa</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.button]}onPress={() => navigation.navigate('ListaRecetas')}>
+                    <Text style={styles.buttonText}>Recetas</Text>
+                </TouchableOpacity>
+            </View>
         </View>
     );
 };
@@ -234,6 +240,28 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         textAlign: 'center',
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginHorizontal: 20,
+        marginTop: 20,
+        width: '100%',
+    },
+    
+    button: {
+        backgroundColor: '#FF9999',
+        flex: 1,
+        paddingVertical: 10,
+        marginHorizontal: 19,
+        borderRadius: 5,
+    },
+    
+    buttonText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        color: 'white',
     },
 });
 

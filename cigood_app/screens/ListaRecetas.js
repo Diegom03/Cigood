@@ -75,9 +75,10 @@ const styles = StyleSheet.create({
     settingsButton: {
         position: 'absolute',
         top: 40,
-        left: 10, // Ajusta las coordenadas left según tu preferencia
+        right: 10, // Ajusta las coordenadas left según tu preferencia
         backgroundColor: 'transparent',
         padding: 10,
+        zIndex: 2
     },
     recetaContainer: {
         flexDirection: 'row',
