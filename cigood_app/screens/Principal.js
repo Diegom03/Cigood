@@ -106,8 +106,8 @@ const MyScreen = () => {
                 </View>
             </View>
 
-            <Button
-            title='Mi despensa'>
+            <Button onPress={() => navigation.navigate('ListaRecetas')}
+                title='Mi despensa'>
             </Button>
         </View>
     );
@@ -216,25 +216,25 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingHorizontal: 20,
         marginTop: 30,
-      },
-      recipeItem: {
+    },
+    recipeItem: {
         width: '44%', // 48
         marginBottom: 20,
         backgroundColor: '#E1755F',
         borderRadius: 8,
         padding: 10,
         alignItems: 'center',
-      },
-      recipeImage: {
+    },
+    recipeImage: {
         width: 120, //150
         height: 120, //150
         marginBottom: 10,
-      },
-      recipeTitle: {
+    },
+    recipeTitle: {
         fontSize: 16,
         fontWeight: 'bold',
         textAlign: 'center',
-      },
+    },
 });
 
 export default MyScreen;

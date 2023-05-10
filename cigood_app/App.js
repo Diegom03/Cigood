@@ -12,6 +12,8 @@ import Principal from './screens/Principal';
 import Ajustes from './screens/Ajustes';
 import Notificaciones from './screens/Notificaciones';
 import Cuenta from './screens/Cuenta';
+//import Prueba from './screens/Prueba';
+import ListaRecetas from './screens/ListaRecetas';
 
 const Stack = createStackNavigator();
 
@@ -65,6 +67,11 @@ const App = () => {
             <Stack.Screen
               name="Cuenta"
               component={Cuenta}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="ListaRecetas"
+              component={ListaRecetas}
               options={{ headerShown: false }}
             />
           </>

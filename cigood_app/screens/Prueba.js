@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
-import { findDocuments } from './db.js';
+import conection from '../conection.js';
 
 const MyScreen = () => {
     const navigation = useNavigation();
 
     const getRecipes = () => {
-        const recetas = findDocuments("recetas", {});
+        const recetas = conection.findDocuments("recetas", {});
     };
 
     return (
