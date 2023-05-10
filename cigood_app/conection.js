@@ -16,16 +16,16 @@ async function insertDocument(collection, document) {
 }
   
 async function findDocuments(collection, query) {
-    try {
-      await client.connect();
-      const db = client.db("<database>");
-      const cursor = await db.collection(collection).find(query);
-      const documents = await cursor.toArray();
-      console.log(`Found ${documents.length} documents`);
-      return documents;
-    } finally {
-      await client.close();
-    }
+  try {
+    await client.connect();
+    const db = client.db("cigood");
+    const cursor = await db.collection(collection).find(query);
+    const documents = await cursor.toArray();
+    console.log(documents);
+    return documents;
+  } finally {
+    await client.close();
+  }
 }
   
 async function updateDocument(collection, filter, update) {
@@ -50,6 +50,18 @@ async function deleteDocument(collection, filter) {
       await client.close();
     }
 }
+
+const get = findDocuments("recetas", {});
   
-const document = { _descripcion: "receta de visual" };
-insertDocument("recetas", document);
+//const document = { _descripcion: "receta de visual" };
+//insertDocument("recetas", document);
+
+//const query = { age: { $gt: 25 } };
+//const documents = await findDocuments("recetas", query);
+
+//const filter = { name: "John" };
+//const update = { $set: { age: 31 } };
+//updateDocument("users", filter, update);
+
+//const filter = { name: "John" };
+//deleteDocument("users", filter);
