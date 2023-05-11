@@ -34,7 +34,7 @@ const MyScreen = () => {
                 <TouchableOpacity style={styles.filterButton} onPress={handleFilterButtonPress}>
                     <Image source={require('../images/filtrar.png')} style={styles.searchButtonImage} />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.searchButton}>
+                <TouchableOpacity style={styles.searchButton} onPress={() => navigation.navigate('Prueba')}>
                     <Image source={require('../images/lupa.png')} style={styles.searchButtonImage} />
                 </TouchableOpacity>
             </View>

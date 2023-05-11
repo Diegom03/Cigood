@@ -12,7 +12,7 @@ import Principal from './screens/Principal';
 import Ajustes from './screens/Ajustes';
 import Notificaciones from './screens/Notificaciones';
 import Cuenta from './screens/Cuenta';
-//import Prueba from './screens/Prueba';
+import Prueba from './screens/Prueba';
 import ListaRecetas from './screens/ListaRecetas';
 import ListaIngredientes from './screens/ListaIngredientes';
 
@@ -78,6 +78,11 @@ const App = () => {
             <Stack.Screen
               name="ListaIngredientes"
               component={ListaIngredientes}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Prueba"
+              component={Prueba}
               options={{ headerShown: false }}
             />
           </>

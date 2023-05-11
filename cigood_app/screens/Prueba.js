@@ -1,23 +1,30 @@
 import React, { useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
-
-import conection from '../conection.js';
+import { View, Text, Button, StyleSheet } from 'react-native';
 
 const MyScreen = () => {
-    const navigation = useNavigation();
+    const [recipes, setRecipes] = useState([]);
 
     const getRecipes = () => {
-        const recetas = conection.findDocuments("recetas", {});
+        fetch('http://192.168.1.139:3000/api/data')
+            .then(response => response.json())
+            .then(data => setRecipes(data))
+            .catch(error => console.error(error));
     };
 
     return (
         <View style={styles.container}>
-            <Button onPress={getRecipes}
-                title='Mis recetas'>
-            </Button>
+            <Button onPress={getRecipes} title='Mis recetas' />
+            {recipes.map(recipe => (
+                <View key={recipe._id}>
+                    <Text>{recipe._descripcion}</Text>
+                </View>
+            ))}
         </View>
     );
 };
+
+export default MyScreen;
+
 
 const styles = StyleSheet.create({
     container: {
@@ -27,5 +34,3 @@ const styles = StyleSheet.create({
         paddingTop: 50,
     },
 });
-
-export default MyScreen;
