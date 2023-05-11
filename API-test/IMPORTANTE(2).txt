@@ -1,0 +1,8 @@
+1- EXPRESS
+npm install express body-parser cors
+
+2- MONGODB
+npm install mongodb
+
+3- CORS
+npm install cors
