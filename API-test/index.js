@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const app = express();
+const { ObjectId } = require('mongodb');
 
 const { insertDocument, findDocuments, updateDocument, deleteDocument } = require('./mongo.js');
 
@@ -40,16 +41,28 @@ app.delete('/delete', async (req, res) => {
 // Iniciar el servidor
 app.listen(3000, () => console.log('Servidor iniciado en el puerto 3000'));
 
-// obtiene datos de la api
-app.get('/api/data', async (req, res) => {
-    try {
-      const query = { _descripcion: { $eq: 'receta de Gabo(con extra de amor)' } };
-      const documents = await findDocuments("recetas", query);
-      console.log("Me he llegado de la funion -> ")
+// Peticion GET: se pasa el nombre de la tabla y el id del objeto
+app.get('/api/data/:tableName/:id', async (req, res) => {
+  try {
+    const { tableName, id } = req.params;
+    console.log(tableName);
+    console.log(id);
+
+    if(id == "{}"){
+      const query = {};
+      const documents = await findDocuments(tableName, query);
       console.log(documents);
       res.send(documents);
-    } catch (error) {
-      console.log(error);
-      res.status(500).send('Internal server error');
+
+    } else {
+      const query = { _id: new ObjectId(id) };
+      const documents = await findDocuments(tableName, query);
+      console.log(documents);
+      res.send(documents);
     }
+    
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('Internal server error');
+  }
 });

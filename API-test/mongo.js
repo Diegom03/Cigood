@@ -22,8 +22,6 @@ async function findDocuments(collection, query) {
     console.log('Me he conectado');
     const cursor = await db.collection(collection).find(query);
     const documents = await cursor.toArray();
-    console.log('Salgo de la funcion y devuelvo al index -> ');
-    console.log(documents);
     return documents;
   } finally {
     await client.close();

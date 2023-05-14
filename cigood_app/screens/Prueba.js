@@ -5,7 +5,10 @@ const MyScreen = () => {
     const [recipes, setRecipes] = useState([]);
 
     const getRecipes = () => {
-        fetch('http://192.168.1.139:3000/api/data')
+        const tabla = "recetas";
+        const id = "{}";
+        
+        fetch(`http://192.168.1.139:3000/api/data/${tabla}/${id}`)
             .then(response => response.json())
             .then(data => setRecipes(data))
             .catch(error => console.error(error));
