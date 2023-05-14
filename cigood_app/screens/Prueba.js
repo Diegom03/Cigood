@@ -6,9 +6,14 @@ const MyScreen = () => {
 
     const getRecipes = () => {
         const tabla = "recetas";
-        const id = "{}";
-        
-        fetch(`http://192.168.1.139:3000/api/data/${tabla}/${id}`)
+        const id = "644ab1bebb62c636801a0d94";
+
+        // fetch(`http://192.168.1.139:3000/api/data/${tabla}/${id}`)
+        //     .then(response => response.json())
+        //     .then(data => setRecipes(data))
+        //     .catch(error => console.error(error));
+
+        fetch(`http://192.168.1.139:3000/api/despensa/${id}`)
             .then(response => response.json())
             .then(data => setRecipes(data))
             .catch(error => console.error(error));

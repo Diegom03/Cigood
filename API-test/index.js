@@ -4,7 +4,7 @@ const cors = require('cors');
 const app = express();
 const { ObjectId } = require('mongodb');
 
-const { insertDocument, findDocuments, updateDocument, deleteDocument } = require('./mongo.js');
+const { insertDocument, findDocuments, updateDocument, deleteDocument, deleteDocuments } = require('./mongo.js');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -60,6 +60,38 @@ app.get('/api/data/:tableName/:id', async (req, res) => {
       console.log(documents);
       res.send(documents);
     }
+    
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('Internal server error');
+  }
+});
+
+
+// Peticion GET y DELETE que borra de la despensa los ingredientes utilizados
+app.get('/api/despensa/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    //Obtiene la receta
+    let query = { _id: new ObjectId(id) };
+    const receta = await findDocuments("recetas", query);
+    const productosIds = [];
+
+    console.log(receta);
+    // if (receta && Array.isArray(receta._ingredientes)) {
+    //   receta._ingredientes.forEach(ingrediente => {
+    //     productosIds.push(ingrediente.id);
+    //   });
+    // }
+    // else {
+    //   console.log("No se encontró la propiedad _ingredientes en el objeto receta o no es un arreglo.");
+    // }
+
+    //Borra los productos
+    console.log(receta._ingredientes);
+    query = { _producto: { $in: receta._ingredientes } };
+    const borrado = await deleteDocuments("ingredientes", query);
     
   } catch (error) {
     console.log(error);
