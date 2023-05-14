@@ -76,21 +76,11 @@ app.get('/api/despensa/:id', async (req, res) => {
     //Obtiene la receta
     let query = { _id: new ObjectId(id) };
     const receta = await findDocuments("recetas", query);
-    const productosIds = [];
-
     console.log(receta);
-    // if (receta && Array.isArray(receta._ingredientes)) {
-    //   receta._ingredientes.forEach(ingrediente => {
-    //     productosIds.push(ingrediente.id);
-    //   });
-    // }
-    // else {
-    //   console.log("No se encontró la propiedad _ingredientes en el objeto receta o no es un arreglo.");
-    // }
 
     //Borra los productos
-    console.log(receta._ingredientes);
-    query = { _producto: { $in: receta._ingredientes } };
+    console.log(receta[0]._ingredientes);
+    query = { _producto: { $in: receta[0]._ingredientes } };
     const borrado = await deleteDocuments("ingredientes", query);
     
   } catch (error) {

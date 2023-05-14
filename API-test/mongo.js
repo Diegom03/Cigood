@@ -55,7 +55,7 @@ async function deleteDocuments(collection, filter) {
   try {
     await client.connect();
     const db = client.db("cigood");
-    const result = await db.collection(collection).deleteOne(filter);
+    const result = await db.collection(collection).deleteMany(filter);
     console.log(`Eliminados ${result.deletedCount} productos`);
   } finally {
     await client.close();
