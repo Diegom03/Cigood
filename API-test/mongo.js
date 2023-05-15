@@ -31,7 +31,7 @@ async function findDocuments(collection, query) {
 async function updateDocument(collection, filter, update) {
     try {
       await client.connect();
-      const db = client.db("<database>");
+      const db = client.db("cigood");
       const result = await db.collection(collection).updateOne(filter, update);
       console.log(`Matched ${result.matchedCount} documents`);
       console.log(`Modified ${result.modifiedCount} documents`);
@@ -43,7 +43,7 @@ async function updateDocument(collection, filter, update) {
 async function deleteDocument(collection, filter) {
     try {
       await client.connect();
-      const db = client.db("<database>");
+      const db = client.db("cigood");
       const result = await db.collection(collection).deleteMany(filter);
       console.log(`Deleted ${result.deletedCount} documents`);
     } finally {

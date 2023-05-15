@@ -78,10 +78,28 @@ app.get('/api/despensa/:id', async (req, res) => {
     const receta = await findDocuments("recetas", query);
     console.log(receta);
 
-    //Borra los productos
+    //Borra los productos utilizados de la despensa
     console.log(receta[0]._ingredientes);
     query = { _producto: { $in: receta[0]._ingredientes } };
     const borrado = await deleteDocuments("ingredientes", query);
+    
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('Internal server error');
+  }
+});
+
+
+// Verifica el login de usuario
+app.get('/api/login/:tableName/:user/:password', async (req, res) => {
+  try {
+    const { tableName, user, password } = req.params;
+
+    //Obtiene el usuario
+    let query = { name: user, pass: password };
+    const usuario = await findDocuments(tableName, query);
+    console.log(usuario);
+    res.send(usuario);
     
   } catch (error) {
     console.log(error);

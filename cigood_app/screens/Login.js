@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, TextInput, StyleSheet, TouchableOpacity, Text, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = () => {
   const navigation = useNavigation();
+  const tabla = "usuarios";
 
   useEffect(() => {
     const checkSession = async () => {
@@ -26,6 +27,8 @@ const Login = () => {
   const [usernameError, setUsernameError] = React.useState('');
   const [passwordError, setPasswordError] = React.useState('');
 
+  const [login, setLogin] = useState([]);
+
   const handleLogin = async () => {
     if (!username || !password) {
       // Si el usuario o la contraseña están vacíos, muestra un error
@@ -42,15 +45,26 @@ const Login = () => {
       return;
     }
 
-    try {
-      await AsyncStorage.setItem('esta_logueado', 'true');
-    } catch (error) {
-      console.log(error);
-    }
+    fetch(`http://192.168.1.139:3000/api/login/${tabla}/${username}/${password}`)
+            .then(response => response.json())
+            .then(data => setLogin(data))
+            .catch(error => console.error(error));
 
-    console.log(`Iniciando sesión con usuario: ${username} y contraseña: ${password}`);
-    navigation.navigate('Principal');
-    // Aquí ira la validacion a la BD
+    console.log(login);
+
+    // Si ha devuelto un resultado eso queiere decir que el login es correcto
+    if (login.length === 0) {
+      console.log(`Login incorrecto`);
+    } else {
+      try {
+        await AsyncStorage.setItem('esta_logueado', 'true');
+      } catch (error) {
+        console.log(error);
+      }
+  
+      console.log(`Iniciando sesión con usuario: ${username} y contraseña: ${password}`);
+      navigation.navigate('Principal');
+    }
   };
 
   // Link a al pestaña registros
