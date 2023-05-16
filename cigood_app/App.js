@@ -15,6 +15,7 @@ import Cuenta from './screens/Cuenta';
 import Prueba from './screens/Prueba';
 import ListaRecetas from './screens/ListaRecetas';
 import ListaIngredientes from './screens/ListaIngredientes';
+import Camara from './screens/Camara';
 
 const Stack = createStackNavigator();
 
@@ -83,6 +84,11 @@ const App = () => {
             <Stack.Screen
               name="Prueba"
               component={Prueba}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Camara"
+              component={Camara}
               options={{ headerShown: false }}
             />
           </>

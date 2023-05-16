@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const MyScreen = () => {
+    const navigation = useNavigation();
     const [recipes, setRecipes] = useState([]);
 
     const getRecipes = () => {
@@ -19,6 +21,10 @@ const MyScreen = () => {
             .catch(error => console.error(error));
     };
 
+    const getCamara = () => {
+        navigation.navigate('Camara');
+    };
+
     return (
         <View style={styles.container}>
             <Button onPress={getRecipes} title='Mis recetas' />
@@ -27,6 +33,7 @@ const MyScreen = () => {
                     <Text>{recipe._descripcion}</Text>
                 </View>
             ))}
+            <Button onPress={getCamara} title='Mi camara' />
         </View>
     );
 };

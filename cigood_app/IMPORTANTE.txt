@@ -34,6 +34,13 @@ npm install @react-native-community/checkbox
 
 npm install @react-native-async-storage/async-storage
 
+12- para la camara
+
+expo install expo-camera
+
+13- para los permisos
+
+expo install expo-permissions
 
 
 CADA VEZ QUE INSTALE ALGO
