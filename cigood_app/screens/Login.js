@@ -20,7 +20,7 @@ const Login = () => {
     };
 
     checkSession();
-  }, []);
+  }, [login]);
 
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
@@ -28,6 +28,24 @@ const Login = () => {
   const [passwordError, setPasswordError] = React.useState('');
 
   const [login, setLogin] = useState([]);
+
+  useEffect(() => {
+    console.log(login);
+
+    // Si ha devuelto un resultado eso quiere decir que el login es correcto
+    if (login.length === 0) {
+      console.log(`Login incorrecto`);
+    } else {
+      try {
+        AsyncStorage.setItem('esta_logueado', 'true');
+      } catch (error) {
+        console.log(error);
+      }
+
+      console.log(`Iniciando sesión con usuario: ${username} y contraseña: ${password}`);
+      navigation.navigate('Principal');
+    }
+  }, [login]);
 
   const handleLogin = async () => {
     if (!username || !password) {
@@ -46,25 +64,9 @@ const Login = () => {
     }
 
     fetch(`http://192.168.1.139:3000/api/login/${tabla}/${username}/${password}`)
-            .then(response => response.json())
-            .then(data => setLogin(data))
-            .catch(error => console.error(error));
-
-    console.log(login);
-
-    // Si ha devuelto un resultado eso queiere decir que el login es correcto
-    if (login.length === 0) {
-      console.log(`Login incorrecto`);
-    } else {
-      try {
-        await AsyncStorage.setItem('esta_logueado', 'true');
-      } catch (error) {
-        console.log(error);
-      }
-  
-      console.log(`Iniciando sesión con usuario: ${username} y contraseña: ${password}`);
-      navigation.navigate('Principal');
-    }
+      .then(response => response.json())
+      .then(data => setLogin(data))
+      .catch(error => console.error(error));
   };
 
   // Link a al pestaña registros
