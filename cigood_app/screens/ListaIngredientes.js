@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { getIngredientes } from '../conection';
-import { View, Text, TouchableOpacity, StyleSheet, FlatList, Image, Alert, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, FlatList, Image, Alert, TextInput, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 function ListaIngredientes() {
@@ -8,6 +8,9 @@ function ListaIngredientes() {
     const [selectedIngredientes, setSelectedIngredientes] = useState([]);
     const [showConfirmation, setShowConfirmation] = useState(false);
     const navigation = useNavigation();
+    const [texto, setTexto] = useState('');
+    const [sugerencias, setSugerencias] = useState([]);
+    const flatListRef = useRef(null);
 
     useEffect(() => {
         const fetchIngredientes = async () => {
@@ -21,6 +24,16 @@ function ListaIngredientes() {
 
         fetchIngredientes();
     }, []);
+
+    // Datos de ejemplo
+    const ingredientesDB = [
+        'manzana',
+        'mango',
+        'mandarina',
+        'melón',
+        'plátano',
+        'piña',
+    ];
 
     const handleEliminar = () => {
         if (selectedIngredientes.length === 0) {
@@ -67,16 +80,47 @@ function ListaIngredientes() {
             </TouchableOpacity>
         );
     };
+    const handleChange = (nuevoTexto) => {
+        setTexto(nuevoTexto);
 
+        // Obtener sugerencias basadas en el texto introducido
+        const nuevasSugerencias = ingredientesDB.filter((ingrediente) =>
+            ingrediente.toLowerCase().startsWith(nuevoTexto.toLowerCase())
+        );
+
+        setSugerencias(nuevasSugerencias);
+    };
+
+    const handleBlur = () => {
+        setSugerencias([]);
+    };
+
+    const renderSugerencia = ({ item }) => (
+        <View style={styles.sugerenciaContainer}>
+            <Text style={styles.sugerenciaTexto}>{item.charAt(0).toUpperCase() + item.slice(1)}</Text>
+        </View>
+    );
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Ingredientes</Text>
-            <View style={styles.searchContainer}>
-                <TextInput
-                    style={styles.searchInput}
-                    placeholder="Buscar ingredientes"
-                />
-            </View>
+            <TouchableWithoutFeedback onPress={handleBlur}>
+                <View style={styles.inputContainer} >
+                    <TextInput
+                        style={styles.input}
+                        value={texto}
+                        onChangeText={handleChange}
+                        placeholder="Buscar ingredientes..."
+                        onFocus={() => setSugerencias([])}
+                    />
+                    <FlatList
+                        ref={flatListRef}
+                        data={sugerencias}
+                        renderItem={renderSugerencia}
+                        keyExtractor={(item) => item}
+                        contentContainerStyle={styles.sugerenciasContainer}
+                    />
+                </View>
+            </TouchableWithoutFeedback>
             <TouchableOpacity style={styles.settingsButton} onPress={() => navigation.navigate('Ajustes')}>
                 <Image source={require('../images/ajustes.png')} style={styles.settingsButtonImage} />
             </TouchableOpacity>
@@ -129,6 +173,13 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
         padding: 10,
     },
+    inputContainer: {
+        zIndex: 3,
+        marginTop: 130,
+        flex: 1,
+        alignItems: 'center',
+        paddingHorizontal: 16,
+    },
     title: {
         position: 'absolute',
         top: 0,
@@ -143,26 +194,6 @@ const styles = StyleSheet.create({
         zIndex: 2,
         paddingTop: 60,
         paddingBottom: 140,
-    },
-    searchContainer: {
-        position: 'absolute',
-        top: 150,
-        left: 10,
-        right: 10,
-        backgroundColor: '#FFFFFF',
-        paddingHorizontal: 10,
-        paddingVertical: 5,
-        borderRadius: 5,
-        zIndex: 1,
-        borderWidth: 1,
-        borderColor: 'black',
-        marginHorizontal: 20,
-        zIndex: 2,
-
-    },
-    searchInput: {
-        fontSize: 16,
-
     },
     settingsButton: {
         position: 'absolute',
@@ -198,9 +229,9 @@ const styles = StyleSheet.create({
     },
     listContent: {
         paddingHorizontal: 10,
-        paddingTop: 260,
+        paddingTop: 140,
         marginHorizontal: 10, // Ajusta el valor según sea necesario para evitar solapamiento con el título y los botones
-        paddingBottom:90,
+        paddingBottom: 90,
     },
     ingredienteContainer: {
         width: '45%',
@@ -259,13 +290,36 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 100,
         borderRadius: 5,
-        marginBottom:10,
+        marginBottom: 10,
     },
     buscarRecetasButtonText: {
         fontSize: 16,
         fontWeight: 'bold',
         color: 'white',
 
+    },
+    input: {
+        height: 40,
+        width: '100%',
+        borderColor: 'gray',
+        borderWidth: 1,
+        paddingHorizontal: 10,
+        marginBottom: 16,
+    },
+    sugerenciasContainer: {
+        width: '100%',
+        alignItems: 'stretch',
+        zIndex: 3,
+    },
+    sugerenciaContainer: {
+        backgroundColor: '#e5e5e5',
+        padding: 8,
+        marginBottom: 8,
+        width: 1000,
+    },
+    sugerenciaTexto: {
+        fontSize: 16,
+        zIndex: 4,
     },
 });
 
