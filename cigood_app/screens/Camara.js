@@ -1,13 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Modal, Button } from 'react-native';
+import { StyleSheet, Text, View, Modal, Button, Image } from 'react-native';
 import { Camera } from 'expo-camera';
 
 const MyCamera = () => {
   const [scannedBarcode, setScannedBarcode] = useState('');
   const [showPopup, setShowPopup] = useState(false);
+  const [scannedProduct, setScannedProduct] = useState(null);
 
   const handleBarcodeScan = ({ data }) => {
+    // Establece los datos que vienen al escanear
     setScannedBarcode(data);
+
+    // Busca el producto al que corresponde el código de barras
+    fetch(`https://world.openfoodfacts.org/api/v0/product/${data}.json`)
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === 1) {
+          setScannedProduct(data.product);
+        }
+      })
+      .catch(error => console.error(error));
+
     setShowPopup(true);
   };
 
@@ -26,14 +39,17 @@ const MyCamera = () => {
   const closePopup = () => {
     setShowPopup(false);
     setScannedBarcode('');
+    setScannedProduct(null);
+  };
+
+  const handleAddProduct = () => {
+    // Lógica para agregar el producto
+    console.log('Agregar producto');
   };
 
   return (
     <View style={styles.container}>
-      <Camera
-        style={styles.camera}
-        onBarCodeScanned={handleBarcodeScan}
-      />
+      <Camera style={styles.camera} onBarCodeScanned={handleBarcodeScan} />
       <View style={styles.overlay}>
         <View style={styles.rectangleContainer}>
           <View style={styles.rectangle} />
@@ -48,10 +64,20 @@ const MyCamera = () => {
       >
         <View style={styles.popupContainer}>
           <View style={styles.popupContent}>
-            <Text style={styles.popupText}>
-              El código de barras que has escaneado es: {scannedBarcode}
-            </Text>
-            <Button title="Cerrar" onPress={closePopup} color="red" />
+            {scannedProduct && (
+              <React.Fragment>
+                <Text style={styles.popupText}>{scannedProduct.product_name}</Text>
+                {scannedProduct.image_url && (
+                  <Image source={{ uri: scannedProduct.image_url }} style={styles.productImage} />
+                )}
+              </React.Fragment>
+            )}
+            <View style={styles.buttonContainer}>
+              <Button title="Cerrar" onPress={closePopup} color="red" />
+            </View>
+            <View style={styles.buttonContainer}>
+              <Button title="Agregar" onPress={handleAddProduct} color="green" />
+            </View>
           </View>
         </View>
       </Modal>
@@ -105,10 +131,22 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 20,
     alignItems: 'center',
+    justifyContent: 'center',
   },
   popupText: {
-    fontSize: 18,
+    fontSize: 20,
     marginBottom: 20,
+    //fontFamily: 'Arial', // Cambia la fuente a Arial
+    textAlign: 'center', // Centra el texto horizontalmente
+  },
+  productImage: {
+    width: 200,
+    height: 200,
+    marginBottom: 20,
+    alignSelf: 'center', // Alinea la imagen al centro horizontalmente
+  },
+  buttonContainer: {
+    marginTop: 10,
   },
 });
 

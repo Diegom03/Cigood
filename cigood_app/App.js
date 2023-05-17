@@ -16,6 +16,7 @@ import Prueba from './screens/Prueba';
 import ListaRecetas from './screens/ListaRecetas';
 import ListaIngredientes from './screens/ListaIngredientes';
 import Camara from './screens/Camara';
+import CamaraPhoto from './screens/CamaraPhoto';
 
 const Stack = createStackNavigator();
 
@@ -89,6 +90,11 @@ const App = () => {
             <Stack.Screen
               name="Camara"
               component={Camara}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="CamaraPhoto"
+              component={CamaraPhoto}
               options={{ headerShown: false }}
             />
           </>

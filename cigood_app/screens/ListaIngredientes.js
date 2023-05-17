@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { getIngredientes } from '../conection';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, Image, Alert, TextInput, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { block } from 'react-native-reanimated';
+//import { block } from 'react-native-reanimated';
 
 function ListaIngredientes() {
     const [ingredientes, setIngredientes] = useState([]);
