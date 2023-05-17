@@ -68,6 +68,14 @@ function ListaIngredientes() {
         setSelectedIngredientes(updatedSelectedIngredientes);
     };
 
+    const handleSearchChange = (text) => {
+        setTexto(text);
+        const filteredIngredientes = ingredientesDB.filter((ingrediente) =>
+            ingrediente.toLowerCase().includes(text.toLowerCase())
+        );
+        setSugerencias(filteredIngredientes);
+    };
+
     const renderIngrediente = ({ item }) => {
         const isSelected = selectedIngredientes.includes(item.id);
 
@@ -80,50 +88,28 @@ function ListaIngredientes() {
             </TouchableOpacity>
         );
     };
-    const handleChange = (nuevoTexto) => {
-        setTexto(nuevoTexto);
 
-        // Obtener sugerencias basadas en el texto introducido
-        const nuevasSugerencias = ingredientesDB.filter((ingrediente) =>
-            ingrediente.toLowerCase().startsWith(nuevoTexto.toLowerCase())
-        );
-
-        setSugerencias(nuevasSugerencias);
-    };
-
-    const handleBlur = () => {
-        setSugerencias([]);
-    };
-
-    const renderSugerencia = ({ item }) => (
-        <View style={styles.sugerenciaContainer}>
-            <Text style={styles.sugerenciaTexto}>{item.charAt(0).toUpperCase() + item.slice(1)}</Text>
-        </View>
-    );
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Ingredientes</Text>
-            <TouchableWithoutFeedback onPress={handleBlur}>
-                <View style={styles.inputContainer} >
-                    <TextInput
-                        style={styles.input}
-                        value={texto}
-                        onChangeText={handleChange}
-                        placeholder="Buscar ingredientes..."
-                        onFocus={() => setSugerencias([])}
-                    />
-                    <FlatList
-                        ref={flatListRef}
-                        data={sugerencias}
-                        renderItem={renderSugerencia}
-                        keyExtractor={(item) => item}
-                        contentContainerStyle={styles.sugerenciasContainer}
-                    />
-                </View>
-            </TouchableWithoutFeedback>
             <TouchableOpacity style={styles.settingsButton} onPress={() => navigation.navigate('Ajustes')}>
                 <Image source={require('../images/ajustes.png')} style={styles.settingsButtonImage} />
             </TouchableOpacity>
+            <View style={styles.searchContainer}>
+                <TextInput
+                    style={styles.searchInput}
+                    placeholder="Buscar ingredientes"
+                    value={texto}
+                    onChangeText={handleSearchChange}
+                />
+                {sugerencias.length > 0 && (
+                    <FlatList
+                        data={sugerencias}
+                        renderItem={({ item }) => <Text style={styles.searchSuggestion}>{item}</Text>}
+                        keyExtractor={(item) => item}
+                        style={styles.suggestionList}
+                    />)}
+            </View>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity style={styles.button} onPress={handleEliminar}>
                     <Text style={styles.buttonText}>Eliminar</Text>
@@ -138,6 +124,8 @@ function ListaIngredientes() {
                 keyExtractor={(item) => item.id.toString()}
                 numColumns={2}
                 contentContainerStyle={styles.listContent}
+                ref={flatListRef}
+                onContentSizeChange={() => flatListRef.current.scrollToEnd({ animated: true })}
             />
             {showConfirmation && (
                 <View style={styles.confirmationContainer}>
@@ -150,7 +138,8 @@ function ListaIngredientes() {
                             <Text style={styles.confirmationButtonText}>Sí</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
-                            style={styles.confirmationButton} onPress={() => handleConfirmationResponse('no')}
+                            style={styles.confirmationButton}
+                            onPress={() => handleConfirmationResponse('no')}
                         >
                             <Text style={styles.confirmationButtonText}>No</Text>
                         </TouchableOpacity>
@@ -172,13 +161,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#FFFFFF',
         padding: 10,
-    },
-    inputContainer: {
-        zIndex: 3,
-        marginTop: 130,
-        flex: 1,
-        alignItems: 'center',
-        paddingHorizontal: 16,
     },
     title: {
         position: 'absolute',
@@ -207,6 +189,38 @@ const styles = StyleSheet.create({
         width: 30,
         height: 30,
     },
+    searchContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: 140,
+        marginBottom: 20,
+        zIndex: 4,
+    },
+    searchInput: {
+        flex: 1,
+        height: 40,
+        borderColor: '#DDDDDD',
+        borderWidth: 1,
+        borderRadius: 5,
+        paddingHorizontal: 10,
+        marginRight: 10,
+    },
+    suggestionList: {
+        position: 'absolute',
+        top: 60, // Ajusta este valor según sea necesario para que la lista aparezca debajo de la barra de búsqueda
+        left: 0,
+        right: 0,
+        zIndex: 2, // Asegúrate de que la lista tenga un valor de zIndex mayor que los botones
+        backgroundColor: '#FFFFFF',
+        paddingHorizontal: 10,
+        borderColor: '#DDDDDD',
+        borderWidth: 1,
+        borderRadius: 5,
+    },
+    searchSuggestion: {
+        fontSize: 16,
+        paddingVertical: 5,
+    },
     buttonContainer: {
         position: 'absolute',
         top: 200,
@@ -229,7 +243,7 @@ const styles = StyleSheet.create({
     },
     listContent: {
         paddingHorizontal: 10,
-        paddingTop: 140,
+        paddingTop: 50,
         marginHorizontal: 10, // Ajusta el valor según sea necesario para evitar solapamiento con el título y los botones
         paddingBottom: 90,
     },
@@ -296,30 +310,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         color: 'white',
-
-    },
-    input: {
-        height: 40,
-        width: '100%',
-        borderColor: 'gray',
-        borderWidth: 1,
-        paddingHorizontal: 10,
-        marginBottom: 16,
-    },
-    sugerenciasContainer: {
-        width: '100%',
-        alignItems: 'stretch',
-        zIndex: 3,
-    },
-    sugerenciaContainer: {
-        backgroundColor: '#e5e5e5',
-        padding: 8,
-        marginBottom: 8,
-        width: 1000,
-    },
-    sugerenciaTexto: {
-        fontSize: 16,
-        zIndex: 4,
     },
 });
 
