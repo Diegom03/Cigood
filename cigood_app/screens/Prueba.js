@@ -30,10 +30,6 @@ const MyScreen = () => {
         //     .catch(error => console.error(error));
     };
 
-    const getCamara = () => {
-        navigation.navigate('Camara');
-    };
-
     return (
         <View style={styles.container}>
             <Button onPress={getRecipes} title='Mis recetas' />

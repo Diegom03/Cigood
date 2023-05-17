@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Modal, Button } from 'react-native';
 import { Camera } from 'expo-camera';
-
 
 const MyCamera = () => {
   const [scannedBarcode, setScannedBarcode] = useState('');
+  const [showPopup, setShowPopup] = useState(false);
 
   const handleBarcodeScan = ({ data }) => {
     setScannedBarcode(data);
+    setShowPopup(true);
   };
 
   const getCameraPermission = async () => {
@@ -16,17 +17,16 @@ const MyCamera = () => {
       console.log('Se ha denegado el permiso para acceder a la cámara');
       return;
     }
-    // Aquí puedes realizar las acciones necesarias una vez que se hayan concedido los permisos
   };
 
   useEffect(() => {
-    // Realizar cualquier acción adicional con el código de barras escaneado
-    console.log('Código de barras escaneado:', scannedBarcode);
-  }, [scannedBarcode]);
-
-  useEffect(() => {
     getCameraPermission();
-  }, []);  
+  }, []);
+
+  const closePopup = () => {
+    setShowPopup(false);
+    setScannedBarcode('');
+  };
 
   return (
     <View style={styles.container}>
@@ -35,8 +35,26 @@ const MyCamera = () => {
         onBarCodeScanned={handleBarcodeScan}
       />
       <View style={styles.overlay}>
-        <Text style={styles.overlayText}>Apunta la cámara hacia un código de barras</Text>
+        <View style={styles.rectangleContainer}>
+          <View style={styles.rectangle} />
+        </View>
+        <Text style={styles.overlayText}>Enfoca el código de barras</Text>
       </View>
+      <Modal
+        visible={showPopup}
+        animationType="fade"
+        transparent={true}
+        onRequestClose={closePopup}
+      >
+        <View style={styles.popupContainer}>
+          <View style={styles.popupContent}>
+            <Text style={styles.popupText}>
+              El código de barras que has escaneado es: {scannedBarcode}
+            </Text>
+            <Button title="Cerrar" onPress={closePopup} color="red" />
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -44,14 +62,9 @@ const MyCamera = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   camera: {
     flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    width: '100%',
   },
   overlay: {
     position: 'absolute',
@@ -61,14 +74,41 @@ const styles = StyleSheet.create({
     bottom: 0,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  rectangleContainer: {
+    width: 250,
+    height: 130,
+    borderWidth: 1,
+    borderColor: 'white',
+    marginBottom: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  rectangle: {
+    width: '100%',
+    height: '100%',
+    borderWidth: 2,
+    borderColor: 'white',
   },
   overlayText: {
-    color: 'white',
     fontSize: 16,
-    fontWeight: 'bold',
-    padding: 16,
-    textAlign: 'center',
+    color: 'white',
+  },
+  popupContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  popupContent: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 20,
+    alignItems: 'center',
+  },
+  popupText: {
+    fontSize: 18,
+    marginBottom: 20,
   },
 });
 

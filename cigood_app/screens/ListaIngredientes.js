@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { getIngredientes } from '../conection';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, Image, Alert, TextInput, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { block } from 'react-native-reanimated';
 
 function ListaIngredientes() {
     const [ingredientes, setIngredientes] = useState([]);
@@ -89,6 +90,10 @@ function ListaIngredientes() {
         );
     };
 
+    const usarCamara = () => {
+        navigation.navigate('Camara');
+    };
+
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Ingredientes</Text>
@@ -109,6 +114,14 @@ function ListaIngredientes() {
                         keyExtractor={(item) => item}
                         style={styles.suggestionList}
                     />)}
+                <TouchableOpacity onPress={usarCamara}>
+                    <View style={styles.searchIconContainer}>
+                        <Image
+                            source={require('../images/camara.png')}
+                            style={styles.searchIcon}
+                        />
+                    </View>
+                </TouchableOpacity>
             </View>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity style={styles.button} onPress={handleEliminar}>
@@ -220,6 +233,13 @@ const styles = StyleSheet.create({
     searchSuggestion: {
         fontSize: 16,
         paddingVertical: 5,
+    },
+    searchIconContainer: {
+        marginLeft: 8,
+    },
+    searchIcon: {
+        width: 40,
+        height: 40,
     },
     buttonContainer: {
         position: 'absolute',
