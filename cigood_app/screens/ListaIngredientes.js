@@ -69,7 +69,12 @@ function ListaIngredientes() {
         setSelectedIngredientes(updatedSelectedIngredientes);
     };
 
+    const hideSuggestions = () => {
+        setSugerencias([]);
+      };
+
     const handleSearchChange = (text) => {
+        const capitalizedText = text.charAt(0).toUpperCase() + text.slice(1);
         setTexto(text);
         const filteredIngredientes = ingredientesDB.filter((ingrediente) =>
             ingrediente.toLowerCase().includes(text.toLowerCase())
@@ -95,77 +100,72 @@ function ListaIngredientes() {
     };
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Ingredientes</Text>
-            <TouchableOpacity style={styles.settingsButton} onPress={() => navigation.navigate('Ajustes')}>
-                <Image source={require('../images/ajustes.png')} style={styles.settingsButtonImage} />
-            </TouchableOpacity>
-            <View style={styles.searchContainer}>
-                <TextInput
-                    style={styles.searchInput}
-                    placeholder="Buscar ingredientes"
-                    value={texto}
-                    onChangeText={handleSearchChange}
-                />
-                {sugerencias.length > 0 && (
-                    <FlatList
-                        data={sugerencias}
-                        renderItem={({ item }) => <Text style={styles.searchSuggestion}>{item}</Text>}
-                        keyExtractor={(item) => item}
-                        style={styles.suggestionList}
-                    />)}
-                <TouchableOpacity onPress={usarCamara}>
-                    <View style={styles.searchIconContainer}>
-                        <Image
-                            source={require('../images/camara.png')}
-                            style={styles.searchIcon}
-                        />
-                    </View>
+        <TouchableWithoutFeedback onPress={hideSuggestions}>
+            <View style={styles.container}>
+                <Text style={styles.title}>Ingredientes</Text>
+                <TouchableOpacity style={styles.settingsButton} onPress={() => navigation.navigate('Ajustes')}>
+                    <Image source={require('../images/ajustes.png')} style={styles.settingsButtonImage} />
                 </TouchableOpacity>
-            </View>
-            <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.button} onPress={handleEliminar}>
-                    <Text style={styles.buttonText}>Eliminar</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.button}>
-                    <Text style={styles.buttonText}>Vaciar lista</Text>
-                </TouchableOpacity>
-            </View>
-            <FlatList
-                data={ingredientes}
-                renderItem={renderIngrediente}
-                keyExtractor={(item) => item.id.toString()}
-                numColumns={2}
-                contentContainerStyle={styles.listContent}
-                ref={flatListRef}
-                onContentSizeChange={() => flatListRef.current.scrollToEnd({ animated: true })}
-            />
-            {showConfirmation && (
-                <View style={styles.confirmationContainer}>
-                    <Text style={styles.confirmationText}>¿Estás seguro de que quieres eliminar los ingredientes?</Text>
-                    <View style={styles.confirmationButtons}>
-                        <TouchableOpacity
-                            style={[styles.confirmationButton, { backgroundColor: 'lightblue' }]}
-                            onPress={() => handleConfirmationResponse('yes')}
-                        >
-                            <Text style={styles.confirmationButtonText}>Sí</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={styles.confirmationButton}
-                            onPress={() => handleConfirmationResponse('no')}
-                        >
-                            <Text style={styles.confirmationButtonText}>No</Text>
-                        </TouchableOpacity>
-                    </View>
+                <View style={styles.searchContainer}>
+                    <TextInput
+                        style={styles.searchInput}
+                        placeholder="Buscar ingredientes"
+                        value={texto}
+                        onChangeText={handleSearchChange}
+                    />
+                    {sugerencias.length > 0 && (
+                        <FlatList
+                            data={sugerencias}
+                            renderItem={({ item }) => <Text style={styles.searchSuggestion}>{item}</Text>}
+                            keyExtractor={(item) => item}
+                            style={styles.suggestionList}
+                            
+                        />)}
                 </View>
-            )}
-            <View style={styles.whiteBar}>
-                {/* Agregar el botón "Buscar recetas" dentro de la franja blanca */}
-                <TouchableOpacity style={styles.buscarRecetasButton}>
-                    <Text style={styles.buscarRecetasButtonText}>Buscar recetas</Text>
-                </TouchableOpacity>
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity style={styles.button} onPress={handleEliminar}>
+                        <Text style={styles.buttonText}>Eliminar</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.button}>
+                        <Text style={styles.buttonText}>Vaciar lista</Text>
+                    </TouchableOpacity>
+                </View>
+                <FlatList
+                    data={ingredientes}
+                    renderItem={renderIngrediente}
+                    keyExtractor={(item) => item.id.toString()}
+                    numColumns={2}
+                    contentContainerStyle={styles.listContent}
+                    ref={flatListRef}
+                    onContentSizeChange={() => flatListRef.current.scrollToEnd({ animated: true })}
+                />
+                {showConfirmation && (
+                    <View style={styles.confirmationContainer}>
+                        <Text style={styles.confirmationText}>¿Estás seguro de que quieres eliminar los ingredientes?</Text>
+                        <View style={styles.confirmationButtons}>
+                            <TouchableOpacity
+                                style={[styles.confirmationButton, { backgroundColor: 'lightblue' }]}
+                                onPress={() => handleConfirmationResponse('yes')}
+                            >
+                                <Text style={styles.confirmationButtonText}>Sí</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={styles.confirmationButton}
+                                onPress={() => handleConfirmationResponse('no')}
+                            >
+                                <Text style={styles.confirmationButtonText}>No</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                )}
+                <View style={styles.whiteBar}>
+                    {/* Agregar el botón "Buscar recetas" dentro de la franja blanca */}
+                    <TouchableOpacity style={styles.buscarRecetasButton}>
+                        <Text style={styles.buscarRecetasButtonText}>Buscar recetas</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
-        </View>
+        </TouchableWithoutFeedback>
     );
 }
 
