@@ -41,7 +41,7 @@ app.delete('/delete', async (req, res) => {
 // Iniciar el servidor
 app.listen(3000, () => console.log('Servidor iniciado en el puerto 3000'));
 
-// Peticion GET: se pasa el nombre de la tabla y el id del objeto
+// Peticion GET (1-{}): se pasa el nombre de la tabla y el id del objeto
 app.get('/api/data/:tableName/:id', async (req, res) => {
   try {
     const { tableName, id } = req.params;

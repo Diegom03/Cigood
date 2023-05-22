@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Modal, Button, Image } from 'react-native';
+import { StyleSheet, Text, View, Modal, Image, TouchableOpacity  } from 'react-native';
 import { Camera } from 'expo-camera';
 
 const MyCamera = () => {
@@ -43,7 +43,6 @@ const MyCamera = () => {
   };
 
   const handleAddProduct = () => {
-    // Lógica para agregar el producto
     console.log('Agregar producto');
   };
 
@@ -66,17 +65,25 @@ const MyCamera = () => {
           <View style={styles.popupContent}>
             {scannedProduct && (
               <React.Fragment>
-                <Text style={styles.popupText}>{scannedProduct.product_name}</Text>
                 {scannedProduct.image_url && (
                   <Image source={{ uri: scannedProduct.image_url }} style={styles.productImage} />
                 )}
+                <Text style={styles.popupText}>¿Quieres añadir {scannedProduct.product_name} ?</Text>
               </React.Fragment>
             )}
-            <View style={styles.buttonContainer}>
-              <Button title="Cerrar" onPress={closePopup} color="red" />
-            </View>
-            <View style={styles.buttonContainer}>
-              <Button title="Agregar" onPress={handleAddProduct} color="green" />
+            <View style={styles.buttonGroupContainer}>
+              <TouchableOpacity
+                style={[styles.buttonContainer, styles.buttonYes]}
+                onPress={handleAddProduct}
+              >
+                <Text style={styles.buttonText}>Sí</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.buttonContainer, styles.buttonNo]}
+                onPress={closePopup}
+              >
+                <Text style={styles.buttonText}>No</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -128,25 +135,46 @@ const styles = StyleSheet.create({
   },
   popupContent: {
     backgroundColor: 'white',
-    borderRadius: 10,
+    borderRadius: 50,
     padding: 20,
     alignItems: 'center',
     justifyContent: 'center',
+    width: 250,
+    height: 300,
   },
   popupText: {
-    fontSize: 20,
+    fontSize: 14,
     marginBottom: 20,
     //fontFamily: 'Arial', // Cambia la fuente a Arial
     textAlign: 'center', // Centra el texto horizontalmente
   },
   productImage: {
-    width: 200,
-    height: 200,
+    width: 140,
+    height: 140,
     marginBottom: 20,
     alignSelf: 'center', // Alinea la imagen al centro horizontalmente
   },
+  buttonGroupContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
   buttonContainer: {
-    marginTop: 10,
+    width: 80,
+    borderRadius: 20,
+    overflow: 'hidden',
+  },
+  buttonYes: {
+    backgroundColor: '#52BB32',
+  },
+  buttonNo: {
+    backgroundColor: '#E12626',
+  },
+  buttonText: {
+    color: 'white',
+    textAlign: 'center',
+    paddingVertical: 6,
+    fontSize: 18,
   },
 });
 

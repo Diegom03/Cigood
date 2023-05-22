@@ -71,7 +71,7 @@ function ListaIngredientes() {
 
     const hideSuggestions = () => {
         setSugerencias([]);
-      };
+    };
 
     const handleSearchChange = (text) => {
         const capitalizedText = text.charAt(0).toUpperCase() + text.slice(1);
@@ -119,8 +119,16 @@ function ListaIngredientes() {
                             renderItem={({ item }) => <Text style={styles.searchSuggestion}>{item}</Text>}
                             keyExtractor={(item) => item}
                             style={styles.suggestionList}
-                            
+
                         />)}
+                    <TouchableOpacity onPress={usarCamara}>
+                        <View style={styles.searchIconContainer}>
+                            <Image
+                                source={require('../images/camara.png')}
+                                style={styles.searchIcon}
+                            />
+                        </View>
+                    </TouchableOpacity>
                 </View>
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity style={styles.button} onPress={handleEliminar}>
@@ -233,6 +241,13 @@ const styles = StyleSheet.create({
     searchSuggestion: {
         fontSize: 16,
         paddingVertical: 5,
+    },
+    searchIconContainer: {
+        marginLeft: 8,
+    },
+    searchIcon: {
+        width: 40,
+        height: 40,
     },
     searchIconContainer: {
         marginLeft: 8,
