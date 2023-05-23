@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getRecetas } from '../conection';
+import { getRecetas } from '../Onload';
 import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 

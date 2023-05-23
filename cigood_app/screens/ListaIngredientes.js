@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { getIngredientes } from '../conection';
+import { getIngredientes } from '../Onload';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, Image, Alert, TextInput, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 //import { block } from 'react-native-reanimated';
@@ -83,14 +83,14 @@ function ListaIngredientes() {
     };
 
     const renderIngrediente = ({ item }) => {
-        const isSelected = selectedIngredientes.includes(item.id);
+        const isSelected = selectedIngredientes.includes(item._producto);
 
         return (
             <TouchableOpacity
                 style={[styles.ingredienteContainer, isSelected && styles.selectedIngrediente]}
-                onPress={() => handleIngredientePress(item.id)}
+                onPress={() => handleIngredientePress(item._producto)}
             >
-                <Text style={styles.ingredienteNombre}>{item.name}</Text>
+                <Text style={styles.ingredienteNombre}>{item._nombre}</Text>
             </TouchableOpacity>
         );
     };
@@ -141,7 +141,7 @@ function ListaIngredientes() {
                 <FlatList
                     data={ingredientes}
                     renderItem={renderIngrediente}
-                    keyExtractor={(item) => item.id.toString()}
+                    keyExtractor={(item) => item._producto.toString()}
                     numColumns={2}
                     contentContainerStyle={styles.listContent}
                     ref={flatListRef}
