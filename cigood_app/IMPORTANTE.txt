@@ -42,6 +42,10 @@ expo install expo-camera
 
 expo install expo-permissions
 
+14- para el css
+
+npm install react-native-css
+
 
 CADA VEZ QUE INSTALE ALGO
 npm start --reset-cache

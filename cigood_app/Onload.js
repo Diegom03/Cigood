@@ -1,7 +1,7 @@
 // AQUI SE REALIZAN LAS LLAMADAS A COMPONENTES ONLOAD
 
 // VARIABLES LOCALES
-import { TABLA_INGREDIENTES, GET_ALL } from './constants.js';
+import { TABLA_INGREDIENTES, GET_ALL, TABLA_DESPENSA } from './constants.js';
 
 // ESTA funcion devuelve todas las recetas
 export function getRecetas() {
@@ -59,14 +59,42 @@ export function getRecetas() {
 // Esta funcion devuelve los ingredientes de la despensa de un usuario
 export async function getIngredientes() {
   try {
-    const tabla = TABLA_INGREDIENTES;
+    const tabla = TABLA_DESPENSA;
     const id = GET_ALL;
     
     const response = await fetch(`http://192.168.1.139:3000/api/data/${tabla}/${id}`);
     const ingredientes = await response.json();
     
-    console.log(ingredientes);
-    return ingredientes;
+    const ingredientesConId = ingredientes.map((ingrediente) => {
+      return {
+        ...ingrediente,
+        id: ingrediente._producto, // Utilizar "_producto" como el id
+      };
+    });
+
+    console.log(ingredientesConId);
+    return ingredientesConId;
+
+  } catch (error) {
+    console.error('Error al obtener los ingredientes:', error);
+    throw error;
+  }
+}
+
+export async function dropIngredientes(ingredientesB, borrar) {
+  try {
+    const tabla = TABLA_DESPENSA;
+    let id = null;
+
+    if (borrar === "varios") {
+      id = ingredientesB;
+
+    } else if (borrar === "{}") {
+      id = GET_ALL;
+    }
+    
+    await fetch(`http://192.168.1.139:3000/api/delete/${tabla}/${id}`);
+
   } catch (error) {
     console.error('Error al obtener los ingredientes:', error);
     throw error;

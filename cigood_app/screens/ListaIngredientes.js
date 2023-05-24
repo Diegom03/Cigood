@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { getIngredientes } from '../Onload';
+import { getIngredientes, dropIngredientes } from '../Onload';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, Image, Alert, TextInput, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 //import { block } from 'react-native-reanimated';
@@ -37,37 +37,47 @@ function ListaIngredientes() {
     ];
 
     const handleEliminar = () => {
+        // Si no hay nada seleccionado vuelve a la lista
         if (selectedIngredientes.length === 0) {
             return;
         }
 
+        // Si hay ingredientes marcados, muestra la confirmación
         setShowConfirmation(true);
     };
 
     const handleConfirmationResponse = (response) => {
         if (response === 'yes') {
-            // Eliminar ingredientes seleccionados
-            setIngredientes((prevIngredientes) =>
-                prevIngredientes.filter((ingrediente) => !selectedIngredientes.includes(ingrediente))
-            );
-            setSelectedIngredientes([]);
-        }
+          // Obtener los ids de los ingredientes seleccionados
+          const idsSeleccionados = selectedIngredientes.map((id) => id._producto);
 
+          console.log(idsSeleccionados);
+
+          // Eliminar ingredientes (BBDD)
+          dropIngredientes(idsSeleccionados, "varios");
+      
+          // Eliminar ingredientes seleccionados (visual)
+          setIngredientes((prevIngredientes) =>
+            prevIngredientes.filter((ingrediente) => !idsSeleccionados.includes(ingrediente._producto))
+          );
+          setSelectedIngredientes([]);
+        }
+      
         setShowConfirmation(false);
     };
 
-    const handleIngredientePress = (id) => {
+    const handleIngredientePress = (item) => {
         let updatedSelectedIngredientes;
-        if (selectedIngredientes.includes(id)) {
-            // Desseleccionar ingrediente
-            updatedSelectedIngredientes = selectedIngredientes.filter((selectedId) => selectedId !== id);
+        if (selectedIngredientes.includes(item)) {
+          // Desseleccionar ingrediente
+          updatedSelectedIngredientes = selectedIngredientes.filter((selectedItem) => selectedItem !== item);
         } else {
-            // Seleccionar ingrediente
-            updatedSelectedIngredientes = [...selectedIngredientes, id];
+          // Seleccionar ingrediente
+          updatedSelectedIngredientes = [...selectedIngredientes, item];
         }
-
+      
         setSelectedIngredientes(updatedSelectedIngredientes);
-    };
+    };     
 
     const hideSuggestions = () => {
         setSugerencias([]);
@@ -83,15 +93,15 @@ function ListaIngredientes() {
     };
 
     const renderIngrediente = ({ item }) => {
-        const isSelected = selectedIngredientes.includes(item._producto);
-
+        const isSelected = selectedIngredientes.includes(item);
+      
         return (
-            <TouchableOpacity
-                style={[styles.ingredienteContainer, isSelected && styles.selectedIngrediente]}
-                onPress={() => handleIngredientePress(item._producto)}
-            >
-                <Text style={styles.ingredienteNombre}>{item._nombre}</Text>
-            </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.ingredienteContainer, isSelected && styles.selectedIngrediente]}
+            onPress={() => handleIngredientePress(item)}
+          >
+            <Text style={styles.ingredienteNombre}>{item._nombre}</Text>
+          </TouchableOpacity>
         );
     };
 
@@ -145,7 +155,8 @@ function ListaIngredientes() {
                     numColumns={2}
                     contentContainerStyle={styles.listContent}
                     ref={flatListRef}
-                    onContentSizeChange={() => flatListRef.current.scrollToEnd({ animated: true })}
+                    onContentSizeChange={() => ingredientes.length > 0 && flatListRef.current.scrollToEnd({ animated: true })}
+
                 />
                 {showConfirmation && (
                     <View style={styles.confirmationContainer}>
@@ -265,12 +276,14 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         zIndex: 2,
         marginHorizontal: 20,
+        paddingTop: 5,
     },
     button: {
-        backgroundColor: '#DDDDDD',
+        backgroundColor: '#DF8371',
         paddingVertical: 10,
-        paddingHorizontal: 20,
+        paddingHorizontal: 10,
         borderRadius: 5,
+        width: 130,
     },
     buttonText: {
         fontSize: 16,

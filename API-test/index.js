@@ -48,7 +48,7 @@ app.get('/api/data/:tableName/:id', async (req, res) => {
     console.log(tableName);
     console.log(id);
 
-    if(id == "{}"){
+    if (id == "{}") {
       const query = {};
       const documents = await findDocuments(tableName, query);
       console.log(documents);
@@ -60,7 +60,29 @@ app.get('/api/data/:tableName/:id', async (req, res) => {
       console.log(documents);
       res.send(documents);
     }
-    
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('Internal server error');
+  }
+});
+
+
+// Peticion DELETE (1-{}): se pasa el nombre de la tabla y el id(s) del objeto(s) a borrar
+app.get('/api/delete/:tableName/:id', async (req, res) => {
+  try {
+    const { tableName, id } = req.params;
+
+    if (id == "{}") {
+      const query = {};
+      await deleteDocument(tableName, query);
+
+    } else {
+      const query = { _producto: { $in: id.split(",").map(Number) } };
+      console.log(query); // Imprimir el valor de query
+      await deleteDocuments(tableName, query);
+    }
+
   } catch (error) {
     console.log(error);
     res.status(500).send('Internal server error');
@@ -82,7 +104,7 @@ app.get('/api/despensa/:id', async (req, res) => {
     console.log(receta[0]._ingredientes);
     query = { _producto: { $in: receta[0]._ingredientes } };
     const borrado = await deleteDocuments("ingredientes", query);
-    
+
   } catch (error) {
     console.log(error);
     res.status(500).send('Internal server error');
@@ -100,7 +122,7 @@ app.get('/api/login/:tableName/:user/:password', async (req, res) => {
     const usuario = await findDocuments(tableName, query);
     console.log(usuario);
     res.send(usuario);
-    
+
   } catch (error) {
     console.log(error);
     res.status(500).send('Internal server error');
