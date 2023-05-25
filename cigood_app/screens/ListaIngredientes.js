@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { getIngredientes, dropIngredientes } from '../Onload';
+import { getIngredientes, dropIngredientes, asyncIngredientes } from '../Onload';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, Image, Alert, TextInput, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 //import { block } from 'react-native-reanimated';
 
 function ListaIngredientes() {
     const [ingredientes, setIngredientes] = useState([]);
+    const [ingredientesDB, setIngredientesDB] = useState([]);
     const [selectedIngredientes, setSelectedIngredientes] = useState([]);
     const [showConfirmation, setShowConfirmation] = useState(false);
     const navigation = useNavigation();
@@ -15,9 +16,19 @@ function ListaIngredientes() {
 
     useEffect(() => {
         const fetchIngredientes = async () => {
+            //Obtiene los ingredientes de la despensa
             try {
                 const ingredientesData = await getIngredientes();
                 setIngredientes(ingredientesData);
+            } catch (error) {
+                console.error('Error al obtener los ingredientes:', error);
+            }
+
+            // Obtiene el asistente de busqueda
+            try {
+                const ingredientesLista = await asyncIngredientes();
+                setIngredientesDB(ingredientesLista);
+                alert(JSON.stringify(ingredientesLista));
             } catch (error) {
                 console.error('Error al obtener los ingredientes:', error);
             }
@@ -27,14 +38,14 @@ function ListaIngredientes() {
     }, []);
 
     // Datos de ejemplo
-    const ingredientesDB = [
-        'manzana',
-        'mango',
-        'mandarina',
-        'melón',
-        'plátano',
-        'piña',
-    ];
+    // const ingredientesDB = [
+    //     'manzana',
+    //     'mango',
+    //     'mandarina',
+    //     'melón',
+    //     'plátano',
+    //     'piña',
+    // ];
 
     const handleEliminar = () => {
         // Si no hay nada seleccionado vuelve a la lista

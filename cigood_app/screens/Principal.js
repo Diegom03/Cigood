@@ -1,12 +1,42 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Modal, Button } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { asyncDespensa } from '../Onload';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Modal, Button, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const MyScreen = () => {
     const navigation = useNavigation();
     const [isFilterModalVisible, setFilterModalVisible] = useState(false);
     const [selectedFilters, setSelectedFilters] = useState([]);
 
+    //  Carga la despensa actualizada y la agrega al asyncStorage  \\
+    
+    // useEffect(() => {
+    //     const obtenerDespensa = async () => {
+    //         try {
+    //             const resultado = await asyncDespensa();
+    //             alert(JSON.stringify(resultado));
+
+    //             // Meto el objeto al async storage
+    //             const despensa = JSON.stringify(resultado);
+    //             await AsyncStorage.setItem('despensa', despensa);
+
+    //             // Obtengo el objeto
+    //             // const despensaGet = await AsyncStorage.getItem('despensa');
+    //             // const despensaGetLog = JSON.parse(despensaGet);
+    //             // console.log("Obtengo:");
+    //             // console.log(despensaGetLog);
+
+    //         } catch (error) {
+    //             console.error('Error al obtener la despensa:', error);
+    //         }
+    //     };
+    
+    //     obtenerDespensa();
+    // }, []);
+
+    //  ---------------------------------------------------------  \\
+    
     const handleFilterButtonPress = () => {
         setFilterModalVisible(true);
     };

@@ -100,3 +100,37 @@ export async function dropIngredientes(ingredientesB, borrar) {
     throw error;
   }
 }
+
+// Agrega la despensa al asyncStorage
+export async function asyncDespensa() {
+  try {
+    const tabla = TABLA_DESPENSA;
+    const id = GET_ALL;
+
+    const response = await fetch(`http://192.168.1.139:3000/api/data/${tabla}/${id}`);
+    const ingredientes = await response.json();
+
+    return ingredientes;
+
+  } catch (error) {
+    console.error('Error al obtener la despensa:', error);
+    throw error;
+  }
+}
+
+// Obtiene toda la tabla ingredientes
+export async function asyncIngredientes() {
+  try {
+    const tabla = TABLA_INGREDIENTES;
+    const id = GET_ALL;
+
+    const response = await fetch(`http://192.168.1.139:3000/api/data/${tabla}/${id}`);
+    const ingredientes = await response.json();
+
+    return ingredientes;
+
+  } catch (error) {
+    console.error('Error al obtener la despensa:', error);
+    throw error;
+  }
+}
