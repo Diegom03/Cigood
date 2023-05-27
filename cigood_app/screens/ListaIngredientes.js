@@ -10,6 +10,7 @@ function ListaIngredientes() {
     const [selectedIngredientes, setSelectedIngredientes] = useState([]);
     const [showConfirmation, setShowConfirmation] = useState(false);
     const navigation = useNavigation();
+    const [searchValue, setSearchValue] = useState('');
     const [texto, setTexto] = useState('');
     const [sugerencias, setSugerencias] = useState([]);
     const flatListRef = useRef(null);
@@ -27,8 +28,9 @@ function ListaIngredientes() {
             // Obtiene el asistente de busqueda
             try {
                 const ingredientesLista = await asyncIngredientes();
-                setIngredientesDB(ingredientesLista);
-                alert(JSON.stringify(ingredientesLista));
+                const nombresIngredientes = ingredientesLista.map((ingrediente) => ingrediente._nombre);
+                setIngredientesDB(nombresIngredientes);
+                alert(JSON.stringify(nombresIngredientes));
             } catch (error) {
                 console.error('Error al obtener los ingredientes:', error);
             }
@@ -36,16 +38,6 @@ function ListaIngredientes() {
 
         fetchIngredientes();
     }, []);
-
-    // Datos de ejemplo
-    // const ingredientesDB = [
-    //     'manzana',
-    //     'mango',
-    //     'mandarina',
-    //     'melón',
-    //     'plátano',
-    //     'piña',
-    // ];
 
     const handleEliminar = () => {
         // Si no hay nada seleccionado vuelve a la lista
@@ -59,38 +51,43 @@ function ListaIngredientes() {
 
     const handleConfirmationResponse = (response) => {
         if (response === 'yes') {
-          // Obtener los ids de los ingredientes seleccionados
-          const idsSeleccionados = selectedIngredientes.map((id) => id._producto);
+            // Obtener los ids de los ingredientes seleccionados
+            const idsSeleccionados = selectedIngredientes.map((id) => id._producto);
 
-          console.log(idsSeleccionados);
+            console.log(idsSeleccionados);
 
-          // Eliminar ingredientes (BBDD)
-          dropIngredientes(idsSeleccionados, "varios");
-      
-          // Eliminar ingredientes seleccionados (visual)
-          setIngredientes((prevIngredientes) =>
-            prevIngredientes.filter((ingrediente) => !idsSeleccionados.includes(ingrediente._producto))
-          );
-          setSelectedIngredientes([]);
+            // Eliminar ingredientes (BBDD)
+            dropIngredientes(idsSeleccionados, "varios");
+
+            // Eliminar ingredientes seleccionados (visual)
+            setIngredientes((prevIngredientes) =>
+                prevIngredientes.filter((ingrediente) => !idsSeleccionados.includes(ingrediente._producto))
+            );
+            setSelectedIngredientes([]);
         }
-      
+
         setShowConfirmation(false);
     };
 
     const handleIngredientePress = (item) => {
         let updatedSelectedIngredientes;
         if (selectedIngredientes.includes(item)) {
-          // Desseleccionar ingrediente
-          updatedSelectedIngredientes = selectedIngredientes.filter((selectedItem) => selectedItem !== item);
+            // Desseleccionar ingrediente
+            updatedSelectedIngredientes = selectedIngredientes.filter((selectedItem) => selectedItem !== item);
         } else {
-          // Seleccionar ingrediente
-          updatedSelectedIngredientes = [...selectedIngredientes, item];
+            // Seleccionar ingrediente
+            updatedSelectedIngredientes = [...selectedIngredientes, item];
         }
-      
+
         setSelectedIngredientes(updatedSelectedIngredientes);
-    };     
+    };
 
     const hideSuggestions = () => {
+        setSugerencias([]);
+    };
+
+    const handleSuggestionPress = (ingredient) => {
+        setSearchValue(ingredient);
         setSugerencias([]);
     };
 
@@ -101,18 +98,19 @@ function ListaIngredientes() {
             ingrediente.toLowerCase().includes(text.toLowerCase())
         );
         setSugerencias(filteredIngredientes);
+        setSearchValue(text);
     };
 
     const renderIngrediente = ({ item }) => {
         const isSelected = selectedIngredientes.includes(item);
-      
+
         return (
-          <TouchableOpacity
-            style={[styles.ingredienteContainer, isSelected && styles.selectedIngrediente]}
-            onPress={() => handleIngredientePress(item)}
-          >
-            <Text style={styles.ingredienteNombre}>{item._nombre}</Text>
-          </TouchableOpacity>
+            <TouchableOpacity
+                style={[styles.ingredienteContainer, isSelected && styles.selectedIngrediente]}
+                onPress={() => handleIngredientePress(item)}
+            >
+                <Text style={styles.ingredienteNombre}>{item._nombre}</Text>
+            </TouchableOpacity>
         );
     };
 
@@ -131,23 +129,24 @@ function ListaIngredientes() {
                     <TextInput
                         style={styles.searchInput}
                         placeholder="Buscar ingredientes"
-                        value={texto}
+                        value={searchValue}
                         onChangeText={handleSearchChange}
                     />
                     {sugerencias.length > 0 && (
                         <FlatList
                             data={sugerencias}
-                            renderItem={({ item }) => <Text style={styles.searchSuggestion}>{item}</Text>}
+                            renderItem={({ item }) => (
+                                <TouchableOpacity onPress={() => handleSuggestionPress(item)}>
+                                    <Text style={styles.searchSuggestion}>{item}</Text>
+                                </TouchableOpacity>
+                            )}
                             keyExtractor={(item) => item}
                             style={styles.suggestionList}
-
-                        />)}
+                        />
+                    )}
                     <TouchableOpacity onPress={usarCamara}>
                         <View style={styles.searchIconContainer}>
-                            <Image
-                                source={require('../images/camara.png')}
-                                style={styles.searchIcon}
-                            />
+                            <Image source={require('../images/camara.png')} style={styles.searchIcon} />
                         </View>
                     </TouchableOpacity>
                 </View>
