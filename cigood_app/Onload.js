@@ -1,7 +1,7 @@
 // AQUI SE REALIZAN LAS LLAMADAS A COMPONENTES ONLOAD
 
 // VARIABLES LOCALES
-import { TABLA_INGREDIENTES, GET_ALL, TABLA_DESPENSA, TABLA_RECETAS, TABLA_FILTROS, USUARIO_DIEGO } from './constants.js';
+import { TABLA_INGREDIENTES, GET_ALL, TABLA_DESPENSA, TABLA_RECETAS, TABLA_FILTROS, USUARIO_DIEGO, IP_GENERAL } from './constants.js';
 
 // ESTA funcion devuelve todas las recetas
 export async function getRecetas() {
@@ -9,7 +9,7 @@ export async function getRecetas() {
     const tabla = TABLA_RECETAS;
     const id = GET_ALL;
     
-    const response = await fetch(`http://192.168.1.139:3000/api/data/${tabla}/${id}`);
+    const response = await fetch(`http://`+IP_GENERAL+`:3000/api/data/${tabla}/${id}`);
     const recetas = await response.json();
     
     const recetasConId = recetas.map((receta) => {
@@ -33,7 +33,7 @@ export async function getFiltros() {
     const tabla = TABLA_FILTROS;
     const id = GET_ALL;
     
-    const response = await fetch(`http://192.168.1.139:3000/api/data/${tabla}/${id}`);
+    const response = await fetch(`http://`+IP_GENERAL+`:3000/api/data/${tabla}/${id}`);
     const ingredientes = await response.json();
 
     console.log(ingredientes);
@@ -51,7 +51,7 @@ export async function getIngredientes() {
     const tabla = TABLA_DESPENSA;
     const id = GET_ALL;
     
-    const response = await fetch(`http://192.168.1.139:3000/api/data/${tabla}/${id}`);
+    const response = await fetch(`http://`+IP_GENERAL+`:3000/api/data/${tabla}/${id}`);
     const ingredientes = await response.json();
     
     const ingredientesConId = ingredientes.map((ingrediente) => {
@@ -82,7 +82,7 @@ export async function dropIngredientes(ingredientesB, borrar) {
       id = GET_ALL;
     }
     
-    await fetch(`http://192.168.1.139:3000/api/delete/${tabla}/${id}`);
+    await fetch(`http://`+IP_GENERAL+`:3000/api/delete/${tabla}/${id}`);
 
   } catch (error) {
     console.error('Error al obtener los ingredientes:', error);
@@ -96,7 +96,7 @@ export async function asyncDespensa() {
     const tabla = TABLA_DESPENSA;
     const id = GET_ALL;
 
-    const response = await fetch(`http://192.168.1.139:3000/api/data/${tabla}/${id}`);
+    const response = await fetch(`http://`+IP_GENERAL+`:3000/api/data/${tabla}/${id}`);
     const ingredientes = await response.json();
 
     return ingredientes;
@@ -113,7 +113,7 @@ export async function asyncIngredientes() {
     const tabla = TABLA_INGREDIENTES;
     const id = GET_ALL;
 
-    const response = await fetch(`http://192.168.1.139:3000/api/data/${tabla}/${id}`);
+    const response = await fetch(`http://`+IP_GENERAL+`:3000/api/data/${tabla}/${id}`);
     const ingredientes = await response.json();
 
     return ingredientes;
@@ -131,7 +131,7 @@ export async function addIngrediente(ingrediente) {
     const producto = JSON.stringify(ingrediente);
     const usaurio = USUARIO_DIEGO;
 
-    await fetch(`http://192.168.1.139:3000/api/insert/producto/${tabla}/${producto}/${usaurio}`);
+    await fetch(`http://`+IP_GENERAL+`:3000/api/insert/producto/${tabla}/${producto}/${usaurio}`);
 
   } catch (error) {
     console.error('Error al obtener la despensa:', error);

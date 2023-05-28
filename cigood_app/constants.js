@@ -11,3 +11,6 @@ export let GET_ALL = "{}";
 export let DROP_SOME = "varios";
 
 export let USUARIO_DIEGO = "Diego28";
+
+// IP DE CADA UNO
+export let IP_GENERAL = "192.168.1.139";
