@@ -63,7 +63,7 @@ const Login = () => {
       return;
     }
 
-    fetch(`http://192.168.18.162:3000/api/login/${tabla}/${username}/${password}`)
+    fetch(`http://192.168.1.139:3000/api/login/${tabla}/${username}/${password}`)
       .then(response => response.json())
       .then(data => setLogin(data))
       .catch(error => console.error(error));
