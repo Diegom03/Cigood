@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, TextInput, StyleSheet, TouchableOpacity, Text, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {IP_GENERAL} from '../constants';
 
 const Login = () => {
   const navigation = useNavigation();
