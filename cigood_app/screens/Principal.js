@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { asyncDespensa } from '../Onload';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Modal, Button, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import CheckBox from 'expo-checkbox';
+import { getFiltros } from '../Onload';
 
 const MyScreen = () => {
     const navigation = useNavigation();
@@ -10,7 +10,7 @@ const MyScreen = () => {
     const [selectedFilters, setSelectedFilters] = useState([]);
 
     //  Carga la despensa actualizada y la agrega al asyncStorage  \\
-    
+
     // useEffect(() => {
     //     const obtenerDespensa = async () => {
     //         try {
@@ -31,12 +31,26 @@ const MyScreen = () => {
     //             console.error('Error al obtener la despensa:', error);
     //         }
     //     };
-    
+
     //     obtenerDespensa();
     // }, []);
 
     //  ---------------------------------------------------------  \\
-    
+
+    useEffect(() => {
+        const fetchFiltros = async () => {
+            //Obtiene los ingredientes de la despensa
+            try {
+                const filtros = await getFiltros();
+                console.log(filtros);
+                setSelectedFilters(filtros);
+            } catch (error) {
+                console.error('Error al obtener los filtros:', error);
+            }
+        };
+        fetchFiltros();
+    }, []);
+
     const handleFilterButtonPress = () => {
         setFilterModalVisible(true);
     };
@@ -47,12 +61,25 @@ const MyScreen = () => {
 
     const handleFilterOptionPress = (filter) => {
         if (selectedFilters.includes(filter)) {
+            // Si el filtro ya está seleccionado, eliminarlo de la lista de filtros seleccionados
             setSelectedFilters(selectedFilters.filter((f) => f !== filter));
         } else {
+            // Si el filtro no está seleccionado, agregarlo a la lista de filtros seleccionados
             setSelectedFilters([...selectedFilters, filter]);
         }
     };
 
+
+
+    const handleRecipeSearch = () => {
+        // Realizar la búsqueda de recetas utilizando el texto de búsqueda y los filtros seleccionados
+        const searchQuery = searchText; // Texto de búsqueda
+        const filters = selectedFilters; // Filtros seleccionado
+        // Realizar la lógica de búsqueda de recetas con la query de búsqueda y los filtros seleccionados
+        // Puedes utilizar una función o método específico para realizar esta búsqueda según tus necesidades y la forma en que obtienes las receta
+        // Navegar a la pantalla de resultados de búsqueda o realizar la acción deseada
+        // navigation.navigate('Resultados', { searchQuery, filters });
+    };
     return (
         <View style={styles.container}>
             <TouchableOpacity style={styles.settingsButton} onPress={() => navigation.navigate('Ajustes')}>
@@ -73,48 +100,25 @@ const MyScreen = () => {
                 <View style={styles.modalContainer}>
                     <View style={styles.modalContent}>
                         <Text style={styles.modalTitle}>Opciones de Filtro</Text>
-                        <TouchableOpacity
-                            style={[
-                                styles.filterOption,
-                                selectedFilters.includes('opcion1') && styles.selectedFilterOption,
-                            ]}
-                            onPress={() => handleFilterOptionPress('opcion1')}
-                        >
-                            <Text style={styles.filterOptionLabel}>Opción 1</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={[
-                                styles.filterOption,
-                                selectedFilters.includes('opcion2') && styles.selectedFilterOption,
-                            ]}
-                            onPress={() => handleFilterOptionPress('opcion2')}
-                        >
-                            <Text style={styles.filterOptionLabel}>Opción 2</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={[
-                                styles.filterOption,
-                                selectedFilters.includes('opcion3') && styles.selectedFilterOption,
-                            ]}
-                            onPress={() => handleFilterOptionPress('opcion3')}
-                        >
-                            <Text style={styles.filterOptionLabel}>Opción 3</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={[
-                                styles.filterOption,
-                                selectedFilters.includes('opcion4') && styles.selectedFilterOption,
-                            ]}
-                            onPress={() => handleFilterOptionPress('opcion4')}
-                        >
-                            <Text style={styles.filterOptionLabel}>Opción 4</Text>
-                        </TouchableOpacity>
+
+                        {/* Iterar sobre las opciones de filtro desde el estado selectedFilters */}
+                        {selectedFilters.map((filter) => (
+                            <View style={styles.checkboxOption} key={filter._id}>
+                                <CheckBox
+                                    value={selectedFilters.includes(filter)}
+                                    onValueChange={() => handleFilterOptionPress(filter)}
+                                />
+                                <Text style={styles.filterOptionLabel}>{filter._nombre}</Text>
+                            </View>
+                        ))}
+
                         <TouchableOpacity style={styles.closeButton} onPress={handleFilterModalClose}>
                             <Text style={styles.closeButtonText}>Cerrar</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
             </Modal>
+
 
             <Text style={styles.title2}>Recetas del dia</Text>
             <View style={styles.recipeContainer}>
@@ -141,7 +145,7 @@ const MyScreen = () => {
                 <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ListaIngredientes')}>
                     <Text style={styles.buttonText}>Mi despensa</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.button]}onPress={() => navigation.navigate('ListaRecetas')}>
+                <TouchableOpacity style={[styles.button]} onPress={() => navigation.navigate('ListaRecetas')}>
                     <Text style={styles.buttonText}>Recetas</Text>
                 </TouchableOpacity>
             </View>
@@ -278,7 +282,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
         width: '100%',
     },
-    
+
     button: {
         backgroundColor: '#FF9999',
         flex: 1,
@@ -286,7 +290,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 19,
         borderRadius: 5,
     },
-    
+
     buttonText: {
         fontSize: 16,
         fontWeight: 'bold',
