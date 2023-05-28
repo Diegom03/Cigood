@@ -4,15 +4,15 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 
 //callback(new error_1.MongoServerError(document));
 
-async function insertDocument(collection, document) {
-    try {
-        await client.connect();
-        const db = client.db("cigood");
-        const result = await db.collection(collection).insertOne(document);
-        console.log(`Document inserted with _id: ${result.insertedId}`);
-    } finally {
-        await client.close();
-    }
+async function insertDocument(collection, producto) {
+  try {
+    await client.connect();
+    const db = client.db("cigood");
+    const result = await db.collection(collection).insertOne(producto);
+    console.log(`Documento insertado con _id: ${result.insertedId}`);
+  } finally {
+    await client.close();
+  }
 }
   
 async function findDocuments(collection, query) {
@@ -61,24 +61,6 @@ async function deleteDocuments(collection, filter) {
     await client.close();
   }
 }
-
-//const get = findDocuments("recetas", {});
-  
-//const document = { _descripcion: "receta de Gabo(con extra de amor)" };
-//insertDocument("recetas", document);
-
-//const query = { _descripcion: { $eq: 'receta de Gabo(con extra de amor)' } };
-//findDocuments("recetas", query);
-
-//const filter = { name: "John" };
-//const update = { $set: { age: 31 } };
-//updateDocument("users", filter, update);
-
-//const filter = { name: "John" };
-//deleteDocument("users", filter);
-
-
-// conection.js
 
 module.exports = {
     insertDocument,

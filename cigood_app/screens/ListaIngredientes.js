@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { getIngredientes, dropIngredientes, asyncIngredientes } from '../Onload';
+import { getIngredientes, dropIngredientes, asyncIngredientes, addIngrediente } from '../Onload';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, Image, Alert, TextInput, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 //import { block } from 'react-native-reanimated';
 
 function ListaIngredientes() {
@@ -27,10 +28,12 @@ function ListaIngredientes() {
 
             // Obtiene el asistente de busqueda
             try {
+                // Arego el listado de productos al AsyncStorage para recuperarlo mas tarde
                 const ingredientesLista = await asyncIngredientes();
+                AsyncStorage.setItem('listado_ingredientes', JSON.stringify(ingredientesLista));
+
                 const nombresIngredientes = ingredientesLista.map((ingrediente) => ingrediente._nombre);
                 setIngredientesDB(nombresIngredientes);
-                alert(JSON.stringify(nombresIngredientes));
             } catch (error) {
                 console.error('Error al obtener los ingredientes:', error);
             }
@@ -118,6 +121,25 @@ function ListaIngredientes() {
         navigation.navigate('Camara');
     };
 
+    // Agrega el producto, obtiene el nombre y lo busca en el AsyncStorage
+    const agregarProducto = async () => {
+        const addProducto = await AsyncStorage.getItem('listado_ingredientes');
+        const productos = JSON.parse(addProducto);
+      
+        const productoEncontrado = productos.find((producto) => producto._nombre === searchValue);
+      
+        if (productoEncontrado) {
+            console.log('Producto encontrado: ')
+            console.log(productoEncontrado);
+
+            addIngrediente(productoEncontrado);
+            setSearchValue('');
+        } else {
+            console.log('Producto no encontrado');
+            setSearchValue('Producto no encontrado');
+        }
+    };
+
     return (
         <TouchableWithoutFeedback onPress={hideSuggestions}>
             <View style={styles.container}>
@@ -126,6 +148,11 @@ function ListaIngredientes() {
                     <Image source={require('../images/ajustes.png')} style={styles.settingsButtonImage} />
                 </TouchableOpacity>
                 <View style={styles.searchContainer}>
+                    <TouchableOpacity onPress={agregarProducto}>
+                        <View style={styles.searchIconContainer2}>
+                            <Image source={require('../images/carrito-de-compras.png')} style={styles.searchIcon} />
+                        </View>
+                    </TouchableOpacity>
                     <TextInput
                         style={styles.searchInput}
                         placeholder="Buscar ingredientes"
@@ -266,12 +293,8 @@ const styles = StyleSheet.create({
     searchIconContainer: {
         marginLeft: 8,
     },
-    searchIcon: {
-        width: 40,
-        height: 40,
-    },
-    searchIconContainer: {
-        marginLeft: 8,
+    searchIconContainer2: {
+        marginRight: 12,
     },
     searchIcon: {
         width: 40,

@@ -1,7 +1,7 @@
 // AQUI SE REALIZAN LAS LLAMADAS A COMPONENTES ONLOAD
 
 // VARIABLES LOCALES
-import { TABLA_INGREDIENTES, GET_ALL, TABLA_DESPENSA } from './constants.js';
+import { TABLA_INGREDIENTES, GET_ALL, TABLA_DESPENSA, USUARIO_DIEGO } from './constants.js';
 
 // ESTA funcion devuelve todas las recetas
 export function getRecetas() {
@@ -128,6 +128,21 @@ export async function asyncIngredientes() {
     const ingredientes = await response.json();
 
     return ingredientes;
+
+  } catch (error) {
+    console.error('Error al obtener la despensa:', error);
+    throw error;
+  }
+}
+
+// Obtiene toda la tabla ingredientes
+export async function addIngrediente(ingrediente) {
+  try {
+    const tabla = TABLA_DESPENSA;
+    const producto = JSON.stringify(ingrediente);
+    const usaurio = USUARIO_DIEGO;
+
+    await fetch(`http://192.168.1.139:3000/api/insert/producto/${tabla}/${producto}/${usaurio}`);
 
   } catch (error) {
     console.error('Error al obtener la despensa:', error);
