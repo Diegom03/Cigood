@@ -34,9 +34,17 @@ npm install @react-native-community/checkbox
 
 npm install @react-native-async-storage/async-storage
 
-12- para consultar a la BD
+12- para la camara
 
-import { MongoClient } from 'mongodb';
+expo install expo-camera
+
+13- para los permisos
+
+expo install expo-permissions
+
+14- para el css
+
+npm install react-native-css
 
 
 CADA VEZ QUE INSTALE ALGO
