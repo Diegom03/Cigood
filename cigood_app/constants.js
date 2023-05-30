@@ -13,7 +13,7 @@ export let DROP_SOME = "varios";
 export let USUARIO_DIEGO = "Diego28";
 
 // IP DE CADA UNO
-export let IP_GENERAL = "192.168.18.162";
+export let IP_GENERAL = "192.168.1.139";
 
 //Víctor: 192.168.18.162
 //Diego: 192.168.1.139

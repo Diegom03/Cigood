@@ -92,10 +92,8 @@ app.get('/api/data/:tableName/:id', async (req, res) => {
 app.get('/api/filters/:tableName/:filter', async (req, res) => {
   try {
     const { tableName, filter } = req.params;
-    console.log(tableName);
-    console.log(filter);
 
-    const query = { _filtros: { $in: filter.split(",").map(Number) } };
+    const query = { _filtros: { $in: filter.split(",").map(String) } };
     const documents = await findDocuments(tableName, query);
     console.log(documents);
     res.send(documents);
