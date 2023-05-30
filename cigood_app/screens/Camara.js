@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Modal, Image, TouchableOpacity  } from 'react-native';
+import { addIngrediente } from '../Onload';
 import { Camera } from 'expo-camera';
+import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const MyCamera = () => {
+  const navigation = useNavigation();
   const [scannedBarcode, setScannedBarcode] = useState('');
   const [showPopup, setShowPopup] = useState(false);
   const [scannedProduct, setScannedProduct] = useState(null);
+  const [productoAgregado, setProductoAgregado] = useState(null);
 
-  const handleBarcodeScan = ({ data }) => {
+  const handleBarcodeScan = async ({ data }) => {
     // Establece los datos que vienen al escanear
     setScannedBarcode(data);
 
@@ -21,6 +26,25 @@ const MyCamera = () => {
       })
       .catch(error => console.error(error));
 
+    // Si el codigo pertenece a un producto de la API de openFood comprueba 
+    // que tambien este en nuestro listado de ingredientes
+    if (scannedProduct != null) {
+      const ingredientes = await AsyncStorage.getItem('listado_ingredientes');
+      const listado_ingredientes = JSON.parse(ingredientes);
+    
+      const productoEncontrado = listado_ingredientes.find((ingrediente) => scannedProduct.product_name.includes(ingrediente._nombre));
+    
+      if (productoEncontrado) {
+        // Se encontró el ingrediente correspondiente al producto escaneado y lo agrega a la variable local
+        console.log('El ingrediente {' + productoEncontrado._nombre + '} está en el listado de ingredientes.');
+        setProductoAgregado(productoEncontrado);
+      } else {
+        // No se encontró el ingrediente correspondiente
+        console.log('El ingrediente no está en el listado de ingredientes.');
+      }
+    }
+    
+    // Hace visible el pop up
     setShowPopup(true);
   };
 
@@ -44,6 +68,8 @@ const MyCamera = () => {
 
   const handleAddProduct = () => {
     console.log('Agregar producto');
+    addIngrediente(productoAgregado);
+    navigation.navigate('Principal');
   };
 
   return (

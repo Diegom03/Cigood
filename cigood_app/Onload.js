@@ -124,7 +124,7 @@ export async function asyncIngredientes() {
   }
 }
 
-// Obtiene toda la tabla ingredientes
+// Añade un ingrediente a la despensa
 export async function addIngrediente(ingrediente) {
   try {
     const tabla = TABLA_DESPENSA;
