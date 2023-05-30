@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Modal, Butt
 import { useNavigation } from '@react-navigation/native';
 import CheckBox from 'expo-checkbox';
 import { getFiltros } from '../Onload';
-import {IP_GENERAL} from '../constants';
+import { IP_GENERAL } from '../constants';
 
 const MyScreen = () => {
     const navigation = useNavigation();
@@ -48,10 +48,10 @@ const MyScreen = () => {
     const handleRecipeSearch = () => {
         // Obtener los nombres de los filtros seleccionados en forma de array
         const filters = filtrosBusqueda.map(filter => filter._nombre);
-    
+
         // Realizar la búsqueda de recetas utilizando los filtros seleccionados
         console.log('filtros busqueda: ' + JSON.stringify(filters));
-    
+
         getRecipes(filters)
             .then(recipes => {
                 // Aquí puedes hacer lo que desees con las recetas obtenidas
@@ -62,25 +62,20 @@ const MyScreen = () => {
                 console.error(error);
             });
     };
-    
+
 
     const getRecipes = (filtros) => {
-        console.log('he llegado');
         const tabla = "recetas";
 
-        let query = {};
-        /*if (filtros && filtros.length > 0) {
-            // Si hay filtros, construye el filtro de búsqueda
-            query = { filtros: { $in: filtros } };
-        }*/
+        const encodedFilters = filtros.map(filter => encodeURIComponent(filter));
+        const filtro= encodedFilters.join(",");
 
-        const url = `http://`+IP_GENERAL+`:3000/api/data/${tabla}/${filtros}`;
+        const url = `http://` + IP_GENERAL + `:3000/api/filters/${tabla}/${filtro}`;
 
         return fetch(url)
             .then(response => response.json())
             .then(data => {
                 setRecipes(data);
-                console.log(JSON.stringify(data));
                 return data;
             })
             .catch(error => {
@@ -88,6 +83,7 @@ const MyScreen = () => {
                 return [];
             });
     }
+
     return (
         <View style={styles.container}>
             <TouchableOpacity style={styles.settingsButton} onPress={() => navigation.navigate('Ajustes')}>
