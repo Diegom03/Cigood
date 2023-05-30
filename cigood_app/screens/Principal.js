@@ -7,48 +7,23 @@ import { getFiltros } from '../Onload';
 const MyScreen = () => {
     const navigation = useNavigation();
     const [isFilterModalVisible, setFilterModalVisible] = useState(false);
-    const [selectedFilters, setSelectedFilters] = useState([]);
-
-    //  Carga la despensa actualizada y la agrega al asyncStorage  \\
-
-    // useEffect(() => {
-    //     const obtenerDespensa = async () => {
-    //         try {
-    //             const resultado = await asyncDespensa();
-    //             alert(JSON.stringify(resultado));
-
-    //             // Meto el objeto al async storage
-    //             const despensa = JSON.stringify(resultado);
-    //             await AsyncStorage.setItem('despensa', despensa);
-
-    //             // Obtengo el objeto
-    //             // const despensaGet = await AsyncStorage.getItem('despensa');
-    //             // const despensaGetLog = JSON.parse(despensaGet);
-    //             // console.log("Obtengo:");
-    //             // console.log(despensaGetLog);
-
-    //         } catch (error) {
-    //             console.error('Error al obtener la despensa:', error);
-    //         }
-    //     };
-
-    //     obtenerDespensa();
-    // }, []);
-
-    //  ---------------------------------------------------------  \\
+    const [filtrosBD, setfiltrosBD] = useState([]);
+    const [filtrosBusqueda, setFiltrosBusqueda] = useState([]);
 
     useEffect(() => {
         const fetchFiltros = async () => {
-            //Obtiene los ingredientes de la despensa
             try {
                 const filtros = await getFiltros();
+
+                setFiltrosBusqueda([]);
                 console.log(filtros);
-                setSelectedFilters(filtros);
+                setfiltrosBD(filtros);
             } catch (error) {
                 console.error('Error al obtener los filtros:', error);
             }
         };
         fetchFiltros();
+        //console.log('filtros actuales: ' + JSON.stringify(filtrosBusqueda));
     }, []);
 
     const handleFilterButtonPress = () => {
@@ -60,26 +35,26 @@ const MyScreen = () => {
     };
 
     const handleFilterOptionPress = (filter) => {
-        if (selectedFilters.includes(filter)) {
+        if (filtrosBusqueda.includes(filter)) {
             // Si el filtro ya está seleccionado, eliminarlo de la lista de filtros seleccionados
-            setSelectedFilters(selectedFilters.filter((f) => f !== filter));
+            setFiltrosBusqueda(filtrosBusqueda.filter((f) => f !== filter));
         } else {
             // Si el filtro no está seleccionado, agregarlo a la lista de filtros seleccionados
-            setSelectedFilters([...selectedFilters, filter]);
+            setFiltrosBusqueda((prevFilters) => [...prevFilters, filter]);
         }
+        console.log('filtros actuales: ' + JSON.stringify(filtrosBusqueda));
     };
-
-
 
     const handleRecipeSearch = () => {
         // Realizar la búsqueda de recetas utilizando el texto de búsqueda y los filtros seleccionados
         const searchQuery = searchText; // Texto de búsqueda
-        const filters = selectedFilters; // Filtros seleccionado
+        const filters = filtrosBusqueda; // Filtros seleccionados
         // Realizar la lógica de búsqueda de recetas con la query de búsqueda y los filtros seleccionados
-        // Puedes utilizar una función o método específico para realizar esta búsqueda según tus necesidades y la forma en que obtienes las receta
+        // Puedes utilizar una función o método específico para realizar esta búsqueda según tus necesidades y la forma en que obtienes las recetas
         // Navegar a la pantalla de resultados de búsqueda o realizar la acción deseada
         // navigation.navigate('Resultados', { searchQuery, filters });
     };
+
     return (
         <View style={styles.container}>
             <TouchableOpacity style={styles.settingsButton} onPress={() => navigation.navigate('Ajustes')}>
@@ -101,11 +76,11 @@ const MyScreen = () => {
                     <View style={styles.modalContent}>
                         <Text style={styles.modalTitle}>Opciones de Filtro</Text>
 
-                        {/* Iterar sobre las opciones de filtro desde el estado selectedFilters */}
-                        {selectedFilters.map((filter) => (
+                        {/* Iterar sobre las opciones de filtro desde el estado filtrosBD */}
+                        {filtrosBD.map((filter) => (
                             <View style={styles.checkboxOption} key={filter._id}>
                                 <CheckBox
-                                    value={selectedFilters.includes(filter)}
+                                    value={!filtrosBusqueda.includes(filter)}
                                     onValueChange={() => handleFilterOptionPress(filter)}
                                 />
                                 <Text style={styles.filterOptionLabel}>{filter._nombre}</Text>
@@ -119,8 +94,7 @@ const MyScreen = () => {
                 </View>
             </Modal>
 
-
-            <Text style={styles.title2}>Recetas del dia</Text>
+            <Text style={styles.title2}>Recetas del día</Text>
             <View style={styles.recipeContainer}>
                 <View style={styles.recipeItem}>
                     <Image source={require('../images/receta1.jpg')} style={styles.recipeImage} />
@@ -139,7 +113,6 @@ const MyScreen = () => {
                     <Text style={styles.recipeTitle}>Receta 4</Text>
                 </View>
             </View>
-
 
             <View style={styles.buttonContainer}>
                 <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ListaIngredientes')}>
