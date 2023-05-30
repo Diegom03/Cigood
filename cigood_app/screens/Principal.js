@@ -3,12 +3,14 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Modal, Butt
 import { useNavigation } from '@react-navigation/native';
 import CheckBox from 'expo-checkbox';
 import { getFiltros } from '../Onload';
+import {IP_GENERAL} from '../constants';
 
 const MyScreen = () => {
     const navigation = useNavigation();
     const [isFilterModalVisible, setFilterModalVisible] = useState(false);
     const [filtrosBD, setfiltrosBD] = useState([]);
     const [filtrosBusqueda, setFiltrosBusqueda] = useState([]);
+    const [recipes, setRecipes] = useState([]);
 
     useEffect(() => {
         const fetchFiltros = async () => {
@@ -16,14 +18,13 @@ const MyScreen = () => {
                 const filtros = await getFiltros();
 
                 setFiltrosBusqueda([]);
-                console.log(filtros);
+                //console.log(filtros);
                 setfiltrosBD(filtros);
             } catch (error) {
                 console.error('Error al obtener los filtros:', error);
             }
         };
         fetchFiltros();
-        //console.log('filtros actuales: ' + JSON.stringify(filtrosBusqueda));
     }, []);
 
     const handleFilterButtonPress = () => {
@@ -42,19 +43,51 @@ const MyScreen = () => {
             // Si el filtro no está seleccionado, agregarlo a la lista de filtros seleccionados
             setFiltrosBusqueda((prevFilters) => [...prevFilters, filter]);
         }
-        console.log('filtros actuales: ' + JSON.stringify(filtrosBusqueda));
     };
 
     const handleRecipeSearch = () => {
-        // Realizar la búsqueda de recetas utilizando el texto de búsqueda y los filtros seleccionados
-        const searchQuery = searchText; // Texto de búsqueda
-        const filters = filtrosBusqueda; // Filtros seleccionados
-        // Realizar la lógica de búsqueda de recetas con la query de búsqueda y los filtros seleccionados
-        // Puedes utilizar una función o método específico para realizar esta búsqueda según tus necesidades y la forma en que obtienes las recetas
-        // Navegar a la pantalla de resultados de búsqueda o realizar la acción deseada
-        // navigation.navigate('Resultados', { searchQuery, filters });
+        // Obtener los nombres de los filtros seleccionados en forma de array
+        const filters = filtrosBusqueda.map(filter => filter._nombre);
+    
+        // Realizar la búsqueda de recetas utilizando los filtros seleccionados
+        console.log('filtros busqueda: ' + JSON.stringify(filters));
+    
+        getRecipes(filters)
+            .then(recipes => {
+                // Aquí puedes hacer lo que desees con las recetas obtenidas
+                console.log(JSON.stringify(recipes));
+            })
+            .catch(error => {
+                // Manejar el error si ocurre
+                console.error(error);
+            });
     };
+    
 
+    const getRecipes = (filtros) => {
+        console.log('he llegado');
+        const tabla = "recetas";
+
+        let query = {};
+        /*if (filtros && filtros.length > 0) {
+            // Si hay filtros, construye el filtro de búsqueda
+            query = { filtros: { $in: filtros } };
+        }*/
+
+        const url = `http://`+IP_GENERAL+`:3000/api/data/${tabla}/${filtros}`;
+
+        return fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                setRecipes(data);
+                console.log(JSON.stringify(data));
+                return data;
+            })
+            .catch(error => {
+                console.error(error);
+                return [];
+            });
+    }
     return (
         <View style={styles.container}>
             <TouchableOpacity style={styles.settingsButton} onPress={() => navigation.navigate('Ajustes')}>
@@ -66,7 +99,7 @@ const MyScreen = () => {
                 <TouchableOpacity style={styles.filterButton} onPress={handleFilterButtonPress}>
                     <Image source={require('../images/filtrar.png')} style={styles.searchButtonImage} />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.searchButton} onPress={() => navigation.navigate('Prueba')}>
+                <TouchableOpacity style={styles.searchButton} onPress={handleRecipeSearch}>
                     <Image source={require('../images/lupa.png')} style={styles.searchButtonImage} />
                 </TouchableOpacity>
             </View>
@@ -76,15 +109,19 @@ const MyScreen = () => {
                     <View style={styles.modalContent}>
                         <Text style={styles.modalTitle}>Opciones de Filtro</Text>
 
-                        {/* Iterar sobre las opciones de filtro desde el estado filtrosBD */}
                         {filtrosBD.map((filter) => (
-                            <View style={styles.checkboxOption} key={filter._id}>
+                            <TouchableOpacity
+                                style={styles.filterOption}
+                                key={filter._id}
+                                onPress={() => handleFilterOptionPress(filter)}
+                            >
                                 <CheckBox
-                                    value={!filtrosBusqueda.includes(filter)}
+                                    value={filtrosBusqueda.includes(filter)}
                                     onValueChange={() => handleFilterOptionPress(filter)}
+                                    style={styles.checkbox}
                                 />
                                 <Text style={styles.filterOptionLabel}>{filter._nombre}</Text>
-                            </View>
+                            </TouchableOpacity>
                         ))}
 
                         <TouchableOpacity style={styles.closeButton} onPress={handleFilterModalClose}>
@@ -93,6 +130,7 @@ const MyScreen = () => {
                     </View>
                 </View>
             </Modal>
+
 
             <Text style={styles.title2}>Recetas del día</Text>
             <View style={styles.recipeContainer}>
@@ -269,6 +307,43 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
         color: 'white',
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContent: {
+        backgroundColor: 'white',
+        padding: 20,
+        borderRadius: 8,
+        width: '80%',
+    },
+    modalTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 20,
+    },
+    filterOption: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 10,
+    },
+    checkbox: {
+        marginRight: 10,
+    },
+    filterOptionLabel: {
+        fontSize: 16,
+    },
+    closeButton: {
+        marginTop: 20,
+        alignSelf: 'flex-end',
+    },
+    closeButtonText: {
+        fontSize: 16,
+        color: 'blue',
+        fontWeight: 'bold',
     },
 });
 
