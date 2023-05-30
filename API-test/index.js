@@ -88,6 +88,24 @@ app.get('/api/data/:tableName/:id', async (req, res) => {
   }
 });
 
+// Peticion GET (1-{}): devuelve la receta que tenga los filtros seleccionados
+app.get('/api/filters/:tableName/:filter', async (req, res) => {
+  try {
+    const { tableName, filter } = req.params;
+    console.log(tableName);
+    console.log(filter);
+
+    const query = { _filtros: { $in: filter.split(",").map(Number) } };
+    const documents = await findDocuments(tableName, query);
+    console.log(documents);
+    res.send(documents);
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('Internal server error');
+  }
+});
+
 
 // Peticion DELETE (1-{}): se pasa el nombre de la tabla y el id(s) del objeto(s) a borrar
 app.get('/api/delete/:tableName/:id', async (req, res) => {
