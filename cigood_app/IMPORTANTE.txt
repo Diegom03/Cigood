@@ -58,3 +58,5 @@ Ejemplo:
     <View style={styles.iconContainer}>
         <AntDesign name="arrowright" size={18} color="#666666" />
     </View>
+
+linea de prueba
