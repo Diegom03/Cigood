@@ -87,6 +87,7 @@ const ListaIngredientes = () => {
 
     const hideSuggestions = () => {
         setSugerencias([]);
+        setSearchValue('');
     };
 
     const handleSuggestionPress = (ingredient) => {
@@ -125,9 +126,9 @@ const ListaIngredientes = () => {
     const agregarProducto = async () => {
         const addProducto = await AsyncStorage.getItem('listado_ingredientes');
         const productos = JSON.parse(addProducto);
-      
+
         const productoEncontrado = productos.find((producto) => producto._nombre === searchValue);
-      
+
         if (productoEncontrado) {
             console.log('Producto encontrado: ')
             console.log(productoEncontrado);
@@ -153,10 +154,11 @@ const ListaIngredientes = () => {
     return (
         <TouchableWithoutFeedback onPress={hideSuggestions}>
             <View style={styles.container}>
-                <Text style={styles.title}>Ingredientes</Text>
-                <TouchableOpacity style={styles.settingsButton} onPress={() => navigation.navigate('Ajustes')}>
-                    <Image source={require('../images/ajustes.png')} style={styles.settingsButtonImage} />
-                </TouchableOpacity>
+
+                <View style={styles.header}>
+                    <Image source={require('../images/logotipo-short.png')} style={styles.headerImage}></Image>
+                </View>
+
                 <View style={styles.searchContainer}>
                     <TouchableOpacity onPress={agregarProducto}>
                         <View style={styles.searchIconContainer2}>
@@ -187,14 +189,11 @@ const ListaIngredientes = () => {
                         </View>
                     </TouchableOpacity>
                 </View>
-                <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={styles.button} onPress={handleEliminar}>
-                        <Text style={styles.buttonText}>Eliminar</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.button}>
-                        <Text style={styles.buttonText}>Vaciar lista</Text>
-                    </TouchableOpacity>
+
+                <View style={styles.textContainer}>
+                    <Text style={styles.introductionText}>Estos son tus ingredientes</Text>
                 </View>
+
                 <FlatList
                     data={ingredientes}
                     renderItem={renderIngrediente}
@@ -225,13 +224,20 @@ const ListaIngredientes = () => {
                         </View>
                     </View>
                 )}
+
                 <View style={styles.whiteBar}>
-                    {/* Agregar el botón "Buscar recetas" dentro de la franja blanca */}
-                    <TouchableOpacity style={styles.buscarRecetasButton}>
-                        <Text style={styles.buscarRecetasButtonText}>Buscar recetas</Text>
-                    </TouchableOpacity>
+                    <View style={styles.botonesContainer}>
+                        <TouchableOpacity style={styles.botones} onPress={handleEliminar}>
+                            <Text style={styles.botonTexto}>Eliminar</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.botones}>
+                            <Text style={styles.botonTexto}>Vaciar lista</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
+
             </View>
+
         </TouchableWithoutFeedback>
     );
 }
@@ -242,33 +248,26 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
         padding: 10,
     },
-    title: {
-        position: 'absolute',
+
+    // HEADER
+    header: {
         top: 0,
         left: 0,
         right: 0,
-        backgroundColor: '#FFFFFF',
-        paddingHorizontal: 20,
-        paddingVertical: 10,
-        fontSize: 40,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        zIndex: 2,
-        paddingTop: 60,
-        paddingBottom: 140,
-    },
-    settingsButton: {
+        backgroundColor: '#E1755F',
+        opacity: 0.6,
+        height: 120,
         position: 'absolute',
-        top: 40,
-        right: 10,
-        backgroundColor: 'transparent',
-        padding: 10,
         zIndex: 2,
+        alignItems: 'center',
     },
-    settingsButtonImage: {
-        width: 30,
-        height: 30,
+    headerImage: {
+        width: 250,
+        height: 70,
+        marginTop: 35,
     },
+
+    // BUSCADOR
     searchContainer: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -311,33 +310,35 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
     },
-    buttonContainer: {
+
+    // TEXT
+    textContainer: {
         position: 'absolute',
-        top: 200,
+        top: 210,
         left: 10,
         right: 10,
-        flexDirection: 'row',
         justifyContent: 'space-between',
         zIndex: 2,
         marginHorizontal: 20,
         paddingTop: 5,
     },
-    button: {
-        backgroundColor: '#DF8371',
-        paddingVertical: 10,
-        paddingHorizontal: 10,
-        borderRadius: 5,
-        width: 130,
-    },
-    buttonText: {
-        fontSize: 16,
+    introductionText: {
+        fontSize: 20,
+        justifyContent: 'center',
+        textAlign: 'center',
+        color: '#F06244',
         fontWeight: 'bold',
     },
+
+    // FLATLIST
     listContent: {
         paddingHorizontal: 10,
-        paddingTop: 50,
+        paddingTop: 80,
         marginHorizontal: 10, // Ajusta el valor según sea necesario para evitar solapamiento con el título y los botones
-        paddingBottom: 90,
+        paddingBottom: 90, // Para que no lo tape el botón
+        borderWidth: 5,
+        borderColor: '#FF9999',
+        borderRadius: 30,
     },
     ingredienteContainer: {
         width: '45%',
@@ -346,6 +347,8 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         borderRadius: 5,
         marginHorizontal: 5,
+        backgroundColor: 'white',
+        alignItems: 'center',
     },
     selectedIngrediente: {
         backgroundColor: 'lightblue',
@@ -381,6 +384,8 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
     },
+
+    // BOTÓN DE ABAJO
     whiteBar: {
         position: 'absolute',
         bottom: 0,
@@ -391,18 +396,25 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    buscarRecetasButton: {
+    botonesContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginHorizontal: 20, // Separación horizontal entre los botones
+      },
+      botones: {
         backgroundColor: '#FF9999',
         paddingVertical: 10,
-        paddingHorizontal: 100,
+        flex: 1, // Para que ambos botones tengan el mismo ancho
+        marginHorizontal: 5, // Separación horizontal entre los botones
         borderRadius: 5,
         marginBottom: 10,
-    },
-    buscarRecetasButtonText: {
+      },
+      botonTexto: {
         fontSize: 16,
         fontWeight: 'bold',
         color: 'white',
-    },
+        textAlign: 'center', // Alineación del texto dentro de los botones
+      },
 });
 
 export default ListaIngredientes;
