@@ -3,22 +3,11 @@ import { getRecetas } from '../Onload';
 import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-function RecetasComponent() {
-    const [recetas, setRecetas] = useState([]);
+function RecetasComponent({ route }) {
+    const { recetas } = route.params;
+    //const [recetas, setRecetas] = useState([]);
     const navigation = useNavigation();
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const recetasData = await getRecetas();
-                setRecetas(recetasData);
-            } catch (error) {
-                console.error('Error al obtener las recetas:', error);
-            }
-        };
-
-        fetchData();
-    }, []);
 
     return (
         <View style={styles.container}>
@@ -28,10 +17,10 @@ function RecetasComponent() {
             </TouchableOpacity>
             <ScrollView contentContainerStyle={styles.scrollContent}>
                 {recetas.map((receta) => (
-                    <TouchableOpacity key={receta.id} style={styles.recetaContainer}>
-                        <Image source={{ uri: receta.image }} style={styles.image} />
+                    <TouchableOpacity key={receta._id} style={styles.recetaContainer}>
+                        <Image source={{ uri: receta._img }} style={styles.image} />
                         <View style={styles.textContainer}>
-                            <Text style={styles.name}>{receta.name}</Text>
+                            <Text style={styles.name}>{receta._descripcion}</Text>
                             <Text style={styles.description}>{receta.description}</Text>
                         </View>
                     </TouchableOpacity>
