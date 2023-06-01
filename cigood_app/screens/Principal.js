@@ -56,7 +56,7 @@ const Principal = () => {
             .then(recipes => {
                 // Aquí puedes hacer lo que desees con las recetas obtenidas
                 console.log(JSON.stringify(recipes));
-                navigation.navigate('ListaRecetas', { recetas: recipes });
+                navigation.navigate('Recetas', { recetas: recipes });
             })
             .catch(error => {
                 // Manejar el error si ocurre
@@ -67,7 +67,6 @@ const Principal = () => {
 
     const getRecipes = (filtros) => {
         const tabla = "recetas";
-
         const encodedFilters = filtros.map(filter => encodeURIComponent(filter));
         const filtro = encodedFilters.join(",");
         if (filtro != null) {
@@ -75,8 +74,10 @@ const Principal = () => {
             return fetch(url)
                 .then(response => response.json())
                 .then(data => {
-                    setRecipes(data);
-                    return data;
+                    // Ordenar las recetas según los filtros coincidentes
+                    const sortedRecipes = sortRecipesByFilters(data, filtros);
+                    setRecipes(sortedRecipes);
+                    return sortedRecipes;
                 })
                 .catch(error => {
                     console.error(error);
@@ -85,15 +86,40 @@ const Principal = () => {
         } else {
             setRecipes(getRecetas());
         }
-
-
     }
+
+    // Función para ordenar las recetas según los filtros coincidentes
+    const sortRecipesByFilters = (recipes, filters) => {
+        return recipes.sort((a, b) => {
+            // Contar el número de filtros coincidentes para cada receta
+            const aMatchCount = countMatchingFilters(a._filtros, filters);
+            const bMatchCount = countMatchingFilters(b._filtros, filters);
+
+            if (aMatchCount > bMatchCount) {
+                return -1; // a tiene más filtros coincidentes, se coloca antes
+            } else if (aMatchCount < bMatchCount) {
+                return 1; // b tiene más filtros coincidentes, se coloca antes
+            } else {
+                return 0; // a y b tienen el mismo número de filtros coincidentes, el orden se mantiene
+            }
+        });
+    }
+
+    // Función para contar el número de filtros coincidentes entre los filtros de la receta y los filtros seleccionados
+    const countMatchingFilters = (recipeFilters, selectedFilters) => {
+        let count = 0;
+        for (const filter of selectedFilters) {
+            if (recipeFilters.includes(filter)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+
 
     return (
         <View style={styles.container}>
-            <TouchableOpacity style={styles.settingsButton} onPress={() => navigation.navigate('NavBar')}>
-                <Image source={require('../images/ajustes.png')} style={styles.settingsButtonImage} />
-            </TouchableOpacity>
 
             <View style={styles.searchContainer}>
                 <TextInput style={styles.searchInput} placeholder="Buscar" />

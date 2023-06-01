@@ -333,12 +333,13 @@ const styles = StyleSheet.create({
     // FLATLIST
     listContent: {
         paddingHorizontal: 10,
-        paddingTop: 80,
+        paddingTop: 20,
         marginHorizontal: 10, // Ajusta el valor según sea necesario para evitar solapamiento con el título y los botones
         paddingBottom: 90, // Para que no lo tape el botón
         borderWidth: 5,
         borderColor: '#FF9999',
         borderRadius: 30,
+        marginTop:50,
     },
     ingredienteContainer: {
         width: '45%',
@@ -347,14 +348,18 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         borderRadius: 5,
         marginHorizontal: 5,
-        backgroundColor: 'white',
+        backgroundColor: '#F5F5F5', // Color suave
         alignItems: 'center',
-    },
+        //borderWidth: 1, // Contorno suave
+        //borderColor: '#E8E8E8', // Color del contorno suave
+      },
+      
     selectedIngrediente: {
         backgroundColor: 'lightblue',
     },
     ingredienteNombre: {
         fontSize: 16,
+        
     },
     confirmationContainer: {
         position: 'absolute',
