@@ -46,6 +46,12 @@ expo install expo-permissions
 
 npm install react-native-css
 
+15- bootom navigation
+
+npm install @react-navigation/native
+npm install @react-navigation/bottom-tabs
+npm install @expo/vector-icons
+
 
 CADA VEZ QUE INSTALE ALGO
 npm start --reset-cache

@@ -13,7 +13,7 @@ const Login = () => {
       try {
         const loginUser = await AsyncStorage.getItem('esta_logueado');
         if (loginUser === 'true') {
-          navigation.navigate('Principal');
+          navigation.navigate('Navegation');
         }
       } catch (error) {
         console.log(error);

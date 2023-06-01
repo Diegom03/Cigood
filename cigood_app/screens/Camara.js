@@ -69,7 +69,7 @@ const MyCamera = () => {
   const handleAddProduct = () => {
     console.log('Agregar producto');
     addIngrediente(productoAgregado);
-    navigation.navigate('Principal');
+    navigation.navigate('Despensa');
   };
 
   return (

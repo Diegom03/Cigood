@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image, TouchableOpacity, ImageBackground } from
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const SettingsScreen = () => {
+const Ajustes = () => {
     const navigation = useNavigation();
 
     // CERRAR SESIÓN
@@ -71,4 +71,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default SettingsScreen;
+export default Ajustes;

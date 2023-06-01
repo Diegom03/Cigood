@@ -13,10 +13,10 @@ import Ajustes from './screens/Ajustes';
 import Notificaciones from './screens/Notificaciones';
 import Cuenta from './screens/Cuenta';
 import Prueba from './screens/Prueba';
-import ListaRecetas from './screens/ListaRecetas';
 import ListaIngredientes from './screens/ListaIngredientes';
 import Camara from './screens/Camara';
 import CamaraPhoto from './screens/CamaraPhoto';
+import Navegation from './Navegation';
 
 const Stack = createStackNavigator();
 
@@ -53,48 +53,18 @@ const App = () => {
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="Principal"
-              component={Principal}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Ajustes"
-              component={Ajustes}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Notificaciones"
-              component={Notificaciones}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Cuenta"
-              component={Cuenta}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="ListaRecetas"
-              component={ListaRecetas}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="ListaIngredientes"
-              component={ListaIngredientes}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
               name="Prueba"
               component={Prueba}
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="Camara"
-              component={Camara}
+              name="CamaraPhoto"
+              component={CamaraPhoto}
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="CamaraPhoto"
-              component={CamaraPhoto}
+              name="Navegation"
+              component={Navegation}
               options={{ headerShown: false }}
             />
           </>

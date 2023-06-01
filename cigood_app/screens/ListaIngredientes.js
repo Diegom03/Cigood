@@ -3,9 +3,8 @@ import { getIngredientes, dropIngredientes, asyncIngredientes, addIngrediente } 
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, Image, Alert, TextInput, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-//import { block } from 'react-native-reanimated';
 
-function ListaIngredientes() {
+const ListaIngredientes = () => {
     const [ingredientes, setIngredientes] = useState([]);
     const [ingredientesDB, setIngredientesDB] = useState([]);
     const [selectedIngredientes, setSelectedIngredientes] = useState([]);
@@ -14,6 +13,7 @@ function ListaIngredientes() {
     const [searchValue, setSearchValue] = useState('');
     const [texto, setTexto] = useState('');
     const [sugerencias, setSugerencias] = useState([]);
+    const [contador, setContador] = useState(0);
     const flatListRef = useRef(null);
 
     useEffect(() => {
@@ -35,7 +35,7 @@ function ListaIngredientes() {
                 const nombresIngredientes = ingredientesLista.map((ingrediente) => ingrediente._nombre);
                 setIngredientesDB(nombresIngredientes);
             } catch (error) {
-                console.error('Error al obtener los ingredientes:', error);
+                console.error('Error al obtener el asistente:', error);
             }
         };
 
@@ -132,8 +132,18 @@ function ListaIngredientes() {
             console.log('Producto encontrado: ')
             console.log(productoEncontrado);
 
-            addIngrediente(productoEncontrado);
+            await addIngrediente(productoEncontrado);
             setSearchValue('');
+            setContador(contador + 1);
+
+            // Actualiza el listado
+            try {
+                const despensa = await getIngredientes();
+                setIngredientes(despensa);
+            } catch (error) {
+                console.error('Error al obtener los ingredientes:', error);
+            }
+
         } else {
             console.log('Producto no encontrado');
             setSearchValue('Producto no encontrado');
@@ -188,7 +198,8 @@ function ListaIngredientes() {
                 <FlatList
                     data={ingredientes}
                     renderItem={renderIngrediente}
-                    keyExtractor={(item) => item._producto.toString()}
+                    //keyExtractor={(item) => item._producto.toString()}
+                    keyExtractor={(item) => item._producto.toString() + '_' + contador.toString()}
                     numColumns={2}
                     contentContainerStyle={styles.listContent}
                     ref={flatListRef}

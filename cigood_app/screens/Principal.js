@@ -5,7 +5,7 @@ import CheckBox from 'expo-checkbox';
 import { getFiltros } from '../Onload';
 import { IP_GENERAL } from '../constants';
 
-const MyScreen = () => {
+const Principal = () => {
     const navigation = useNavigation();
     const [isFilterModalVisible, setFilterModalVisible] = useState(false);
     const [filtrosBD, setfiltrosBD] = useState([]);
@@ -86,10 +86,10 @@ const MyScreen = () => {
 
     return (
         <View style={styles.container}>
-            <TouchableOpacity style={styles.settingsButton} onPress={() => navigation.navigate('Ajustes')}>
+            <TouchableOpacity style={styles.settingsButton} onPress={() => navigation.navigate('NavBar')}>
                 <Image source={require('../images/ajustes.png')} style={styles.settingsButtonImage} />
             </TouchableOpacity>
-            <Text style={styles.title}>Cigood</Text>
+
             <View style={styles.searchContainer}>
                 <TextInput style={styles.searchInput} placeholder="Buscar" />
                 <TouchableOpacity style={styles.filterButton} onPress={handleFilterButtonPress}>
@@ -149,10 +149,10 @@ const MyScreen = () => {
             </View>
 
             <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ListaIngredientes')}>
+                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Despensa')}>
                     <Text style={styles.buttonText}>Mi despensa</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.button]} onPress={() => navigation.navigate('ListaRecetas')}>
+                <TouchableOpacity style={[styles.button]} onPress={() => navigation.navigate('Recetas')}>
                     <Text style={styles.buttonText}>Recetas</Text>
                 </TouchableOpacity>
             </View>
@@ -343,4 +343,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default MyScreen;
+export default Principal;
