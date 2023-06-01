@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Modal, Button, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import CheckBox from 'expo-checkbox';
-import { getFiltros } from '../Onload';
+import { getFiltros, getRecetas } from '../Onload';
 import { IP_GENERAL } from '../constants';
 
 const Principal = () => {
@@ -56,6 +56,7 @@ const Principal = () => {
             .then(recipes => {
                 // Aquí puedes hacer lo que desees con las recetas obtenidas
                 console.log(JSON.stringify(recipes));
+                navigation.navigate('ListaRecetas', { recetas: recipes });
             })
             .catch(error => {
                 // Manejar el error si ocurre
@@ -68,20 +69,24 @@ const Principal = () => {
         const tabla = "recetas";
 
         const encodedFilters = filtros.map(filter => encodeURIComponent(filter));
-        const filtro= encodedFilters.join(",");
+        const filtro = encodedFilters.join(",");
+        if (filtro != null) {
+            const url = `http://` + IP_GENERAL + `:3000/api/filters/${tabla}/${filtro}`;
+            return fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    setRecipes(data);
+                    return data;
+                })
+                .catch(error => {
+                    console.error(error);
+                    return [];
+                });
+        } else {
+            setRecipes(getRecetas());
+        }
 
-        const url = `http://` + IP_GENERAL + `:3000/api/filters/${tabla}/${filtro}`;
 
-        return fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                setRecipes(data);
-                return data;
-            })
-            .catch(error => {
-                console.error(error);
-                return [];
-            });
     }
 
     return (
