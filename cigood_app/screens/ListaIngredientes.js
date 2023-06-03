@@ -45,7 +45,12 @@ const ListaIngredientes = () => {
     const handleEliminar = () => {
         // Si no hay nada seleccionado vuelve a la lista
         if (selectedIngredientes.length === 0) {
-            return;
+            // Eliminar ingredientes (BBDD)
+            dropIngredientes("[]", "{}");
+
+            // Vacia la lista de ingredientes (visual)
+            setIngredientes([]);
+            setSelectedIngredientes([]);
         }
 
         // Si hay ingredientes marcados, muestra la confirmación
@@ -119,7 +124,7 @@ const ListaIngredientes = () => {
     };
 
     const usarCamara = () => {
-        navigation.navigate('Camara');
+        navigation.navigate('Camara_Sub');
     };
 
     // Agrega el producto, obtiene el nombre y lo busca en el AsyncStorage
@@ -230,7 +235,7 @@ const ListaIngredientes = () => {
                         <TouchableOpacity style={styles.botones} onPress={handleEliminar}>
                             <Text style={styles.botonTexto}>Eliminar</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.botones}>
+                        <TouchableOpacity style={styles.botones} onPress={handleEliminar}>
                             <Text style={styles.botonTexto}>Vaciar lista</Text>
                         </TouchableOpacity>
                     </View>

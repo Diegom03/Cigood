@@ -73,7 +73,7 @@ const Recetas = () => {
             .then(recipes => {
                 // Aquí puedes hacer lo que desees con las recetas obtenidas
                 console.log(JSON.stringify(recipes));
-                navigation.navigate('Recetas', { recetas: recipes });
+                navigation.navigate('ListaRecetas_Sub', { recetas: recipes });
             })
             .catch(error => {
                 // Manejar el error si ocurre
@@ -208,10 +208,10 @@ const Recetas = () => {
             </View>
 
             <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Despensa')}>
+                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Despensa_Sub')}>
                     <Text style={styles.buttonText}>Mi despensa</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.button]} onPress={() => navigation.navigate('Recetas')}>
+                <TouchableOpacity style={[styles.button]} onPress={() => navigation.navigate('Recetas_Sub')}>
                     <Text style={styles.buttonText}>Recetas</Text>
                 </TouchableOpacity>
             </View>
