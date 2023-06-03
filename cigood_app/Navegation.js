@@ -14,6 +14,7 @@ import Cuenta from './screens/Cuenta';
 import Ajustes from './screens/Ajustes';
 import Camara from './screens/Camara';
 import Notificaciones from './screens/Notificaciones';
+import Recetas from './screens/Recetas';
 
 // NAVIGATES DE PRINCIPAL
 const HomeStack = createNativeStackNavigator();
@@ -44,6 +45,25 @@ function MyHomeStack() {
     )
 }
 
+// ESTO es para navigate con botones
+function MyRecipeStack() {
+    return (
+        <HomeStack.Navigator
+            initialRouteName="Recipes"
+        >
+            <HomeStack.Screen
+                name="Recipes"
+                component={Recetas}
+                options={{ headerShown: false }}
+            />
+            <HomeStack.Screen
+                name="ListaRecetas"
+                component={ListaRecetas}
+                options={{ headerShown: false }}
+            />
+        </HomeStack.Navigator>
+    )
+}
 
 // NAVIGATES DE DESPENSA
 const FoodStack = createNativeStackNavigator();
@@ -117,7 +137,7 @@ function BottomNavigation() {
                     } else if (route.name === 'Despensa') {
                         iconName = focused ? 'fast-food' : 'fast-food-outline';
                         iconStyle = [iconStyle, styles.iconMarginTop];
-                    } else if (route.name === 'Cuenta') {
+                    } else if (route.name === 'Recipes') {
                         iconName = focused ? 'person' : 'person-outline';
                         iconStyle = [iconStyle, styles.iconMarginTop];
                     } else if (route.name === 'Ajustes') {
@@ -145,8 +165,8 @@ function BottomNavigation() {
                 options={{ headerShown: false }}
             />
             <Tab.Screen
-                name="Cuenta"
-                component={Cuenta}
+                name="Recipes"
+                component={MyRecipeStack}
                 options={{ headerShown: false }}
             />
             <Tab.Screen
@@ -159,21 +179,21 @@ function BottomNavigation() {
 };
 
 export default function Navigator() {
-    return(
+    return (
         //<NavigationContainer>
-            <BottomNavigation />
+        <BottomNavigation />
         //</NavigationContainer>
     )
 };
 
 const styles = StyleSheet.create({
     icon: {
-      // Estilos para el ícono
+        // Estilos para el ícono
     },
     iconFocused: {
-      // Estilos para el ícono cuando está seleccionado
+        // Estilos para el ícono cuando está seleccionado
     },
     iconMarginTop: {
-      marginTop: 4, // Agrega el margen superior deseado
+        marginTop: 4, // Agrega el margen superior deseado
     },
 });
