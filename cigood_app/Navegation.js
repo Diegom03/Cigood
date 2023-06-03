@@ -30,17 +30,6 @@ function MyHomeStack() {
                 component={Principal}
                 options={{ headerShown: false }}
             />
-            <HomeStack.Screen
-                name="Despensa" // Este nombre es con el que se hara navigate
-                component={ListaIngredientes}
-                options={{ headerShown: false }}
-            />
-            <HomeStack.Screen
-                name="Recetas" // Este nombre es con el que se hara navigate
-                component={ListaRecetas}
-                options={{ headerShown: false }}
-            />
-
         </HomeStack.Navigator>
     )
 }
@@ -49,15 +38,15 @@ function MyHomeStack() {
 function MyRecipeStack() {
     return (
         <HomeStack.Navigator
-            initialRouteName="Recipes"
+            initialRouteName="Recetas_Sub"
         >
             <HomeStack.Screen
-                name="Recipes"
+                name="Recetas_Sub"
                 component={Recetas}
                 options={{ headerShown: false }}
             />
             <HomeStack.Screen
-                name="ListaRecetas"
+                name="ListaRecetas_Sub"
                 component={ListaRecetas}
                 options={{ headerShown: false }}
             />
@@ -73,15 +62,15 @@ const FoodStack = createNativeStackNavigator();
 function MyFoodStack() {
     return (
         <FoodStack.Navigator
-            initialRouteName="Despensa"
+            initialRouteName="Despensa_Sub"
         >
             <FoodStack.Screen
-                name="Despensa" // Este nombre es con el que se hara navigate
+                name="Despensa_Sub" // Este nombre es con el que se hara navigate
                 component={ListaIngredientes}
                 options={{ headerShown: false }}
             />
             <FoodStack.Screen
-                name="Camara" // Este nombre es con el que se hara navigate
+                name="Camara_Sub" // Este nombre es con el que se hara navigate
                 component={Camara}
                 options={{ headerShown: false }}
             />
@@ -98,20 +87,20 @@ const SettingsStack = createNativeStackNavigator();
 function MySettingsStack() {
     return (
         <SettingsStack.Navigator
-            initialRouteName="Ajustes"
+            initialRouteName="Ajustes_Sub"
         >
             <SettingsStack.Screen
-                name="Ajustes"
+                name="Ajustes_Sub"
                 component={Ajustes}
                 options={{ headerShown: false }}
             />
             <SettingsStack.Screen
-                name="Notificaciones"
+                name="Notificaciones_Sub"
                 component={Notificaciones}
                 options={{ headerShown: false }}
             />
             <SettingsStack.Screen
-                name="Cuenta"
+                name="Cuenta_Sub"
                 component={Cuenta}
                 options={{ headerShown: false }}
             />
@@ -135,10 +124,10 @@ function BottomNavigation() {
                         iconName = focused ? 'home' : 'home-outline';
                         iconStyle = [iconStyle, styles.iconMarginTop];
                     } else if (route.name === 'Despensa') {
-                        iconName = focused ? 'fast-food' : 'fast-food-outline';
+                        iconName = focused ? 'pizza' : 'pizza-outline';
                         iconStyle = [iconStyle, styles.iconMarginTop];
-                    } else if (route.name === 'Recipes') {
-                        iconName = focused ? 'person' : 'person-outline';
+                    } else if (route.name === 'Recetas') {
+                        iconName = focused ? 'fast-food' : 'fast-food-outline';
                         iconStyle = [iconStyle, styles.iconMarginTop];
                     } else if (route.name === 'Ajustes') {
                         iconName = focused ? 'settings' : 'settings-outline';
@@ -165,7 +154,7 @@ function BottomNavigation() {
                 options={{ headerShown: false }}
             />
             <Tab.Screen
-                name="Recipes"
+                name="Recetas"
                 component={MyRecipeStack}
                 options={{ headerShown: false }}
             />

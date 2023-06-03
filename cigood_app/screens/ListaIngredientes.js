@@ -119,7 +119,7 @@ const ListaIngredientes = () => {
     };
 
     const usarCamara = () => {
-        navigation.navigate('Camara');
+        navigation.navigate('Camara_Sub');
     };
 
     // Agrega el producto, obtiene el nombre y lo busca en el AsyncStorage

@@ -26,15 +26,15 @@ const Ajustes = () => {
 
             <Text style={styles.title}>Ajustes generales</Text>
             <View style={styles.listContainer}>
-                <View style={styles.listItem} onPress={() => navigation.navigate('Ajustes')}>
+                <View style={styles.listItem} onPress={() => navigation.navigate('Ajustes_Sub')}>
                     <Image source={require('../images/usuario.png')} style={styles.icon} />
-                    <Text style={styles.itemText} onPress={() => navigation.navigate('Cuenta')}>Cuenta</Text>
+                    <Text style={styles.itemText} onPress={() => navigation.navigate('Cuenta_Sub')}>Cuenta</Text>
                 </View>
                 <View style={styles.listItem} >
                     <Image source={require('../images/notificaciones.png')} style={styles.icon} />
-                    <Text style={styles.itemText} onPress={() => navigation.navigate('Notificaciones')}>Notificaciones</Text>
+                    <Text style={styles.itemText} onPress={() => navigation.navigate('Notificaciones_Sub')}>Notificaciones</Text>
                 </View>
-                <View style={styles.listItem} onPress={() => navigation.navigate('Ajustes')}>
+                <View style={styles.listItem} onPress={() => navigation.navigate('Ajustes_Sub')}>
                     <Image source={require('../images/cerrar-sesion.png')} style={styles.icon} />
                     <Text style={styles.itemText} onPress={handleLogout}>Cerrar Sesión</Text>
                 </View>
