@@ -15,6 +15,7 @@ import Ajustes from './screens/Ajustes';
 import Camara from './screens/Camara';
 import Notificaciones from './screens/Notificaciones';
 import Recetas from './screens/Recetas';
+import PlantillaReceta from './modelos/PlantillaReceta';
 
 // NAVIGATES DE PRINCIPAL
 const HomeStack = createNativeStackNavigator();
@@ -28,6 +29,11 @@ function MyHomeStack() {
             <HomeStack.Screen
                 name="Home"
                 component={Principal}
+                options={{ headerShown: false }}
+            />
+            <HomeStack.Screen
+                name="PlantillaReceta_Sub"
+                component={PlantillaReceta}
                 options={{ headerShown: false }}
             />
         </HomeStack.Navigator>

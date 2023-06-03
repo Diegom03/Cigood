@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Modal, Button, Alert, FlatList } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import CheckBox from 'expo-checkbox';
 import { getIngredientes, recetasDespensa } from '../Onload';
-import { IP_GENERAL } from '../constants';
 
 const Principal = () => {
     const navigation = useNavigation();
@@ -53,12 +51,25 @@ const Principal = () => {
         }   
     }, [despensa]);
 
+    // Carga la recteta seleccionada
+    const abrirReceta = (id) => {
+        // Obtiene la receta cuyo id esta guardado
+        //const datosReceta = recetas.map(objeto => objeto._nombre == id);
+        const datosReceta = id;
+        console.log('Abriendo: ' + JSON.stringify(datosReceta));
+
+        // Abre la nueva vista con los datos
+        navigation.navigate('PlantillaReceta_Sub', { receta: datosReceta });
+    };
+
 
     const renderDiarias = ({ item }) => {
         return (
             <View style={styles.recipeItem}>
-                <Image source={{ uri: item._img }} style={styles.recipeImage} />
-                <Text style={styles.recipeTitle}>{item._descripcion}</Text>
+                <TouchableOpacity key={item._id} onPress={() => abrirReceta(item)}>
+                    <Image source={{ uri: item._img }} style={styles.recipeImage} />
+                    <Text style={styles.recipeTitle}>{item._descripcion}</Text>
+                </TouchableOpacity>
             </View>
         );
     };
@@ -115,6 +126,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
         color: '#E12626',
+        top: -10,
     },
 
     // FLATLIST
@@ -136,7 +148,7 @@ const styles = StyleSheet.create({
     },
     recipeImage: {
         width: 140, //150
-        height: 150, //150
+        height: 140, //150
         marginBottom: 10,
         borderRadius: 5,
     },
