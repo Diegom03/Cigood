@@ -153,10 +153,20 @@ export async function recetasDespensa(filtros) {
     // Constrolar que no venga vacio FUTURO
     const response = await fetch(`http://` + IP_GENERAL + `:3000/api/filters/despensa/${tabla}/${despensa}`);
     const recetas = await response.json();
-    console.log(recetas);
+
+    // Agregar un _id único a cada receta basado en su posición en el array
+    const recetasConId = recetas.map((receta, index) => {
+      return {
+        ...receta,
+        _id: receta._id.toString(),
+      };
+    });
+
+    console.log(recetasConId);
+    return recetasConId;
 
   } catch (error) {
-    console.error('Error al obtener la despensa:', error);
+    console.error('Error al obtener las recetas:', error);
     throw error;
   }
 }
