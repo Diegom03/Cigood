@@ -45,7 +45,12 @@ const ListaIngredientes = () => {
     const handleEliminar = () => {
         // Si no hay nada seleccionado vuelve a la lista
         if (selectedIngredientes.length === 0) {
-            return;
+            // Eliminar ingredientes (BBDD)
+            dropIngredientes("[]", "{}");
+
+            // Vacia la lista de ingredientes (visual)
+            setIngredientes([]);
+            setSelectedIngredientes([]);
         }
 
         // Si hay ingredientes marcados, muestra la confirmación

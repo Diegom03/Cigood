@@ -12,9 +12,6 @@ function RecetasComponent({ route }) {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Recetas</Text>
-            <TouchableOpacity style={styles.settingsButton} onPress={() => navigation.navigate('Ajustes')}>
-                <Image source={require('../images/ajustes.png')} style={styles.settingsButtonImage} />
-            </TouchableOpacity>
             <ScrollView contentContainerStyle={styles.scrollContent}>
                 {recetas.map((receta) => (
                     <TouchableOpacity key={receta._id} style={styles.recetaContainer}>
@@ -57,18 +54,7 @@ const styles = StyleSheet.create({
         paddingTop: 60,
         paddingBottom: 20,
     },
-    settingsButtonImage: {
-        width: 30,
-        height: 30,
-    },
-    settingsButton: {
-        position: 'absolute',
-        top: 40,
-        right: 10, // Ajusta las coordenadas left según tu preferencia
-        backgroundColor: 'transparent',
-        padding: 10,
-        zIndex: 2
-    },
+
     recetaContainer: {
         flexDirection: 'row',
         margin: 20,
