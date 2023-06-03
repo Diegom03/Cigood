@@ -230,7 +230,7 @@ const ListaIngredientes = () => {
                         <TouchableOpacity style={styles.botones} onPress={handleEliminar}>
                             <Text style={styles.botonTexto}>Eliminar</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.botones}>
+                        <TouchableOpacity style={styles.botones} onPress={handleEliminar}>
                             <Text style={styles.botonTexto}>Vaciar lista</Text>
                         </TouchableOpacity>
                     </View>

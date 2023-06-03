@@ -104,6 +104,24 @@ app.get('/api/filters/:tableName/:filter', async (req, res) => {
   }
 });
 
+// Peticion GET (1-{}): devuelve la receta que tenga los indredientes seleccionados
+app.get('/api/filters/despensa/:tableName/:despensa', async (req, res) => {
+  try {
+    const { tableName, despensa } = req.params;
+
+    //const query = { _ingredientes: { $all: despensa.split(",").map(Number), $in: despensa.split(",").map(Number) } };
+    const query = { _ingredientes: { $in: despensa.split(",").map(Number) } };
+    console.log(query);
+    const documents = await findDocuments(tableName, query);
+    console.log(documents);
+    res.send(documents);
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('Internal server error');
+  }
+});
+
 
 // Peticion DELETE (1-{}): se pasa el nombre de la tabla y el id(s) del objeto(s) a borrar
 app.get('/api/delete/:tableName/:id', async (req, res) => {

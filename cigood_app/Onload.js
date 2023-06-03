@@ -8,10 +8,10 @@ export async function getRecetas() {
   try {
     const tabla = TABLA_RECETAS;
     const id = GET_ALL;
-    
-    const response = await fetch(`http://`+IP_GENERAL+`:3000/api/data/${tabla}/${id}`);
+
+    const response = await fetch(`http://` + IP_GENERAL + `:3000/api/data/${tabla}/${id}`);
     const recetas = await response.json();
-    
+
     const recetasConId = recetas.map((receta) => {
       return {
         ...receta,
@@ -32,8 +32,8 @@ export async function getFiltros() {
   try {
     const tabla = TABLA_FILTROS;
     const id = GET_ALL;
-    
-    const response = await fetch(`http://`+IP_GENERAL+`:3000/api/data/${tabla}/${id}`);
+
+    const response = await fetch(`http://` + IP_GENERAL + `:3000/api/data/${tabla}/${id}`);
     const ingredientes = await response.json();
 
     console.log(ingredientes);
@@ -50,10 +50,10 @@ export async function getIngredientes() {
   try {
     const tabla = TABLA_DESPENSA;
     const id = GET_ALL;
-    
-    const response = await fetch(`http://`+IP_GENERAL+`:3000/api/data/${tabla}/${id}`);
+
+    const response = await fetch(`http://` + IP_GENERAL + `:3000/api/data/${tabla}/${id}`);
     const ingredientes = await response.json();
-    
+
     const ingredientesConId = ingredientes.map((ingrediente) => {
       return {
         ...ingrediente,
@@ -70,6 +70,7 @@ export async function getIngredientes() {
   }
 }
 
+// Elimina ingredientes 1 o varios
 export async function dropIngredientes(ingredientesB, borrar) {
   try {
     const tabla = TABLA_DESPENSA;
@@ -81,8 +82,8 @@ export async function dropIngredientes(ingredientesB, borrar) {
     } else if (borrar === "{}") {
       id = GET_ALL;
     }
-    
-    await fetch(`http://`+IP_GENERAL+`:3000/api/delete/${tabla}/${id}`);
+
+    await fetch(`http://` + IP_GENERAL + `:3000/api/delete/${tabla}/${id}`);
 
   } catch (error) {
     console.error('Error al obtener los ingredientes:', error);
@@ -90,13 +91,14 @@ export async function dropIngredientes(ingredientesB, borrar) {
   }
 }
 
+
 // Agrega la despensa al asyncStorage
 export async function asyncDespensa() {
   try {
     const tabla = TABLA_DESPENSA;
     const id = GET_ALL;
 
-    const response = await fetch(`http://`+IP_GENERAL+`:3000/api/data/${tabla}/${id}`);
+    const response = await fetch(`http://` + IP_GENERAL + `:3000/api/data/${tabla}/${id}`);
     const ingredientes = await response.json();
 
     return ingredientes;
@@ -106,6 +108,7 @@ export async function asyncDespensa() {
     throw error;
   }
 }
+
 
 // Obtiene toda la tabla ingredientes
 export async function asyncIngredientes() {
@@ -113,7 +116,7 @@ export async function asyncIngredientes() {
     const tabla = TABLA_INGREDIENTES;
     const id = GET_ALL;
 
-    const response = await fetch(`http://`+IP_GENERAL+`:3000/api/data/${tabla}/${id}`);
+    const response = await fetch(`http://` + IP_GENERAL + `:3000/api/data/${tabla}/${id}`);
     const ingredientes = await response.json();
 
     return ingredientes;
@@ -123,6 +126,7 @@ export async function asyncIngredientes() {
     throw error;
   }
 }
+
 
 // Añade un ingrediente a la despensa
 export async function addIngrediente(ingrediente) {
@@ -131,7 +135,25 @@ export async function addIngrediente(ingrediente) {
     const producto = JSON.stringify(ingrediente);
     const usaurio = USUARIO_DIEGO;
 
-    await fetch(`http://`+IP_GENERAL+`:3000/api/insert/producto/${tabla}/${producto}/${usaurio}`);
+    await fetch(`http://` + IP_GENERAL + `:3000/api/insert/producto/${tabla}/${producto}/${usaurio}`);
+
+  } catch (error) {
+    console.error('Error al obtener la despensa:', error);
+    throw error;
+  }
+}
+
+
+// Añade un ingrediente a la despensa
+export async function recetasDespensa(filtros) {
+  try {
+    const tabla = TABLA_RECETAS;
+    const despensa = filtros;
+
+    // Constrolar que no venga vacio FUTURO
+    const response = await fetch(`http://` + IP_GENERAL + `:3000/api/filters/despensa/${tabla}/${despensa}`);
+    const recetas = await response.json();
+    console.log(recetas);
 
   } catch (error) {
     console.error('Error al obtener la despensa:', error);

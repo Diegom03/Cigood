@@ -44,7 +44,7 @@ const Login = () => {
       }
 
       console.log(`Iniciando sesión con usuario: ${username} y contraseña: ${password}`);
-      navigation.navigate('Principal');
+      navigation.navigate('Navegation');
     }
   }, [login]);
 
