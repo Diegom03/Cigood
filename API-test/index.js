@@ -92,7 +92,7 @@ app.get('/api/data/:tableName/:id', async (req, res) => {
 app.get('/api/filters/:tableName/:filter', async (req, res) => {
   try {
     const { tableName, filter } = req.params;
-
+    
     const query = { _filtros: { $in: filter.split(",").map(String) } };
     const documents = await findDocuments(tableName, query);
     console.log(documents);
@@ -165,6 +165,24 @@ app.get('/api/despensa/:id', async (req, res) => {
     res.status(500).send('Internal server error');
   }
 });
+
+//get ingredientes por id
+app.get('/api/nameingrediente/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log(id);
+    //Obtiene la receta
+    let query = { _producto: { $in: id.split(",").map(Number) } };
+    const ingredientes = await findDocuments("ingredientes", query);
+    console.log(ingredientes);
+    res.send(ingredientes);
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('Internal server error');
+  }
+});
+
 
 
 // Verifica el login de usuario

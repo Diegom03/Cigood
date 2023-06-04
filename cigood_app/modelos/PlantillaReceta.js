@@ -1,13 +1,32 @@
-import React, { useState } from 'react';
-import { View, Text, Image, ScrollView, StyleSheet, TouchableOpacity, Modal } from 'react-native';
-import { getIngredientes, dropIngredientes, asyncIngredientes, addIngrediente } from '../Onload';
-import { useNavigation } from '@react-navigation/native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, Image, ScrollView, StyleSheet, TouchableOpacity,ActivityIndicator  } from 'react-native';
+import { getNameIngredientes, dropIngredientes } from '../Onload';
 
 const RecipeTemplate = ({ route }) => {
   const navigation = useNavigation();
   const { receta } = route.params;
   const [pasosCompletados, setPasosCompletados] = useState([]);
-  const [showPopup, setShowPopup] = useState(false);
+  const [ingredientes, setIngredientes] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+
+  useEffect(() => {
+    const obtenerIngredientes = async () => {
+      try {
+        setIsLoading(true);
+        console.log(receta._ingredientes);
+        const data = await getNameIngredientes(receta._ingredientes);
+        setIngredientes(data);
+      } catch (error) {
+        console.error('Error al obtener el nombre de los ingredientes:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    obtenerIngredientes();
+  }, [receta]);
+
 
   const handlePasoPress = (index) => {
     const nuevosCompletados = [...pasosCompletados];
@@ -36,80 +55,57 @@ const RecipeTemplate = ({ route }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.contentContainer}>
-        <Image source={{ uri: receta._img }} style={styles.image} resizeMode="cover" />
-
-        <Text style={styles.recipeTitle}>{receta._descripcion}</Text>
-        <Text style={styles.preparationTime}>Tiempo de preparación: {receta._tiempo}</Text>
-
-        <View style={styles.ingredientsContainer}>
-          <Text style={styles.sectionTitle}>Ingredientes:</Text>
-          {/* Agrega los ingredientes según corresponda */}
-        </View>
-
-        <View style={styles.stepsContainer}>
-          <Text style={styles.sectionTitle}>Pasos:</Text>
-          {receta._pasos.map((paso, index) => (
-            <TouchableOpacity
-              key={index}
-              style={[
-                styles.stepItem,
-                pasosCompletados.includes(index) && styles.stepItemCompleted,
-              ]}
-              onPress={() => handlePasoPress(index)}
-            >
-              <View 
-                style={[
-                  styles.stepIndicator, 
-                  pasosCompletados.includes(index) && styles.stepIndicatorCompleted,]} 
-              />
-              <Text
-                style={[
-                  styles.stepText,
-                  pasosCompletados.includes(index) && styles.stepTextCompleted,
-                ]}
-              >
-                {`${paso}`}
+    <ScrollView contentContainerStyle={styles.container}>
+      {isLoading ? (
+        <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#FF5555" />
+        <Text style={styles.loadingText}>Cargando...</Text>
+      </View>
+      ) : (
+        <>
+          <Image source={{ uri: receta._img }} style={styles.image} resizeMode="cover" />
+          <Text style={styles.recipeTitle}>{receta._descripcion}</Text>
+          <Text style={styles.preparationTime}>Tiempo de preparación: {receta._tiempo}</Text>
+          <View style={styles.ingredientsContainer}>
+            <Text style={styles.sectionTitle}>Ingredientes:</Text>
+            {ingredientes.map((ingrediente, index) => (
+              <Text key={index} style={styles.ingredientItem}>
+                - {ingrediente._nombre}
               </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-
-        <TouchableOpacity style={styles.finishButton} onPress={() => setShowPopup(true)}>
-          <Text style={styles.finishButtonText}>Terminar</Text>
-        </TouchableOpacity>
-      </ScrollView>
-
-      {/* POP-UP terminar receta */}
-      <Modal
-        visible={showPopup}
-        transparent={true}
-        animationType="fade"
-      >
-        <View style={styles.popupContainer}>
-          <View style={styles.popupContent}>
-            <Text style={styles.popupTitle}>¡Receta completada!</Text>
-            <Text style={styles.popupText}>¿Eliminar los productos utilizados de la despensa?</Text>
-            <View style={styles.popupButtons}>
-              <TouchableOpacity
-                style={[styles.popupButton, { backgroundColor: '#52BB32' }]}
-                onPress={() => repuestaPopUp('yes')}
-              >
-                <Text style={styles.popupButtonText}>SÍ</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.popupButton, { backgroundColor: '#E12626' }]}
-                onPress={() => repuestaPopUp('no')}
-              >
-                <Text style={styles.popupButtonText}>NO</Text>
-              </TouchableOpacity>
-            </View>
+            ))}
           </View>
-        </View>
-      </Modal>
-    </View>
+  
+          <View style={styles.stepsContainer}>
+            <Text style={styles.sectionTitle}>Pasos:</Text>
+            {receta._pasos.map((paso, index) => (
+              <TouchableOpacity
+                key={index}
+                style={[
+                  styles.stepItem,
+                  pasosCompletados.includes(index) && styles.stepItemCompleted,
+                ]}
+                onPress={() => handlePasoPress(index)}
+              >
+                <View style={styles.stepIndicator} />
+                <Text
+                  style={[
+                    styles.stepText,
+                    pasosCompletados.includes(index) && styles.stepTextCompleted,
+                  ]}
+                >
+                  {`${paso}`}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+          <TouchableOpacity style={styles.finishButton} onPress={() => console.log('Terminar')}>
+            <Text style={styles.finishButtonText}>Terminar</Text>
+          </TouchableOpacity>
+        </>
+      )}
+    </ScrollView>
   );
+  
 };
 
 const styles = StyleSheet.create({
@@ -128,6 +124,20 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 16,
     marginTop: 20,
+  },
+  ingredientItem: {
+    fontSize: 16,
+    marginLeft: 8,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    marginTop: 16,
+    fontSize: 16,
+    color: '#FF5555',
   },
   recipeTitle: {
     fontSize: 24,

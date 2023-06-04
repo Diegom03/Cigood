@@ -19,7 +19,7 @@ export async function getRecetas() {
       };
     });
 
-    console.log(recetasConId);
+    //console.log(recetasConId);
     return recetasConId;
 
   } catch (error) {
@@ -36,12 +36,25 @@ export async function getFiltros() {
     const response = await fetch(`http://` + IP_GENERAL + `:3000/api/data/${tabla}/${id}`);
     const ingredientes = await response.json();
 
-    console.log(ingredientes);
     return ingredientes;
 
   } catch (error) {
     console.error('Error al obtener los ingredientes:', error);
     throw error;
+  }
+}
+
+//Devuelve los ingredientes que usa una receta
+export async function getNameIngredientes(ingredientes) {
+  const url = `http://${IP_GENERAL}:3000/api/nameingrediente/${ingredientes}`;
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    //console.log(data);
+    return data;
+  } catch (error) {
+    console.error(error);
+    return [];
   }
 }
 
