@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Modal, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Modal, Button, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import CheckBox from 'expo-checkbox';
 import { getFiltros, getRecetas } from '../Onload';
 import { IP_GENERAL } from '../constants';
 
-const Recetas = () => {
+const Recetass = () => {
     const navigation = useNavigation();
     const [isFilterModalVisible, setFilterModalVisible] = useState(false);
     const [filtrosBD, setfiltrosBD] = useState([]);
     const [filtrosBusqueda, setFiltrosBusqueda] = useState([]);
-    const [recipes, setRecipes] = useState([]);
+    const [recipes, setRecipes] = useState([]);;
     const [selectedFilterTitle, setSelectedFilterTitle] = useState('');
-    const [isLoading, setIsLoading] = useState(true);
-
     const handleFilterTitlePress = (title) => {
         setSelectedFilterTitle(title);
     };
@@ -24,25 +22,19 @@ const Recetas = () => {
         const end = start + 3;
         return filtrosBD.slice(start, end);
     };
-
-
-
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchFiltros = async () => {
             try {
                 const filtros = await getFiltros();
-                const recetas = await getRecetas();
+
                 setFiltrosBusqueda([]);
+                //console.log(filtros);
                 setfiltrosBD(filtros);
-                setRecipes(recetas);
-                setIsLoading(false);
             } catch (error) {
-                console.error('Error al obtener los filtros o las recetas:', error);
-                setIsLoading(false);
+                console.error('Error al obtener los filtros:', error);
             }
         };
-
-        fetchData();
+        fetchFiltros();
     }, []);
 
     const filterTitles = [
@@ -71,58 +63,45 @@ const Recetas = () => {
     };
 
     const handleRecipeSearch = () => {
-        setRecipes([]);
-        setIsLoading(true);
         // Obtener los nombres de los filtros seleccionados en forma de array
         const filters = filtrosBusqueda.map(filter => filter._nombre);
 
         // Realizar la búsqueda de recetas utilizando los filtros seleccionados
-        //console.log('filtros busqueda: ' + JSON.stringify(filters));
-        if (filters.length > 0) {
-            fetchRecipes(filters);
-        } else {
-            const conseguirDefault = async () => {
-                try {
-                    const recetas = await getRecetas();
-                    setRecipes(recetas);
-                    setIsLoading(false);
-                } catch (error) {
-                    console.error('Error al obtener los filtros o las recetas:', error);
-                    setIsLoading(false);
-                }
-            };
+        console.log('filtros busqueda: ' + JSON.stringify(filters));
 
-            conseguirDefault();
-        }
-
+        getRecipes(filters)
+            .then(recipes => {
+                // Aquí puedes hacer lo que desees con las recetas obtenidas
+                console.log(JSON.stringify(recipes));
+                navigation.navigate('ListaRecetas_Sub', { recetas: recipes });
+            })
+            .catch(error => {
+                // Manejar el error si ocurre
+                console.error(error);
+            });
     };
 
-    const abrirReceta = (id) => {
-        // Obtiene la receta cuyo id esta guardado
-        //const datosReceta = recetas.map(objeto => objeto._nombre == id);
-        const datosReceta = id;
-        console.log('Abriendo: ' + JSON.stringify(datosReceta));
 
-        // Abre la nueva vista con los datos
-        navigation.navigate('PlantillaReceta_Sub', { receta: datosReceta });
-    };
-    const fetchRecipes = async (filtros) => {
+    const getRecipes = (filtros) => {
         const tabla = "recetas";
         const encodedFilters = filtros.map(filter => encodeURIComponent(filter));
         const filtro = encodedFilters.join(",");
-        const url = `http://` + IP_GENERAL + `:3000/api/filters/${tabla}/${filtro}`;
-        try {
-            const response = await fetch(url);
-            const data = await response.json();
-            // Ordenar las recetas según los filtros coincidentes
-            const sortedRecipes = sortRecipesByFilters(data, filtros);
-            console.log("coño" + sortedRecipes);
-            setRecipes(sortedRecipes);
-            setIsLoading(false);
-            return sortedRecipes;
-        } catch (error) {
-            console.error(error);
-            return [];
+        if (filtro != null) {
+            const url = `http://` + IP_GENERAL + `:3000/api/filters/${tabla}/${filtro}`;
+            return fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    // Ordenar las recetas según los filtros coincidentes
+                    const sortedRecipes = sortRecipesByFilters(data, filtros);
+                    setRecipes(sortedRecipes);
+                    return sortedRecipes;
+                })
+                .catch(error => {
+                    console.error(error);
+                    return [];
+                });
+        } else {
+            setRecipes(getRecetas());
         }
     }
 
@@ -158,7 +137,7 @@ const Recetas = () => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Recetas</Text>
+
             <View style={styles.searchContainer}>
                 <TextInput style={styles.searchInput} placeholder="Buscar" />
                 <TouchableOpacity style={styles.filterButton} onPress={handleFilterButtonPress}>
@@ -206,27 +185,6 @@ const Recetas = () => {
                     </View>
                 </View>
             </Modal>
-            <View>
-                {isLoading ? ( // Mostrar mensaje de carga si isLoading es true
-                    <View style={styles.loadingContainer}>
-                        <ActivityIndicator size="large" color="#FF5555" />
-                        <Text style={styles.loadingText}>Cargando recetas...</Text>
-                    </View>
-                ) : (
-                    <ScrollView contentContainerStyle={styles.scrollContent}>
-                        {recipes.map((receta) => (
-                            <TouchableOpacity key={receta._id} style={styles.recetaContainer} onPress={() => abrirReceta(receta)}>
-                                <Image source={{ uri: receta._img }} style={styles.image} />
-                                <View style={styles.textContainer}>
-                                    <Text style={styles.name}>{receta._descripcion}</Text>
-                                    <Text style={styles.description}>{receta._tiempo}</Text>
-                                </View>
-                            </TouchableOpacity>
-                        ))}
-                    </ScrollView>
-                )}
-            </View>
-
         </View>
     );
 };
@@ -235,15 +193,27 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'flex-start',
+        alignItems: 'center',
         paddingTop: 50,
     },
-
+    title: {
+        fontSize: 40,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginBottom: 20,
+    },
+    title2: {
+        fontSize: 30,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginTop: 20,
+        color: '#E12626',
+    },
     searchContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         marginHorizontal: 25,
-        marginTop: 90,
-        marginBottom: 20,
+        marginTop: 10,
     },
     filterTitleContainer: {
         borderBottomWidth: 1,
@@ -421,57 +391,6 @@ const styles = StyleSheet.create({
         color: 'blue',
         fontWeight: 'bold',
     },
-    title: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        paddingHorizontal: 20,
-        paddingVertical: 10,
-        fontSize: 50,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        zIndex: 1,
-        paddingTop: 60,
-        paddingBottom: 20,
-    },
-
-    recetaContainer: {
-        flexDirection: 'row',
-        margin: 20,
-        alignItems: 'center',
-        borderWidth: 1,
-        borderColor: 'black',
-        borderRadius: 5,
-    },
-    image: {
-        width: 100,
-        height: 100,
-        marginRight: 10,
-    },
-    textContainer: {
-        flex: 1,
-        justifyContent: 'center',
-    },
-    name: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 5,
-    },
-    description: {
-        fontSize: 16,
-    },
-    loadingContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop:50,
-    },
-    loadingText: {
-        marginTop: 10,
-        fontSize: 16,
-        fontWeight: 'bold',
-    },
 });
 
-export default Recetas;
+export default Recetass;
