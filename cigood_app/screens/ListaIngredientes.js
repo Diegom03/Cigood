@@ -366,6 +366,8 @@ const styles = StyleSheet.create({
         fontSize: 16,
         
     },
+
+    // POPUP
     confirmationContainer: {
         position: 'absolute',
         top: 300,
