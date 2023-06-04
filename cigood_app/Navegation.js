@@ -27,7 +27,7 @@ function MyHomeStack() {
             initialRouteName="Home"
         >
             <HomeStack.Screen
-                name="Home"
+                name="Home_Sub"
                 component={Principal}
                 options={{ headerShown: false }}
             />

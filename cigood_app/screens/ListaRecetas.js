@@ -8,13 +8,22 @@ function RecetasComponent({ route }) {
     //const [recetas, setRecetas] = useState([]);
     const navigation = useNavigation();
 
+    const abrirReceta = (id) => {
+        // Obtiene la receta cuyo id esta guardado
+        //const datosReceta = recetas.map(objeto => objeto._nombre == id);
+        const datosReceta = id;
+        console.log('Abriendo: ' + JSON.stringify(datosReceta));
+
+        // Abre la nueva vista con los datos
+        navigation.navigate('PlantillaReceta_Sub', { receta: datosReceta });
+    };
 
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Recetas</Text>
             <ScrollView contentContainerStyle={styles.scrollContent}>
                 {recetas.map((receta) => (
-                    <TouchableOpacity key={receta._id} style={styles.recetaContainer}>
+                    <TouchableOpacity key={receta._id} style={styles.recetaContainer} onPress={() => abrirReceta(receta)}>
                         <Image source={{ uri: receta._img }} style={styles.image} />
                         <View style={styles.textContainer}>
                             <Text style={styles.name}>{receta._descripcion}</Text>
