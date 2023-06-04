@@ -44,7 +44,13 @@ const Login = () => {
       }
 
       console.log(`Iniciando sesión con usuario: ${username} y contraseña: ${password}`);
+
+      AsyncStorage.setItem('usuario_activo', JSON.stringify(login));
       navigation.navigate('Navegation');
+
+      //Reinicia las variables
+      setUsername('');
+      setPassword('');
     }
   }, [login]);
 
@@ -64,7 +70,7 @@ const Login = () => {
       return;
     }
 
-    fetch(`http://`+IP_GENERAL+`:3000/api/login/${tabla}/${username}/${password}`)
+    await fetch(`http://`+IP_GENERAL+`:3000/api/login/${tabla}/${username}/${password}`)
       .then(response => response.json())
       .then(data => setLogin(data))
       .catch(error => console.error(error));
