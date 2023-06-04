@@ -69,7 +69,8 @@ const MyCamera = () => {
   const handleAddProduct = () => {
     console.log('Agregar producto');
     addIngrediente(productoAgregado);
-    navigation.navigate('Despensa');
+    AsyncStorage.setItem('barcode_usado', 'true');
+    navigation.navigate('Despensa_Sub');
   };
 
   return (
