@@ -56,6 +56,11 @@ function MyRecipeStack() {
                 component={ListaRecetas}
                 options={{ headerShown: false }}
             />
+            <HomeStack.Screen
+                name="PlantillaReceta_Sub"
+                component={PlantillaReceta}
+                options={{ headerShown: false }}
+            />
         </HomeStack.Navigator>
     )
 }

@@ -8,8 +8,10 @@ export async function getRecetas() {
   try {
     const tabla = TABLA_RECETAS;
     const id = GET_ALL;
-
-    const response = await fetch(`http://` + IP_GENERAL + `:3000/api/data/${tabla}/${id}`);
+    const url = `http://` + IP_GENERAL + `:3000/api/data/${tabla}/${id}`;
+    console.log(url);
+    const response = await fetch(url);
+    console.log("hola "+response);
     const recetas = await response.json();
 
     const recetasConId = recetas.map((receta) => {
@@ -19,7 +21,7 @@ export async function getRecetas() {
       };
     });
 
-    //console.log(recetasConId);
+    console.log(recetasConId);
     return recetasConId;
 
   } catch (error) {
