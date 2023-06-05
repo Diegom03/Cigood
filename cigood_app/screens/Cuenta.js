@@ -8,17 +8,28 @@ const Cuenta = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
+  const [newUsername, setNewUsername] = useState('');
+  const [newEmail, setNewEmail] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [newPasswordRepeat, setNewPasswordRepeat] = useState('');
+  const [usernameError, setUsernameError] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
 
+  // ONLOAD
   useEffect(() => {
     async function fetchUserData() {
       try {
         const userData = await AsyncStorage.getItem('usuario_activo');
         console.log(userData);
         if (userData !== null) {
-          const { name, pass, email } = JSON.parse(userData);
+          const parsedData = JSON.parse(userData);
+          const name = parsedData[0].name;
+          const pass = parsedData[0].pass;
+          const email = parsedData[0].email;
           setUsername(name);
-          setEmail(pass);
-          setPassword(email);
+          setEmail(email);
+          setPassword(pass);
         }
       } catch (error) {
         console.error('Error al obtener los datos del AsyncStorage:', error);
@@ -28,6 +39,7 @@ const Cuenta = () => {
     fetchUserData();
   }, []);
 
+  // EXTENSIBLE
   const toggleSectionExpansion = (index) => {
     let newExpandedSections = [...expandedSections];
     if (newExpandedSections.includes(index)) {
@@ -38,6 +50,34 @@ const Cuenta = () => {
     setExpandedSections(newExpandedSections);
   };
 
+  const validateUsername = () => {
+    if (newUsername === username) {
+      setUsernameError('El nuevo nombre de usuario es igual al actual');
+    } else {
+      setUsernameError('');
+    }
+  };
+
+  const validateEmail = () => {
+    if (newEmail === email) {
+      setEmailError('El nuevo email es igual al actual');
+    } else {
+      setEmailError('');
+    }
+  };
+
+  const validatePassword = () => {
+    if (newPassword === password) {
+      setPasswordError('La nueva contraseña es igual a la actual');
+    } else if (newPassword !== newPasswordRepeat) {
+      setPasswordError('Las contraseñas no coinciden');
+    } else if (newPassword.length < 6 && newPassword.length != 0) {
+      setPasswordError('La contraseña debe contener 6 caracteres');
+    } else {
+      setPasswordError('');
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.subcontainer1}>
@@ -46,13 +86,6 @@ const Cuenta = () => {
 
       <ScrollView style={styles.subcontainer2}>
         <View style={styles.contentContainer}>
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Trofeos</Text>
-            <View style={styles.iconContainer}>
-              {/* Iconos de trofeos */}
-              {/* Aquí puedes agregar tus propios componentes de iconos */}
-            </View>
-          </View>
 
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Nombre de usuario</Text>
@@ -69,8 +102,13 @@ const Cuenta = () => {
 
               {expandedSections.includes(0) && (
                 <View style={styles.expandedContent}>
-                  <TextInput style={styles.input} placeholder="Nuevo nombre de usuario" />
-                  <TextInput style={styles.input} placeholder="Repetir" />
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Nuevo nombre de usuario"
+                    onChangeText={(text) => setNewUsername(text)}
+                    onBlur={validateUsername}
+                  />
+                  {usernameError ? <Text style={styles.errorText}>{usernameError}</Text> : null}
                   <TouchableOpacity style={styles.confirmButton}>
                     <Text style={styles.confirmButtonText}>Confirmar</Text>
                   </TouchableOpacity>
@@ -94,8 +132,13 @@ const Cuenta = () => {
 
               {expandedSections.includes(1) && (
                 <View style={styles.expandedContent}>
-                  <TextInput style={styles.input} placeholder="Nuevo email" />
-                  <TextInput style={styles.input} placeholder="Repetir" />
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Nuevo email"
+                    onChangeText={(text) => setNewEmail(text)}
+                    onBlur={validateEmail}
+                  />
+                  {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
                   <TouchableOpacity style={styles.confirmButton}>
                     <Text style={styles.confirmButtonText}>Confirmar</Text>
                   </TouchableOpacity>
@@ -119,8 +162,21 @@ const Cuenta = () => {
 
               {expandedSections.includes(2) && (
                 <View style={styles.expandedContent}>
-                  <TextInput style={styles.input} placeholder="Nueva contraseña" />
-                  <TextInput style={styles.input} placeholder="Repetir" />
+                  <TextInput
+                    style={styles.input}
+                    secureTextEntry={true}
+                    placeholder="Nueva contraseña"
+                    onChangeText={(text) => setNewPassword(text)}
+                    onBlur={validatePassword}
+                  />
+                  <TextInput
+                    style={styles.input}
+                    secureTextEntry={true}
+                    placeholder="Repetir contraseña"
+                    onChangeText={(text) => setNewPasswordRepeat(text)}
+                    onBlur={validatePassword}
+                  />
+                  {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
                   <TouchableOpacity style={styles.confirmButton}>
                     <Text style={styles.confirmButtonText}>Confirmar</Text>
                   </TouchableOpacity>
@@ -239,6 +295,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#52BB32',
+  },
+  errorText: {
+    fontSize: 14,
+    color: 'red',
+    marginBottom: 10,
   },
 });
 
