@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { getIngredientes, dropIngredientes, asyncIngredientes, addIngrediente } from '../Onload';
-import { View, Text, TouchableOpacity, StyleSheet, FlatList, Image, Alert, TextInput, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, FlatList, Image, Alert, TextInput, TouchableWithoutFeedback, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -16,12 +16,14 @@ const ListaIngredientes = ({ route }) => {
     const [contador, setContador] = useState(0);
     const [barcode, setBarCode] = useState(AsyncStorage.getItem('barcode_usado').then(value => { setBarCode(value) }));
     const flatListRef = useRef(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchIngredientes = async () => {
             //Obtiene los ingredientes de la despensa
             try {
                 const ingredientesData = await getIngredientes();
+                setIsLoading(false);
                 setIngredientes(ingredientesData);
             } catch (error) {
                 console.error('Error al obtener los ingredientes:', error);
@@ -223,6 +225,12 @@ const ListaIngredientes = ({ route }) => {
                     <Text style={styles.introductionText}>Estos son tus ingredientes</Text>
                 </View>
 
+                {isLoading ? ( // Mostrar mensaje de carga si isLoading es true
+                <View style={styles.loadingContainer}>
+                    <ActivityIndicator size="large" color="#FF5555" />
+                    <Text style={styles.loadingText}>Cargando ingredientes...</Text>
+                </View>
+                ) : (
                 <FlatList
                     data={ingredientes}
                     renderItem={renderIngrediente}
@@ -234,6 +242,8 @@ const ListaIngredientes = ({ route }) => {
                     onContentSizeChange={() => ingredientes.length > 0 && flatListRef.current.scrollToEnd({ animated: true })}
 
                 />
+                )}
+
                 {showConfirmation && (
                     <View style={styles.confirmationContainer}>
                         <Text style={styles.confirmationText}>¿Estás seguro de que quieres eliminar los ingredientes?</Text>
@@ -449,6 +459,19 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: 'white',
         textAlign: 'center', // Alineación del texto dentro de los botones
+    },
+
+    // Loading
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    loadingText: {
+        marginTop: 10,
+        fontSize: 16,
+        fontWeight: 'bold',
+        color:'#FF5555'
     },
 });
 
