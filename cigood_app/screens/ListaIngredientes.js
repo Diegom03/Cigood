@@ -3,6 +3,7 @@ import { getIngredientes, dropIngredientes, asyncIngredientes, addIngrediente } 
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, Image, Alert, TextInput, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-toast-message';
 
 const ListaIngredientes = () => {
     const [ingredientes, setIngredientes] = useState([]);
@@ -15,6 +16,7 @@ const ListaIngredientes = () => {
     const [sugerencias, setSugerencias] = useState([]);
     const [contador, setContador] = useState(0);
     const flatListRef = useRef(null);
+    const [placeholder, setPlaceholder] = useState('Introduzca un ingrediente');
 
     useEffect(() => {
         const fetchIngredientes = async () => {
@@ -52,7 +54,7 @@ const ListaIngredientes = () => {
         console.log('Entro');
         setContador(contador + 1);
     };
-    
+
     // PRODUCTO AGREGADO CON BARCODE
     const agregarBarcode = async () => {
         setContador(contador + 1);
@@ -164,6 +166,8 @@ const ListaIngredientes = () => {
 
             await addIngrediente(productoEncontrado);
             setSearchValue('');
+            setPlaceholder('Introduzca un ingrediente');
+            hideSuggestions();
             setContador(contador + 1);
 
             // Actualiza el listado
@@ -176,7 +180,14 @@ const ListaIngredientes = () => {
 
         } else {
             console.log('Producto no encontrado');
-            setSearchValue('Producto no encontrado');
+            Toast.show({
+                type: 'error',
+                text1: 'Ingrediente no encontrado',
+                text2: 'El ingrediente seleccionado no existe',
+                topOffset: 50,
+            })
+            setSearchValue('');
+            setPlaceholder('Ingrediente no encontrado');
         }
     };
 
@@ -187,6 +198,12 @@ const ListaIngredientes = () => {
                 <View style={styles.header}>
                     <Image source={require('../images/logotipo-short.png')} style={styles.headerImage}></Image>
                 </View>
+                <Toast
+                    ref={(ref) => {
+                        Toast.setRef(ref);
+                    }}
+                    style={styles.toastContainer} // Aplica el estilo con la propiedad zIndex
+                />
 
                 <View style={styles.searchContainer}>
                     <TouchableOpacity onPress={agregarProducto}>
@@ -196,14 +213,14 @@ const ListaIngredientes = () => {
                     </TouchableOpacity>
                     <TextInput
                         style={styles.searchInput}
-                        placeholder="Buscar ingredientes"
+                        placeholder={placeholder}
                         value={searchValue}
                         onChangeText={handleSearchChange}
                         onSubmitEditing={agregarProducto}
                     />
                     {sugerencias.length > 0 && (
                         <FlatList
-                            data={sugerencias}
+                            data={sugerencias.slice(0, 5)}
                             renderItem={({ item }) => (
                                 <TouchableOpacity onPress={() => handleSuggestionPress(item)}>
                                     <Text style={styles.searchSuggestion}>{item}</Text>
@@ -224,17 +241,22 @@ const ListaIngredientes = () => {
                     <Text style={styles.introductionText}>Estos son tus ingredientes</Text>
                 </View>
 
-                <FlatList
-                    data={ingredientes}
-                    renderItem={renderIngrediente}
-                    //keyExtractor={(item) => item._producto.toString()}
-                    keyExtractor={(item) => item._producto.toString() + '_' + contador.toString()}
-                    numColumns={2}
-                    contentContainerStyle={styles.listContent}
-                    ref={flatListRef}
-                    onContentSizeChange={() => ingredientes.length > 0 && flatListRef.current.scrollToEnd({ animated: true })}
-
-                />
+                {ingredientes.length > 0 ? (
+                    <FlatList
+                        data={ingredientes}
+                        renderItem={renderIngrediente}
+                        keyExtractor={(item) => item._producto.toString() + '_' + contador.toString()}
+                        numColumns={2}
+                        contentContainerStyle={styles.listContent}
+                        ref={flatListRef}
+                        onContentSizeChange={() => ingredientes.length > 0 && flatListRef.current.scrollToEnd({ animated: true })}
+                    />
+                ) : (
+                    <View style={styles.emptyContainer}>
+                        <Image source={require('../images/desierto.png')} style={styles.emptyImage} />
+                        <Text style={styles.emptyText}>Aún no has añadido ningún ingrediente</Text>
+                    </View>
+                )}
                 {showConfirmation && (
                     <View style={styles.confirmationContainer}>
                         <Text style={styles.confirmationText}>¿Estás seguro de que quieres eliminar los ingredientes?</Text>
@@ -288,7 +310,6 @@ const styles = StyleSheet.create({
         opacity: 0.6,
         height: 120,
         position: 'absolute',
-        zIndex: 2,
         alignItems: 'center',
     },
     headerImage: {
@@ -329,6 +350,9 @@ const styles = StyleSheet.create({
     searchSuggestion: {
         fontSize: 16,
         paddingVertical: 5,
+        borderBottomWidth: 1, // Ancho del borde inferior
+        borderBottomColor: 'rgba(0, 0, 0, 0.1)', // Color del borde inferior
+        paddingHorizontal: 10,
     },
     searchIconContainer: {
         marginLeft: 8,
@@ -451,10 +475,30 @@ const styles = StyleSheet.create({
         color: 'white',
         textAlign: 'center', // Alineación del texto dentro de los botones
     },
+    toastContainer: {
+        zIndex: 999,
+        position: 'absolute',
+        fontSize: 16, // Agrega esta propiedad al estilo del Toast
+    },
+    emptyContainer: {
+        flex: 1,
+        alignItems: 'center',
+    },
+    emptyImage: {
+        width: 200,
+        height: 200,
+        marginBottom: 0,
+        marginTop: 50,
+    },
+    emptyText: {
+        fontSize: 18,
+        color: 'red',
+    },
+
 });
 
 export default ListaIngredientes;
 
-export function añadirNuevo() {};
+export function añadirNuevo() { };
 
-export function borrarUsados() {};
+export function borrarUsados() { };

@@ -51,6 +51,9 @@ npm install react-native-css
 npm install @react-navigation/native
 npm install @react-navigation/bottom-tabs
 npm install @expo/vector-icons
+expo install react-native-elements
+npm install react-native-flash-message --save
+npm i react-native-toast-message
 
 
 CADA VEZ QUE INSTALE ALGO
