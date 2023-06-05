@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Modal, Image, TouchableOpacity  } from 'react-native';
+import { StyleSheet, Text, View, Modal, Image, TouchableOpacity } from 'react-native';
 import { addIngrediente } from '../Onload';
 import { Camera } from 'expo-camera';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ListaIngredientes, { añadirNuevo } from './ListaIngredientes';
 
 const MyCamera = () => {
   const navigation = useNavigation();
@@ -31,9 +32,9 @@ const MyCamera = () => {
     if (scannedProduct != null) {
       const ingredientes = await AsyncStorage.getItem('listado_ingredientes');
       const listado_ingredientes = JSON.parse(ingredientes);
-    
+
       const productoEncontrado = listado_ingredientes.find((ingrediente) => scannedProduct.product_name.includes(ingrediente._nombre));
-    
+
       if (productoEncontrado) {
         // Se encontró el ingrediente correspondiente al producto escaneado y lo agrega a la variable local
         console.log('El ingrediente {' + productoEncontrado._nombre + '} está en el listado de ingredientes.');
@@ -43,7 +44,7 @@ const MyCamera = () => {
         console.log('El ingrediente no está en el listado de ingredientes.');
       }
     }
-    
+
     // Hace visible el pop up
     setShowPopup(true);
   };
@@ -69,7 +70,10 @@ const MyCamera = () => {
   const handleAddProduct = () => {
     console.log('Agregar producto');
     addIngrediente(productoAgregado);
-    AsyncStorage.setItem('barcode_usado', 'true');
+
+    // Llama a la función agregarIngrediente del componente padre
+    añadirNuevo(productoAgregado);
+
     navigation.navigate('Despensa_Sub');
   };
 

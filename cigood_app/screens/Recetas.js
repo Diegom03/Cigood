@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Modal, ScrollView, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import CheckBox from 'expo-checkbox';
-import { getFiltros, getRecetas } from '../Onload';
+import { getFiltros, getRecetas, getIngredientes, recetasDespensa } from '../Onload';
 import { IP_GENERAL } from '../constants';
 
 const Recetas = () => {
@@ -13,6 +13,10 @@ const Recetas = () => {
     const [recipes, setRecipes] = useState([]);
     const [selectedFilterTitle, setSelectedFilterTitle] = useState('');
     const [isLoading, setIsLoading] = useState(true);
+
+    // Para las recetas de despensa
+    const [recetas, setRecetas] = useState([]);
+    const [despensa, setDespensa] = useState([]);
 
     const handleFilterTitlePress = (title) => {
         setSelectedFilterTitle(title);
@@ -153,6 +157,50 @@ const Recetas = () => {
         }
         return count;
     }
+
+
+    // OBTIENE LAS RECETAS SEGUN DESPENSA
+    const obtenerRecetasDespensa = async () => {
+        setDespensa('Vacio');
+        setRecetas('Vacio');
+
+        // Obtiene el codigo de los ingredientes de la despensa
+        console.log('Paso 1');
+
+        try {
+            const ingredientes = await getIngredientes();
+            const productos = ingredientes.map((elemento) => elemento._producto);
+            setDespensa(productos);
+        } catch (error) {
+            console.error('Error al obtener los productos:', error);
+        }
+
+        // Obtiene las recetas semifiltradas
+        console.log('Paso 2');
+
+        try {
+            const recetasDiarias = await recetasDespensa(despensa);
+            setRecetas(recetasDiarias);
+
+            const listaFiltrada = [];
+
+            // Para cada objeto en 'recetas'
+            for (const receta of recetasDiarias) {
+                const ingredientesReceta = receta._ingredientes;
+
+                // Busca que todos los indredinetes esten en la despensa
+                const todosPresentes = ingredientesReceta.every(ingrediente => despensa.includes(ingrediente));
+
+                if (todosPresentes) {
+                    listaFiltrada.push(receta);
+                }
+            }
+
+            console.log(listaFiltrada);
+        } catch (error) {
+            console.error('Error al obtener las recetas diarias:', error);
+        }
+    };
 
 
 
@@ -444,7 +492,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: 'black',
         borderRadius: 5,
-        backgroundColor:'#F2EFE9'
+        backgroundColor: '#F2EFE9'
     },
     image: {
         width: 100,

@@ -11,14 +11,6 @@ const Principal = () => {
     const [selectedRecipe, setSelectedRecipe] = useState('');
     const [isLoading, setIsLoading] = useState(true);
 
-    // const recetasDiarias = [
-    //     { _id: '1', _image: require('../images/receta1.jpg'), _text: 'Receta 1' },
-    //     { _id: '2', _image: require('../images/receta2.jpg'), _text: 'Receta 2' },
-    //     { _id: '3', _image: require('../images/receta3.jpg'), _text: 'Receta 3' },
-    //     { _id: '4', _image: require('../images/receta4.png'), _text: 'Receta 4' },
-    //     // Agrega más elementos si es necesario
-    // ];
-
     useEffect(() => {
         const obtenerRecetas = async () => {
             // Obtiene el codigo de los ingredientes de la despensa

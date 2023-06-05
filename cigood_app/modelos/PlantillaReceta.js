@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Image, ScrollView, StyleSheet, TouchableOpacity, ActivityIndicator, Modal } from 'react-native';
 import { getNameIngredientes, dropIngredientes } from '../Onload';
 import { useNavigation } from '@react-navigation/native';
+import ListaIngredientes, { borrarUsados } from '../screens/ListaIngredientes';
 
 const RecipeTemplate = ({ route }) => {
   const navigation = useNavigation();
@@ -48,6 +49,9 @@ const RecipeTemplate = ({ route }) => {
       console.log(vaciar);
 
       dropIngredientes(vaciar, 'varios');
+
+      // Elimina los productos usados del listado de la despensa
+      borrarUsados();
     }
 
     // Vuelve a home y oculta el principal
