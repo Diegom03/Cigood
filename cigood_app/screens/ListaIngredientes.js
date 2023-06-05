@@ -4,7 +4,7 @@ import { View, Text, TouchableOpacity, StyleSheet, FlatList, Image, Alert, TextI
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const ListaIngredientes = ({ route }) => {
+const ListaIngredientes = () => {
     const [ingredientes, setIngredientes] = useState([]);
     const [ingredientesDB, setIngredientesDB] = useState([]);
     const [selectedIngredientes, setSelectedIngredientes] = useState([]);
@@ -14,7 +14,6 @@ const ListaIngredientes = ({ route }) => {
     const [texto, setTexto] = useState('');
     const [sugerencias, setSugerencias] = useState([]);
     const [contador, setContador] = useState(0);
-    const [barcode, setBarCode] = useState(AsyncStorage.getItem('barcode_usado').then(value => { setBarCode(value) }));
     const flatListRef = useRef(null);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -44,6 +43,30 @@ const ListaIngredientes = ({ route }) => {
 
         fetchIngredientes();
     }, []);
+
+    // Exporta a CAMARA y actualiza el listado
+    añadirNuevo = (nuevoIngrediente) => {
+        setIngredientes(prevIngredientes => [...prevIngredientes, nuevoIngrediente]);
+    };
+
+    // Exporta a PLANTILLA RECETA y actualiza el listado (al borrar los ingredientes)
+    borrarUsados = () => {
+        console.log('Entro');
+        setContador(contador + 1);
+    };
+    
+    // PRODUCTO AGREGADO CON BARCODE
+    const agregarBarcode = async () => {
+        setContador(contador + 1);
+
+        // Actualiza el listado
+        try {
+            const despensa = await getIngredientes();
+            setIngredientes(despensa);
+        } catch (error) {
+            console.error('Error al obtener los ingredientes:', error);
+        }
+    };
 
     const handleEliminar = () => {
         // Si no hay nada seleccionado vuelve a la lista
@@ -158,28 +181,6 @@ const ListaIngredientes = ({ route }) => {
             setSearchValue('Producto no encontrado');
         }
     };
-
-    // PRODUCTO AGREGADO CON BARCODE
-    const agregarBarcode = async () => {
-        setContador(contador + 1);
-
-        // Actualiza el listado
-        try {
-            const despensa = await getIngredientes();
-            setIngredientes(despensa);
-        } catch (error) {
-            console.error('Error al obtener los ingredientes:', error);
-        }
-    };
-
-    if (barcode === 'true') {
-        console.log('Ha ido');
-        // Si en el asyncStorage dice que se ha usado la camara, obtiene el objeto
-        //agregarBarcode();
-        // Una vez usado lo pone en false para que no de errores
-        AsyncStorage.setItem('barcode_usado', 'false');
-        setBarCode('false');
-    }
 
     return (
         <TouchableWithoutFeedback onPress={hideSuggestions}>
@@ -476,3 +477,7 @@ const styles = StyleSheet.create({
 });
 
 export default ListaIngredientes;
+
+export function añadirNuevo() {};
+
+export function borrarUsados() {};
