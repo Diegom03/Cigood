@@ -198,6 +198,7 @@ const ListaIngredientes = ({ route }) => {
                         placeholder="Buscar ingredientes"
                         value={searchValue}
                         onChangeText={handleSearchChange}
+                        onSubmitEditing={agregarProducto}
                     />
                     {sugerencias.length > 0 && (
                         <FlatList
@@ -273,7 +274,7 @@ const ListaIngredientes = ({ route }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: '#F2EFE9',
         padding: 10,
     },
 
@@ -372,11 +373,10 @@ const styles = StyleSheet.create({
     ingredienteContainer: {
         width: '45%',
         padding: 10,
-        backgroundColor: '#F2F2F2',
+        backgroundColor: '#EAE6DC',
         marginBottom: 10,
         borderRadius: 5,
         marginHorizontal: 5,
-        backgroundColor: '#F5F5F5', // Color suave
         alignItems: 'center',
         //borderWidth: 1, // Contorno suave
         //borderColor: '#E8E8E8', // Color del contorno suave

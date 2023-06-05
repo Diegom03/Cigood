@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'center',
         padding: 20,
+        backgroundColor: '#F2EFE9',
     },
 
     // HEADER

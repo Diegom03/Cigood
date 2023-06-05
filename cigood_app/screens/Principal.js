@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, FlatList } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, FlatList, Modal, TouchableWithoutFeedback, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { getIngredientes, recetasDespensa } from '../Onload';
 
@@ -7,6 +7,9 @@ const Principal = () => {
     const navigation = useNavigation();
     const [recetas, setRecetas] = useState([]);
     const [despensa, setDespensa] = useState([]);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [selectedRecipe, setSelectedRecipe] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
 
     // const recetasDiarias = [
     //     { _id: '1', _image: require('../images/receta1.jpg'), _text: 'Receta 1' },
@@ -39,6 +42,7 @@ const Principal = () => {
             try {
                 const recetasDiarias = await recetasDespensa(despensa);
                 setRecetas(recetasDiarias);
+                setIsLoading(false);
             } catch (error) {
                 console.error('Error al obtener las recetas diarias:', error);
             }
@@ -48,7 +52,7 @@ const Principal = () => {
 
         if (despensa.length !== 0) {
             obtenerRecetasDiarias();
-        }   
+        }
     }, [despensa]);
 
     // Carga la recteta seleccionada
@@ -61,15 +65,33 @@ const Principal = () => {
         // Abre la nueva vista con los datos
         navigation.navigate('PlantillaReceta_Sub', { receta: datosReceta });
     };
-
+    const abrirModalReceta = (id) => {
+        const datosReceta = id;
+        setSelectedRecipe(datosReceta);
+        setModalVisible(true);
+    };
 
     const renderDiarias = ({ item }) => {
         return (
             <View style={styles.recipeItem}>
-                <TouchableOpacity key={item._id} onPress={() => abrirReceta(item)}>
+                <TouchableOpacity key={item._id} onPress={() => abrirReceta(item)} onLongPress={() => abrirModalReceta(item)}>
                     <Image source={{ uri: item._img }} style={styles.recipeImage} />
-                    <Text style={styles.recipeTitle}>{item._descripcion}</Text>
+                    <View style={styles.recipeContainer}>
+                        <Text style={styles.recipeTitle}>{item._descripcion}</Text>
+                    </View>
                 </TouchableOpacity>
+            </View>
+        );
+    };
+
+    const renderModalContent = () => {
+        return (
+            <View style={styles.modalContent}>
+                <Image source={{ uri: selectedRecipe._img }} style={styles.modalImage} />
+                <View style={styles.modalTextContainer}>
+                    <Text style={styles.modalRecipeTitle}>{selectedRecipe._descripcion}</Text>
+                    <Text style={styles.modalRecipeTime}>Tiempo de preparación: {selectedRecipe._tiempo}</Text>
+                </View>
             </View>
         );
     };
@@ -82,14 +104,26 @@ const Principal = () => {
             </View>
 
             <Text style={styles.title2}>Recetas del día</Text>
-
-            <FlatList
-                data={recetas}
-                renderItem={renderDiarias}
-                keyExtractor={(item) => item._id}
-                numColumns={2}
-                contentContainerStyle={styles.recipeContainer}
-            />
+            {isLoading ? ( // Mostrar mensaje de carga si isLoading es true
+                <View style={styles.loadingContainer}>
+                    <ActivityIndicator size="large" color="#FF5555" />
+                    <Text style={styles.loadingText}>Cargando recetas...</Text>
+                </View>
+            ) : (
+                <FlatList
+                    data={recetas}
+                    renderItem={renderDiarias}
+                    keyExtractor={(item) => item._id}
+                    numColumns={2}
+                    contentContainerStyle={styles.recipeContainer}
+                />)}
+            <Modal visible={modalVisible} animationType="fade" transparent>
+                <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+                    <View style={styles.modalContainer}>
+                        {renderModalContent()}
+                    </View>
+                </TouchableWithoutFeedback>
+            </Modal>
         </View>
     );
 };
@@ -99,12 +133,12 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'flex-start',
         alignItems: 'center',
-        paddingTop: 50,
+        backgroundColor: '#F2EFE9',
     },
 
     // HEADER
     header: {
-        top: -50,
+        top: 0,
         left: 0,
         right: 0,
         backgroundColor: '#E1755F',
@@ -126,36 +160,78 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
         color: '#E12626',
-        top: -10,
+        marginTop: 30,
     },
 
     // FLATLIST
     recipeContainer: {
-        paddingHorizontal: 20,
         marginTop: 10,
         display: 'flex',
     },
     recipeItem: {
         width: '44%', // 48
-        marginBottom: 20,
         borderRadius: 8,
-        padding: 10,
+        paddingTop: 10,
         margin: 10,
-        backgroundColor: '#FA5937',
+        backgroundColor: '#FF8A6B',
         alignItems: 'center',
-        borderWidth: 3,
-        borderColor: '#FA5937',
     },
     recipeImage: {
         width: 140, //150
         height: 140, //150
-        marginBottom: 10,
         borderRadius: 5,
     },
     recipeTitle: {
+        fontSize: 17,
+        fontWeight: '600',
+        textAlign: 'center',
+        paddingVertical: 20,
+        color: 'black',
+    },
+    //MODAL
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        paddingHorizontal: 20,
+        paddingVertical: 50,
+    },
+
+    modalContent: {
+        backgroundColor: 'white',
+        borderRadius: 8,
+        padding: 20,
+        alignItems: 'center',
+    },
+    modalTextContainer: {
+        marginTop: 20,
+    },
+    modalImage: {
+        width: 250,
+        height: 150,
+        borderRadius: 8,
+        marginBottom: 10,
+    },
+    modalRecipeTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 5,
+    },
+    modalRecipeTime: {
+        fontSize: 16,
+        marginBottom: 10,
+    },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    loadingText: {
+        marginTop: 10,
         fontSize: 16,
         fontWeight: 'bold',
-        textAlign: 'center',
+        color:'#FF5555'
     },
 });
 

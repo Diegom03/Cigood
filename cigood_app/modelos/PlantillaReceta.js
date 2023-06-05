@@ -151,10 +151,12 @@ const RecipeTemplate = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#EAE6DC',
   },
   contentContainer: {
     flexGrow: 1,
     padding: 16,
+
   },
 
   // CONTENIDO

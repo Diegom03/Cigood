@@ -160,7 +160,7 @@ const Recetas = () => {
         <View style={styles.container}>
             <Text style={styles.title}>Recetas</Text>
             <View style={styles.searchContainer}>
-                <TextInput style={styles.searchInput} placeholder="Buscar" />
+                <TextInput style={styles.searchInput} placeholder="Buscar" onSubmitEditing={handleRecipeSearch} />
                 <TouchableOpacity style={styles.filterButton} onPress={handleFilterButtonPress}>
                     <Image source={require('../images/filtrar.png')} style={styles.searchButtonImage} />
                 </TouchableOpacity>
@@ -236,6 +236,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'flex-start',
         paddingTop: 50,
+        backgroundColor: '#EAE6DC',
     },
 
     searchContainer: {
@@ -443,6 +444,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: 'black',
         borderRadius: 5,
+        backgroundColor:'#F2EFE9'
     },
     image: {
         width: 100,
@@ -465,7 +467,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop:50,
+        marginTop: 50,
     },
     loadingText: {
         marginTop: 10,
