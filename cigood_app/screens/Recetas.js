@@ -54,6 +54,7 @@ const Recetas = () => {
         'Dificultad',
         'Etiquetas dietéticas',
         'Tiempo de preparación',
+        'Tipo de plato'
     ];
 
     const handleFilterButtonPress = () => {
@@ -120,7 +121,7 @@ const Recetas = () => {
             const data = await response.json();
             // Ordenar las recetas según los filtros coincidentes
             const sortedRecipes = sortRecipesByFilters(data, filtros);
-            console.log("coño" + sortedRecipes);
+            //console.log("coño" + sortedRecipes);
             setRecipes(sortedRecipes);
             setIsLoading(false);
             return sortedRecipes;
