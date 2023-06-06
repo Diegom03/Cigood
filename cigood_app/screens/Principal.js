@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, FlatList, Modal, TouchableWithoutFeedback, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { getIngredientes, recetasDespensa } from '../Onload';
+import Carousel from 'react-native-snap-carousel';
 
 const Principal = () => {
     const navigation = useNavigation();
@@ -95,19 +96,19 @@ const Principal = () => {
                 <Image source={require('../images/logotipo-short.png')} style={styles.headerImage}></Image>
             </View>
 
-            <Text style={styles.title2}>Recetas del día</Text>
+            <Text style={styles.title2}>Recomendaciones</Text>
             {isLoading ? ( // Mostrar mensaje de carga si isLoading es true
                 <View style={styles.loadingContainer}>
                     <ActivityIndicator size="large" color="#FF5555" />
                     <Text style={styles.loadingText}>Cargando recetas...</Text>
                 </View>
             ) : (
-                <FlatList
+                <Carousel
                     data={recetas}
                     renderItem={renderDiarias}
-                    keyExtractor={(item) => item._id}
-                    numColumns={2}
-                    contentContainerStyle={styles.recipeContainer}
+                    sliderWidth={400}
+                    itemWidth={200}
+                    layout="default"
                 />)}
             <Modal visible={modalVisible} animationType="fade" transparent>
                 <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
@@ -116,6 +117,7 @@ const Principal = () => {
                     </View>
                 </TouchableWithoutFeedback>
             </Modal>
+            <Text style={styles.title2}>Receta del dia</Text>
         </View>
     );
 };
@@ -153,18 +155,18 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: '#E12626',
         marginTop: 30,
+        marginBottom: 30,
     },
 
     // FLATLIST
     recipeContainer: {
-        marginTop: 10,
         display: 'flex',
+        height:80
     },
     recipeItem: {
-        width: '44%', // 48
         borderRadius: 8,
         paddingTop: 10,
-        margin: 10,
+        margin: 0,
         backgroundColor: '#FF8A6B',
         alignItems: 'center',
     },
@@ -172,6 +174,7 @@ const styles = StyleSheet.create({
         width: 140, //150
         height: 140, //150
         borderRadius: 5,
+        alignSelf:'center',
     },
     recipeTitle: {
         fontSize: 17,
@@ -223,7 +226,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
         fontSize: 16,
         fontWeight: 'bold',
-        color:'#FF5555'
+        color: '#FF5555'
     },
 });
 

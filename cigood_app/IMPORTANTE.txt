@@ -54,6 +54,8 @@ npm install @expo/vector-icons
 expo install react-native-elements
 npm install react-native-flash-message --save
 npm i react-native-toast-message
+npm install react-native-snap-carousel
+
 
 
 CADA VEZ QUE INSTALE ALGO
