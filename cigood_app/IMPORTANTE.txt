@@ -55,6 +55,10 @@ expo install react-native-elements
 npm install react-native-flash-message --save
 npm i react-native-toast-message
 npm install react-native-snap-carousel
+npm install react-native-linear-gradient
+npm install @react-native-community/blur
+
+
 
 
 
