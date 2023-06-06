@@ -157,7 +157,7 @@ const Principal = () => {
             <Image source={{ uri: recetaDelDia._img }} style={styles.recetaDelDiaImage} />
             <View style={styles.recetaDelDiaTextContainer}>
               <Text style={styles.recetaDelDiaTitle}>{recetaDelDia._descripcion}</Text>
-              <Text style={styles.recetaDelDiaTime}>{recetaDelDia._tiempo}</Text>
+              <Text style={styles.recetaDelDiaTitle}>{recetaDelDia._tiempo}</Text>
             </View>
           </TouchableOpacity>
         );
