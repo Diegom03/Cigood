@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Switch, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, Switch, ImageBackground, Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //import { ESTA_LOGUEADO } from '../constants.js';
@@ -13,19 +13,19 @@ const NotificationsScreen = () => {
     useEffect(() => {
         // Recuperar los estados guardados de AsyncStorage cuando la pantalla se monta
         AsyncStorage.getItem('vaciarDespensaSwitch').then((value) => {
-          if (value !== null) {
-            setDespensaSwitch(value === 'true');
-          }
+            if (value !== null) {
+                setDespensaSwitch(value === 'true');
+            }
         });
         AsyncStorage.getItem('compartirRecetaSwitch').then((value) => {
-          if (value !== null) {
-            setRecetasSwitch(value === 'true');
-          }
+            if (value !== null) {
+                setRecetasSwitch(value === 'true');
+            }
         });
         AsyncStorage.getItem('compraGlovoSwitch').then((value) => {
-          if (value !== null) {
-            setGlovoSwitch(value === 'true');
-          }
+            if (value !== null) {
+                setGlovoSwitch(value === 'true');
+            }
         });
     }, []);
 
@@ -48,8 +48,17 @@ const NotificationsScreen = () => {
     };
 
     return (
-        <ImageBackground style={styles.container} source={require('../images/fondo-notificaciones.jpg')}>
+        <ImageBackground style={styles.container} /*source={require('../images/fondo-notificaciones.jpg')}*/>
+            
+            <View style={styles.imageContainer}>
+                <Image
+                    source={require('../images/notificacion.png')} // Ruta de tu imagen
+                    style={styles.image}
+                    resizeMode="contain"
+                />
+            </View>
             <Text style={styles.title}>Notificaciones</Text>
+
             <View style={styles.section}>
                 <View style={styles.sectionItem}>
                     <View style={styles.switchTextContainer}>
@@ -89,13 +98,38 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'center',
         padding: 20,
+        backgroundColor: '#EAE6DC',
+    },
+    // HEADER
+    header: {
+        top: 0,
+        left: 0,
+        right: 0,
+        backgroundColor: '#E1755F',
+        opacity: 0.6,
+        height: 120,
+        position: 'absolute',
+        alignItems: 'center',
+    },
+    headerImage: {
+        width: 250,
+        height: 70,
+        marginTop: 35,
     },
     title: {
-        fontSize: 34,
+        fontSize: 28,
         fontWeight: 'bold',
-        marginTop: 50,
-        marginBottom: 20,
-        color: 'white'
+        marginBottom: 10, 
+        color: 'black',
+    },
+    imageContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 70,
+    },
+    image: {
+        width: 70, // Ancho de la imagen
+        height: 70, // Alto de la imagen
     },
     section: {
         width: '100%',
@@ -103,7 +137,6 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         padding: 10,
         marginBottom: 20,
-        marginTop: 160,
     },
     sectionItem: {
         backgroundColor: '#E6E6E6',

@@ -207,6 +207,9 @@ const Recetas = () => {
 
     return (
         <View style={styles.container}>
+            <View style={styles.header}>
+                <Image source={require('../images/logotipo-short.png')} style={styles.headerImage}></Image>
+            </View>
             <Text style={styles.title}>Recetas</Text>
             <View style={styles.searchContainer}>
                 <TextInput style={styles.searchInput} placeholder="Buscar" onSubmitEditing={handleRecipeSearch} />
@@ -287,12 +290,27 @@ const styles = StyleSheet.create({
         paddingTop: 50,
         backgroundColor: '#EAE6DC',
     },
-
+    // HEADER
+    header: {
+        top: 0,
+        left: 0,
+        right: 0,
+        backgroundColor: '#E1755F',
+        opacity: 0.6,
+        height: 120,
+        position: 'absolute',
+        alignItems: 'center',
+    },
+    headerImage: {
+        width: 250,
+        height: 70,
+        marginTop: 35,
+    },
     searchContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         marginHorizontal: 25,
-        marginTop: 90,
+        marginTop: 140,
         marginBottom: 20,
     },
     filterTitleContainer: {
@@ -473,22 +491,22 @@ const styles = StyleSheet.create({
     },
     title: {
         position: 'absolute',
-        top: 0,
         left: 0,
         right: 0,
         paddingHorizontal: 20,
         paddingVertical: 10,
-        fontSize: 50,
+        fontSize: 40,
         fontWeight: 'bold',
         textAlign: 'center',
         zIndex: 1,
-        paddingTop: 60,
+        paddingTop: 130,
         paddingBottom: 20,
     },
 
     recetaContainer: {
         flexDirection: 'row',
-        margin: 20,
+        marginHorizontal: 20,
+        marginBottom:15,
         alignItems: 'center',
         borderWidth: 1,
         borderColor: 'black',

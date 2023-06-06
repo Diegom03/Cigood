@@ -165,6 +165,12 @@ const ListaIngredientes = () => {
             console.log(productoEncontrado);
 
             await addIngrediente(productoEncontrado);
+            Toast.show({
+                type: 'success',
+                text1: 'Ingrediente añadido',
+                text2: 'El ingrediente se ha añadido correctamente',
+                topOffset: 50,
+            })
             setSearchValue('');
             setPlaceholder('Introduzca un ingrediente');
             hideSuggestions();
@@ -204,11 +210,10 @@ const ListaIngredientes = () => {
                     }}
                     style={styles.toastContainer} // Aplica el estilo con la propiedad zIndex
                 />
-
                 <View style={styles.searchContainer}>
-                    <TouchableOpacity onPress={agregarProducto}>
+                    <TouchableOpacity /*onPress={agregarProducto}*/ onPress={handleEliminar}>
                         <View style={styles.searchIconContainer2}>
-                            <Image source={require('../images/carrito-de-compras.png')} style={styles.searchIcon} />
+                            <Image source={require('../images/papelera.png')} style={styles.searchIcon} />
                         </View>
                     </TouchableOpacity>
                     <TextInput
@@ -236,11 +241,11 @@ const ListaIngredientes = () => {
                         </View>
                     </TouchableOpacity>
                 </View>
-
-                <View style={styles.textContainer}>
-                    <Text style={styles.introductionText}>Estos son tus ingredientes</Text>
+                <View style={styles.fondo}>
+                    <View style={styles.textContainer}>
+                        <Text style={styles.introductionText}>Estos son tus ingredientes</Text>
+                    </View>
                 </View>
-
                 {ingredientes.length > 0 ? (
                     <FlatList
                         data={ingredientes}
@@ -280,10 +285,7 @@ const ListaIngredientes = () => {
                 <View style={styles.whiteBar}>
                     <View style={styles.botonesContainer}>
                         <TouchableOpacity style={styles.botones} onPress={handleEliminar}>
-                            <Text style={styles.botonTexto}>Eliminar</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.botones} onPress={handleEliminar}>
-                            <Text style={styles.botonTexto}>Vaciar lista</Text>
+                            <Text style={styles.botonTexto}>Buscar Recetas</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -300,7 +302,12 @@ const styles = StyleSheet.create({
         backgroundColor: '#F2EFE9',
         padding: 10,
     },
+    fondo:{
+        backgroundColor:'#F2EFE9',
+        height:40,
 
+
+    },
     // HEADER
     header: {
         top: 0,
@@ -368,13 +375,12 @@ const styles = StyleSheet.create({
     // TEXT
     textContainer: {
         position: 'absolute',
-        top: 210,
         left: 10,
         right: 10,
         justifyContent: 'space-between',
         zIndex: 2,
         marginHorizontal: 20,
-        paddingTop: 5,
+        marginTop:10,
     },
     introductionText: {
         fontSize: 20,
@@ -389,11 +395,11 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         paddingTop: 20,
         marginHorizontal: 10, // Ajusta el valor según sea necesario para evitar solapamiento con el título y los botones
-        paddingBottom: 90, // Para que no lo tape el botón
+        paddingBottom:100, // Para que no lo tape el botón
         borderWidth: 5,
         borderColor: '#FF9999',
         borderRadius: 30,
-        marginTop: 50,
+        marginTop: 20,
     },
     ingredienteContainer: {
         width: '45%',
@@ -452,7 +458,7 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         height: 100,
-        backgroundColor: 'white',
+        backgroundColor: '#F2EFE9',
         alignItems: 'center',
         justifyContent: 'center',
     },
