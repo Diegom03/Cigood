@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, Image } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -80,6 +80,13 @@ const Cuenta = () => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.imageContainer}>
+        <Image
+          source={require('../images/usuario2.png')} // Ruta de tu imagen
+          style={styles.image}
+          resizeMode="contain"
+        />
+      </View>
       <View style={styles.subcontainer1}>
         <Text style={styles.title}>Cuenta</Text>
       </View>
@@ -196,38 +203,38 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    paddingTop: 50,
+    backgroundColor: '#EAE6DC',
   },
 
   // CONTENEDOR SECUNDARIO 1
-  subcontainer1: {
-    height: '25%',
-    width: '100%',
-    backgroundColor: '#E12626',
-    alignItems: 'center',
-  },
 
   // TITULO
   title: {
     fontSize: 34,
     fontWeight: 'bold',
-    marginTop: 40,
-    marginBottom: 20,
-    color: 'white',
+    marginBottom:10,
   },
 
   // CONTENEDOR SECUNDARIO 2
   subcontainer2: {
     height: '75%',
     width: '100%',
-    backgroundColor: '#E6E6E6',
+
+  },
+  imageContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 100,
+  },
+  image: {
+    width: 70, // Ancho de la imagen
+    height: 70, // Alto de la imagen
   },
 
   // CONTENEDOR SECUNDARIO
   contentContainer: {
-    backgroundColor: '#E6E6E6',
+    backgroundColor: '#EAE6DC',
     borderRadius: 8,
-    padding: 20,
     width: '100%',
     alignItems: 'center',
   },
@@ -300,6 +307,25 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: 'red',
     marginBottom: 10,
+  },
+
+  //HEADER
+  header: {
+    top: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: '#E1755F',
+    opacity: 0.6,
+    height: 120,
+    width: '100%',
+    alignItems: 'center',
+  },
+  headerImage: {
+    width: 250,
+    height: 70,
+    marginTop: 35,
+    position: 'absolute',
+    zIndex: 2,
   },
 });
 
