@@ -78,6 +78,18 @@ const Cuenta = () => {
     }
   };
 
+  const handleNewUsaername = () => {
+    setUsername(newUsername);
+  }
+
+  const handleNewEmail = () => {
+    setEmail(newEmail);
+  }
+
+  const handleNewPassword = () => {
+    setPassword(newPassword);
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.imageContainer}>
@@ -116,7 +128,7 @@ const Cuenta = () => {
                     onBlur={validateUsername}
                   />
                   {usernameError ? <Text style={styles.errorText}>{usernameError}</Text> : null}
-                  <TouchableOpacity style={styles.confirmButton}>
+                  <TouchableOpacity style={styles.confirmButton} onPress={handleNewUsaername}>
                     <Text style={styles.confirmButtonText}>Confirmar</Text>
                   </TouchableOpacity>
                 </View>
@@ -146,7 +158,7 @@ const Cuenta = () => {
                     onBlur={validateEmail}
                   />
                   {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
-                  <TouchableOpacity style={styles.confirmButton}>
+                  <TouchableOpacity style={styles.confirmButton} onPress={handleNewEmail}>
                     <Text style={styles.confirmButtonText}>Confirmar</Text>
                   </TouchableOpacity>
                 </View>
@@ -184,7 +196,7 @@ const Cuenta = () => {
                     onBlur={validatePassword}
                   />
                   {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
-                  <TouchableOpacity style={styles.confirmButton}>
+                  <TouchableOpacity style={styles.confirmButton} onPress={handleNewPassword}>
                     <Text style={styles.confirmButtonText}>Confirmar</Text>
                   </TouchableOpacity>
                 </View>
