@@ -79,15 +79,27 @@ const Cuenta = () => {
   };
 
   const handleNewUsaername = () => {
-    setUsername(newUsername);
+    if (setUsernameError !== '') {
+      console.log('Error');
+    } else {
+      setUsername(newUsername);
+    }
   }
 
   const handleNewEmail = () => {
-    setEmail(newEmail);
+    if (setEmailError !== '') {
+      console.log('Error');
+    } else {
+      setEmail(newEmail);
+    }
   }
 
   const handleNewPassword = () => {
-    setPassword(newPassword);
+    if (setPasswordError !== '') {
+      console.log('Error');
+    } else {
+      setPassword(newPassword);
+    }
   }
 
   return (
