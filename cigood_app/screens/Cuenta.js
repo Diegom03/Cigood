@@ -79,7 +79,7 @@ const Cuenta = () => {
   };
 
   const handleNewUsaername = () => {
-    if (setUsernameError !== '') {
+    if (setUsernameError == '') {
       console.log('Error');
     } else {
       setUsername(newUsername);
@@ -87,7 +87,7 @@ const Cuenta = () => {
   }
 
   const handleNewEmail = () => {
-    if (setEmailError !== '') {
+    if (setEmailError == '') {
       console.log('Error');
     } else {
       setEmail(newEmail);
@@ -95,7 +95,7 @@ const Cuenta = () => {
   }
 
   const handleNewPassword = () => {
-    if (setPasswordError !== '') {
+    if (setPasswordError == '') {
       console.log('Error');
     } else {
       setPassword(newPassword);
