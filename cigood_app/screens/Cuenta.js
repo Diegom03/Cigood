@@ -1,17 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, Image } from 'react-native';
+import { actualizarUsuario } from '../Onload';
 import { Entypo } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Cuenta = () => {
   const [expandedSections, setExpandedSections] = useState([]);
+
+  // Campos usuario
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
+  const [id, setId] = useState('');
+
+  // Repetir campo
   const [newUsername, setNewUsername] = useState('');
   const [newEmail, setNewEmail] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [newPasswordRepeat, setNewPasswordRepeat] = useState('');
+
+  // Errores
   const [usernameError, setUsernameError] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
@@ -27,9 +35,11 @@ const Cuenta = () => {
           const name = parsedData[0].name;
           const pass = parsedData[0].pass;
           const email = parsedData[0].email;
+          const id = parsedData[0]._id;
           setUsername(name);
           setEmail(email);
           setPassword(pass);
+          setId(id);
         }
       } catch (error) {
         console.error('Error al obtener los datos del AsyncStorage:', error);
@@ -50,6 +60,26 @@ const Cuenta = () => {
     setExpandedSections(newExpandedSections);
   };
 
+  // Nuevo usuario al asyncStorage
+  const newUserAsync = async (dato, nuevoValor) => {
+    const newUserData = await AsyncStorage.getItem('usuario_activo');
+    const newUserFormat = JSON.parse(newUserData);
+
+    if (dato === 'email') {
+      newUserFormat.email = nuevoValor;
+    } else if (dato === 'usuario') {
+      newUserFormat.name = nuevoValor;
+    } else if (dato === 'pass') {
+      newUserFormat.pass = nuevoValor;
+    }
+
+    console.log(newUserFormat);
+
+    // Almacenar el objeto actualizado en AsyncStorage
+    await AsyncStorage.setItem('usuario_activo', JSON.stringify(newUserFormat));
+  }
+
+  // VALIDACONES
   const validateUsername = () => {
     if (newUsername === username) {
       setUsernameError('El nuevo nombre de usuario es igual al actual');
@@ -79,28 +109,40 @@ const Cuenta = () => {
   };
 
   const handleNewUsaername = () => {
-    if (setUsernameError !== '') {
+    if (setUsernameError === '') {
       console.log('Error');
     } else {
       setUsername(newUsername);
+      actualizarUsuario('nombre', newUsername, id).then(() => {
+        // Actualizar AsyncStorage después de actualizar en la base de datos
+        newUserAsync('usuario', newUsername);
+      });
     }
   }
-
+  
   const handleNewEmail = () => {
-    if (setEmailError !== '') {
+    if (setEmailError === '') {
       console.log('Error');
     } else {
       setEmail(newEmail);
+      actualizarUsuario('correo', newEmail, id).then(() => {
+        // Actualizar AsyncStorage después de actualizar en la base de datos
+        newUserAsync('email', newEmail);
+      });
     }
   }
-
+  
   const handleNewPassword = () => {
-    if (setPasswordError !== '') {
+    if (setPasswordError === '') {
       console.log('Error');
     } else {
       setPassword(newPassword);
+      actualizarUsuario('contraseña', newPassword, id).then(() => {
+        // Actualizar AsyncStorage después de actualizar en la base de datos
+        newUserAsync('pass', newPassword);
+      });
     }
-  }
+  } 
 
   return (
     <View style={styles.container}>
@@ -236,7 +278,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 34,
     fontWeight: 'bold',
-    marginBottom:10,
+    marginBottom: 10,
   },
 
   // CONTENEDOR SECUNDARIO 2

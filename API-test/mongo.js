@@ -33,8 +33,8 @@ async function updateDocument(collection, filter, update) {
       await client.connect();
       const db = client.db("cigood");
       const result = await db.collection(collection).updateOne(filter, update);
-      console.log(`Matched ${result.matchedCount} documents`);
-      console.log(`Modified ${result.modifiedCount} documents`);
+      console.log(`Encontrado ${result.matchedCount} documento`);
+      console.log(`Modificado ${result.modifiedCount} documento`);
     } finally {
       await client.close();
     }

@@ -38,7 +38,7 @@ app.listen(3000, () => console.log('Servidor iniciado en el puerto 3000'));
 // Inserta un producto en la despensa mediante el buscador
 app.get('/api/insert/producto/:tableName/:producto/:usuario', async (req, res) => {
   try {
-    const { tableName, producto} = req.params;
+    const { tableName, producto } = req.params;
 
     // Convertir el objeto JSON producto a un objeto JavaScript
     const productoObj = JSON.parse(producto);
@@ -88,11 +88,12 @@ app.get('/api/data/:tableName/:id', async (req, res) => {
   }
 });
 
+
 // Peticion GET (1-{}): devuelve la receta que tenga los filtros seleccionados
 app.get('/api/filters/:tableName/:filter', async (req, res) => {
   try {
     const { tableName, filter } = req.params;
-    
+
     const query = { _filtros: { $in: filter.split(",").map(String) } };
     const documents = await findDocuments(tableName, query);
     console.log(documents);
@@ -103,6 +104,7 @@ app.get('/api/filters/:tableName/:filter', async (req, res) => {
     res.status(500).send('Internal server error');
   }
 });
+
 
 // Peticion GET (1-{}): devuelve la receta que tenga los indredientes seleccionados
 app.get('/api/filters/despensa/:tableName/:despensa', async (req, res) => {
@@ -184,7 +186,6 @@ app.get('/api/nameingrediente/:id', async (req, res) => {
 });
 
 
-
 // Verifica el login de usuario
 app.get('/api/login/:tableName/:user/:password', async (req, res) => {
   try {
@@ -195,6 +196,36 @@ app.get('/api/login/:tableName/:user/:password', async (req, res) => {
     const usuario = await findDocuments(tableName, query);
     console.log(usuario);
     res.send(usuario);
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('Internal server error');
+  }
+});
+
+
+// Actualiza un campo del usuario
+app.get('/api/userUpdate/:tableName/:fila/:valor/:usuario', async (req, res) => {
+  try {
+    const { tableName, fila, valor, usuario } = req.params;
+    let query = { _id: new ObjectId(usuario) };
+
+    //Comprueba que fila modifica
+    if (fila === "nombre") {
+      updateField = { $set: { name: valor } };
+    } else if (fila === "contraseña") {
+      updateField = { $set: { pass: valor } };
+    } else if (fila === "correo") {
+      updateField = { $set: { email: valor } };
+    } else {
+      console.log('Fila inválida');
+      res.send('Fila inválida');
+      return;
+    }
+
+    const result = await updateDocument(tableName, query, updateField);
+    console.log(result);
+    res.send(result);
 
   } catch (error) {
     console.log(error);

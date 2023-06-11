@@ -1,7 +1,7 @@
 // AQUI SE REALIZAN LAS LLAMADAS A COMPONENTES ONLOAD
 
 // VARIABLES LOCALES
-import { TABLA_INGREDIENTES, GET_ALL, TABLA_DESPENSA, TABLA_RECETAS, TABLA_FILTROS, USUARIO_DIEGO, IP_GENERAL } from './constants.js';
+import { TABLA_INGREDIENTES, GET_ALL, TABLA_DESPENSA, TABLA_RECETAS, TABLA_FILTROS, TABLA_USUARIOS, USUARIO_DIEGO, IP_GENERAL } from './constants.js';
 
 // ESTA funcion devuelve todas las recetas
 export async function getRecetas() {
@@ -182,6 +182,25 @@ export async function recetasDespensa(filtros) {
 
   } catch (error) {
     console.error('Error al obtener las recetas:', error);
+    throw error;
+  }
+}
+
+// Actualiza un dato de la cuenta
+export async function actualizarUsuario(campo, dato, usuario) {
+  try {
+    const tabla = TABLA_USUARIOS;
+    const fila = campo;
+    const valor = dato;
+    const id = usuario;
+
+    const response = await fetch(`http://` + IP_GENERAL + `:3000/api/userUpdate/${tabla}/${fila}/${valor}/${id}`);
+
+    console.log(response);
+    return response;
+
+  } catch (error) {
+    console.error('Error al actualizar el usuario:', error);
     throw error;
   }
 }
