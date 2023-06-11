@@ -29,8 +29,6 @@ const Recetas = () => {
         return filtrosBD.slice(start, end);
     };
 
-
-
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -111,6 +109,7 @@ const Recetas = () => {
         // Abre la nueva vista con los datos
         navigation.navigate('PlantillaReceta_Sub', { receta: datosReceta });
     };
+
     const fetchRecipes = async (filtros) => {
         const tabla = "recetas";
         const encodedFilters = filtros.map(filter => encodeURIComponent(filter));
@@ -121,10 +120,9 @@ const Recetas = () => {
             const data = await response.json();
             // Ordenar las recetas según los filtros coincidentes
             const sortedRecipes = sortRecipesByFilters(data, filtros);
-            //console.log("coño" + sortedRecipes);
             setRecipes(sortedRecipes);
             setIsLoading(false);
-            return sortedRecipes;
+            //return sortedRecipes;
         } catch (error) {
             console.error(error);
             return [];
@@ -160,49 +158,47 @@ const Recetas = () => {
     }
 
 
-    // OBTIENE LAS RECETAS SEGUN DESPENSA
-    const obtenerRecetasDespensa = async () => {
+    getRecetasByIngredientes = async () => {
         setDespensa('Vacio');
         setRecetas('Vacio');
-
+      
         // Obtiene el codigo de los ingredientes de la despensa
         console.log('Paso 1');
-
+      
         try {
-            const ingredientes = await getIngredientes();
-            const productos = ingredientes.map((elemento) => elemento._producto);
-            setDespensa(productos);
+          const ingredientes = await getIngredientes();
+          const productos = ingredientes.map((elemento) => elemento._producto);
+          setDespensa(productos);
         } catch (error) {
-            console.error('Error al obtener los productos:', error);
+          console.error('Error al obtener los productos:', error);
         }
-
-        // Obtiene las recetas semifiltradas
-        console.log('Paso 2');
-
-        try {
+      };
+      
+      useEffect(() => {
+        setIsLoading(true);
+        const fetchRecetas = async () => {
+          // Obtiene las recetas semifiltradas
+          console.log('Paso 2');
+      
+          try {
             const recetasDiarias = await recetasDespensa(despensa);
-            setRecetas(recetasDiarias);
-
-            const listaFiltrada = [];
-
-            // Para cada objeto en 'recetas'
-            for (const receta of recetasDiarias) {
-                const ingredientesReceta = receta._ingredientes;
-
-                // Busca que todos los indredinetes esten en la despensa
-                const todosPresentes = ingredientesReceta.every(ingrediente => despensa.includes(ingrediente));
-
-                if (todosPresentes) {
-                    listaFiltrada.push(receta);
-                }
-            }
-
-            console.log(listaFiltrada);
-        } catch (error) {
+      
+            const listaFiltrada = recetasDiarias.filter((receta) =>
+              receta._ingredientes.every((ingrediente) => despensa.includes(ingrediente))
+            );
+      
+            console.log('LISTA FILTRADA CON RECETAS ' + listaFiltrada);
+            setRecipes(listaFiltrada);
+            setIsLoading(false);
+          } catch (error) {
             console.error('Error al obtener las recetas diarias:', error);
-        }
-    };
-
+            setIsLoading(false);
+          }
+        };
+      
+        fetchRecetas();
+      }, [despensa]);
+      
 
 
     return (
@@ -506,7 +502,7 @@ const styles = StyleSheet.create({
     recetaContainer: {
         flexDirection: 'row',
         marginHorizontal: 20,
-        marginBottom:15,
+        marginBottom: 15,
         alignItems: 'center',
         borderWidth: 1,
         borderColor: 'black',
@@ -544,3 +540,5 @@ const styles = StyleSheet.create({
 });
 
 export default Recetas;
+
+export function getRecetasByIngredientes() { };
