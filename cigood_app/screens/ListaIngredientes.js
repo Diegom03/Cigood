@@ -4,6 +4,7 @@ import { View, Text, TouchableOpacity, StyleSheet, FlatList, Image, Alert, TextI
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
+import Recetas, { getRecetasByIngredientes } from './Recetas';
 
 const ListaIngredientes = () => {
     const [ingredientes, setIngredientes] = useState([]);
@@ -25,7 +26,7 @@ const ListaIngredientes = () => {
                 const ingredientesData = await getIngredientes();
                 setIngredientes(ingredientesData);
             } catch (error) {
-                console.error('Error al obtener los ingredientes:', error);
+                //console.error('Error al obtener los ingredientes:', error);
             }
 
             // Obtiene el asistente de busqueda
@@ -37,7 +38,7 @@ const ListaIngredientes = () => {
                 const nombresIngredientes = ingredientesLista.map((ingrediente) => ingrediente._nombre);
                 setIngredientesDB(nombresIngredientes);
             } catch (error) {
-                console.error('Error al obtener el asistente:', error);
+                //console.error('Error al obtener el asistente:', error);
             }
         };
 
@@ -64,7 +65,7 @@ const ListaIngredientes = () => {
             const despensa = await getIngredientes();
             setIngredientes(despensa);
         } catch (error) {
-            console.error('Error al obtener los ingredientes:', error);
+            //console.error('Error al obtener los ingredientes:', error);
         }
     };
 
@@ -181,7 +182,7 @@ const ListaIngredientes = () => {
                 const despensa = await getIngredientes();
                 setIngredientes(despensa);
             } catch (error) {
-                console.error('Error al obtener los ingredientes:', error);
+                //console.error('Error al obtener los ingredientes:', error);
             }
 
         } else {
@@ -196,6 +197,12 @@ const ListaIngredientes = () => {
             setPlaceholder('Ingrediente no encontrado');
         }
     };
+
+    const getRecetas = ()=>{
+        navigation.navigate('Recetas_Sub');
+        getRecetasByIngredientes();
+
+    }
 
     return (
         <TouchableWithoutFeedback onPress={hideSuggestions}>
@@ -284,7 +291,7 @@ const ListaIngredientes = () => {
 
                 <View style={styles.whiteBar}>
                     <View style={styles.botonesContainer}>
-                        <TouchableOpacity style={styles.botones} onPress={handleEliminar}>
+                        <TouchableOpacity style={styles.botones} onPress={getRecetas}>
                             <Text style={styles.botonTexto}>Buscar Recetas</Text>
                         </TouchableOpacity>
                     </View>
